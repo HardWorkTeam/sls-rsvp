@@ -71,7 +71,7 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
 
       {/* 1. COVER (Envelope reveal and first slide card) */}
       {sectionsVisibility.Cover && (
-        <Cover couple={data.couple} events={data.events} guestName={guestName} />
+        <Cover couple={data.couple} events={data.events} guestName={guestName} coverImage={data.coverImage} />
       )}
 
       {/* 2. WELCOME STATEMENT */}

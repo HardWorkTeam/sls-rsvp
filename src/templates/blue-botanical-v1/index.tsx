@@ -62,7 +62,7 @@ export default function BlueBotanicalV1Template({ data, guestName }: TemplatePro
 
       {/* ── COVER ── */}
       {sectionsVisibility.Cover && (
-        <Cover couple={data.couple} events={data.events} guestName={guestName} />
+        <Cover couple={data.couple} events={data.events} guestName={guestName} coverImage={data.coverImage} />
       )}
 
       {/* ── WELCOME MESSAGE ── */}

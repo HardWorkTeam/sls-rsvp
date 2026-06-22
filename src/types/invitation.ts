@@ -60,6 +60,7 @@ export interface RsvpSettings {
 export interface InvitationData {
   slug: string;
   templateId: TemplateId;
+  coverImage?: string;
   sectionsVisibility: {
     Cover: boolean;
     CoupleInfo: boolean;

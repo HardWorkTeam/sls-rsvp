@@ -64,7 +64,7 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
 }
 
 function buildGiftRegistries(invitation: PublicInvitation): GiftRegistryItem[] {
-  const bank = invitation.settings?.bank_account;
+  const bank = invitation.settings?.bank_account as Record<string, string> | undefined;
   if (!bank || !bank.name) return [];
   return [
     {
@@ -139,28 +139,32 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
   const groomExt = ext.groom ?? {};
   const brideExt = ext.bride ?? {};
 
+  const groomNameEn = groomExt.nameEn ?? "";
+  const brideNameEn = brideExt.nameEn ?? "";
+
   return {
     slug: invitation.invitation_code,
     templateId,
+    coverImage: invitation.cover_image_path ?? "",
     sectionsVisibility,
     couple: {
       groom: {
-        nameKh: groomExt.nameKh || wedding.groom_name,
-        nameEn: groomExt.nameEn || wedding.groom_name,
-        father: groomExt.father ?? "",
+        nameKh:   groomExt.nameKh   ?? "",
+        nameEn:   groomExt.nameEn   ?? "",
+        father:   groomExt.father   ?? "",
         fatherEn: groomExt.fatherEn ?? "",
-        mother: groomExt.mother ?? "",
+        mother:   groomExt.mother   ?? "",
         motherEn: groomExt.motherEn ?? "",
-        photo: groomExt.photo || wedding.groom_photo_path ?? "",
+        photo:    groomExt.photo    ?? "",
       },
       bride: {
-        nameKh: brideExt.nameKh || wedding.bride_name,
-        nameEn: brideExt.nameEn || wedding.bride_name,
-        father: brideExt.father ?? "",
+        nameKh:   brideExt.nameKh   ?? "",
+        nameEn:   brideExt.nameEn   ?? "",
+        father:   brideExt.father   ?? "",
         fatherEn: brideExt.fatherEn ?? "",
-        mother: brideExt.mother ?? "",
+        mother:   brideExt.mother   ?? "",
         motherEn: brideExt.motherEn ?? "",
-        photo: brideExt.photo || wedding.bride_photo_path ?? "",
+        photo:    brideExt.photo    ?? "",
       },
     },
     events,
@@ -174,9 +178,13 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
     invitationTextKh: invTextKh,
     invitationTextEn: invTextEn,
     meta: {
-      title: `${wedding.bride_name} & ${wedding.groom_name} — Wedding Invitation`,
+      title: brideNameEn && groomNameEn
+        ? `${brideNameEn} & ${groomNameEn} — Wedding Invitation`
+        : "Wedding Invitation",
       description: wedding.story_description?.slice(0, 160) ??
-        `Join us to celebrate the wedding of ${wedding.bride_name} and ${wedding.groom_name}.`,
+        (brideNameEn && groomNameEn
+          ? `Join us to celebrate the wedding of ${brideNameEn} and ${groomNameEn}.`
+          : "Join us to celebrate our wedding."),
       coverImage: invitation.cover_image_path ?? "",
     },
   };

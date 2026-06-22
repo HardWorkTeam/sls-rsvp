@@ -178,6 +178,29 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               <DiamondDivider color="#D4A020" />
             </div>
 
+            {/* Couple photos */}
+            {(groom.photo || bride.photo) && (
+              <div className="flex items-end justify-center gap-4 w-full py-2">
+                {groom.photo && (
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#D4A020]/50 shadow-[0_0_0_3px_rgba(212,160,32,0.12)]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={groom.photo} alt={groom.nameEn} className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                )}
+                <div className="w-[1px] h-16 self-center" style={{ background: 'rgba(212,160,32,0.2)' }} />
+                {bride.photo && (
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#D4A020]/50 shadow-[0_0_0_3px_rgba(212,160,32,0.12)]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={bride.photo} alt={bride.nameEn} className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Couple names */}
             <div className="flex flex-col items-center gap-3 w-full py-2">
               <div className="flex flex-col items-center">

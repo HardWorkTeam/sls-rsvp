@@ -9,9 +9,10 @@ interface CoverProps {
   couple: Couple;
   events: WeddingEvent[];
   guestName?: string;
+  coverImage?: string;
 }
 
-export const Cover: React.FC<CoverProps> = ({ couple, events, guestName }) => {
+export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverImage }) => {
   const [phase, setPhase] = useState<'sealed' | 'flap-open' | 'card-rise' | 'card-fullscreen' | 'reveal'>('sealed');
   const primaryEvent = events[0];
 
@@ -43,6 +44,14 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName }) => {
 
   return (
     <section className="relative w-full overflow-hidden flex flex-col items-center justify-center" style={{ minHeight: '100dvh' }}>
+      {/* User cover photo */}
+      {coverImage && (
+        <>
+          <img src={coverImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ zIndex: 0 }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(20,15,10,0.45)', zIndex: 1 }} />
+        </>
+      )}
+
       {/* Subtle textured ivory background for revealed state */}
       <div className="absolute inset-0 bg-pattern-editorial" />
 

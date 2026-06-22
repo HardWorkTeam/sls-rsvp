@@ -43,10 +43,12 @@ export const GiftRegistry: React.FC<GiftProps> = ({ registries }) => {
             <span style={{ color: '#E8C97A', opacity: 0.6 }}>✦</span>
           </div>
           <div className="p-5 flex gap-4 items-center">
-            <div className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden p-1"
-              style={{ border: '1px solid rgba(106, 140, 178, 0.3)', background: 'rgba(255,255,255,0.05)' }}>
-              <img src={item.qrCodeUrl} alt={item.bankName} className="w-full h-full object-cover rounded-lg" />
-            </div>
+            {item.qrCodeUrl && (
+              <div className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden p-1"
+                style={{ border: '1px solid rgba(106, 140, 178, 0.3)', background: 'rgba(255,255,255,0.05)' }}>
+                <img src={item.qrCodeUrl} alt={item.bankName} className="w-full h-full object-cover rounded-lg" />
+              </div>
+            )}
             <div className="space-y-2">
               <div>
                 <p className="font-serif-en text-[10px] tracking-widest uppercase" style={{ color: 'rgba(232, 201, 122, 0.7)' }}>Account Name</p>

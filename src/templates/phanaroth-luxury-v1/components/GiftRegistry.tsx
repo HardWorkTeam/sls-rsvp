@@ -65,20 +65,22 @@ export const GiftRegistry: React.FC<GiftProps> = ({ registries }) => {
 
                 <div className="p-5 flex gap-5 items-center">
                   {/* QR Code */}
-                  <div
-                    className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden"
-                    style={{
-                      border: '1px solid rgba(232,201,122,0.3)',
-                      background: 'rgba(250,246,239,0.05)',
-                      padding: '4px',
-                    }}
-                  >
-                    <img
-                      src={item.qrCodeUrl}
-                      alt={`QR Code ${item.bankName}`}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </div>
+                  {item.qrCodeUrl && (
+                    <div
+                      className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden"
+                      style={{
+                        border: '1px solid rgba(232,201,122,0.3)',
+                        background: 'rgba(250,246,239,0.05)',
+                        padding: '4px',
+                      }}
+                    >
+                      <img
+                        src={item.qrCodeUrl}
+                        alt={`QR Code ${item.bankName}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+                  )}
 
                   {/* Account detail & Copy Button */}
                   <div className="flex-1 space-y-3 text-[#FAF6EF]">

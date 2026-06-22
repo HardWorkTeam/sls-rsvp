@@ -64,7 +64,7 @@ export default function PhanarothLuxuryV1Template({ data, guestName }: TemplateP
     >
       {/* 1. COVER (Bi-parting doors gate opener) */}
       {sectionsVisibility.Cover && (
-        <Cover couple={data.couple} events={data.events} guestName={guestName} />
+        <Cover couple={data.couple} events={data.events} guestName={guestName} coverImage={data.coverImage} />
       )}
 
       {/* 2. WELCOME MESSAGE */}

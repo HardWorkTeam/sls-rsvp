@@ -10,11 +10,12 @@ interface CoverProps {
   dateLabel?: string;
   venueName?: string;
   guestName?: string;
+  coverImage?: string;
 }
 
 type EnvelopeState = 'closed' | 'opening-flap' | 'sliding-card' | 'zoom-out' | 'done';
 
-export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, guestName }) => {
+export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, guestName, coverImage }) => {
   const [envelopeState, setEnvelopeState] = useState<EnvelopeState>('closed');
   const [opened, setOpened] = useState(false);
 
@@ -53,6 +54,14 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
 
   return (
     <section className="relative w-full h-[100svh] bg-transparent overflow-hidden flex flex-col items-center justify-center">
+
+      {/* User cover photo */}
+      {coverImage && (
+        <>
+          <img src={coverImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ zIndex: 0 }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(255,255,255,0.55)', zIndex: 1 }} />
+        </>
+      )}
 
       {/* ─── 3D PHYSICAL ENVELOPE GATE VIEW ─── */}
       <AnimatePresence>

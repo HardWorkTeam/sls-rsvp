@@ -66,7 +66,7 @@ export default function RoyalKhmerV1Template({ data, guestName }: TemplateProps)
           Full-screen cinematic opener with gold particles & splash gate.
       ══════════════════════════════════════════════════════════════════ */}
       {sectionsVisibility.Cover && (
-        <Cover couple={data.couple} events={data.events} guestName={guestName} />
+        <Cover couple={data.couple} events={data.events} guestName={guestName} coverImage={data.coverImage} />
       )}
 
       {/* ══════════════════════════════════════════════════════════════════

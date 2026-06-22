@@ -63,7 +63,7 @@ export default function AngkorHeritageV1Template({ data, guestName }: TemplatePr
 
       {/* ── COVER ── */}
       {sectionsVisibility.Cover && (
-        <Cover couple={data.couple} events={data.events} guestName={guestName} />
+        <Cover couple={data.couple} events={data.events} guestName={guestName} coverImage={data.coverImage} />
       )}
 
       {/* 2. WELCOME MESSAGE */}

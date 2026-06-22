@@ -94,10 +94,11 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
 
       {/* ── Sections ── */}
       {sectionsVisibility.Cover && (
-        <Cover 
-          couple={data.couple} 
-          dateLabel={data.lunarDateText} 
-          venueName={data.events[0]?.locationName} 
+        <Cover
+          couple={data.couple}
+          dateLabel={data.lunarDateText}
+          venueName={data.events[0]?.locationName}
+          coverImage={data.coverImage}
         />
       )}
 

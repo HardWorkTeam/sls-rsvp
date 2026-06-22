@@ -64,14 +64,16 @@ export const GiftRegistry: React.FC<GiftRegistryProps> = ({ registries }) => {
 
                   <div className="relative z-10 flex gap-4 items-center">
                     {/* QR Code Container */}
-                    <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden p-1 bg-white border border-[#C5A059]/20 shadow-xs">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={item.qrCodeUrl}
-                        alt={item.bankName}
-                        className="w-full h-full object-cover rounded"
-                      />
-                    </div>
+                    {item.qrCodeUrl && (
+                      <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden p-1 bg-white border border-[#C5A059]/20 shadow-xs">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={item.qrCodeUrl}
+                          alt={item.bankName}
+                          className="w-full h-full object-cover rounded"
+                        />
+                      </div>
+                    )}
 
                     {/* Account Details */}
                     <div className="flex-1 space-y-2.5 text-left">

@@ -9,9 +9,10 @@ interface CoverProps {
   couple: Couple;
   events: WeddingEvent[];
   guestName?: string;
+  coverImage?: string;
 }
 
-export const Cover: React.FC<CoverProps> = ({ couple, events, guestName }) => {
+export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverImage }) => {
   const [envelopeState, setEnvelopeState] = useState<'closed' | 'opening-flap' | 'sliding-card' | 'zoom-out' | 'done'>('closed');
   const [opened, setOpened] = useState(false);
   const primaryEvent = events[0];
@@ -64,9 +65,13 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName }) => {
         background: 'transparent',
       }}
     >
-
-
-
+      {/* User cover photo */}
+      {coverImage && (
+        <>
+          <img src={coverImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ zIndex: 0 }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(30,60,100,0.52)', zIndex: 1 }} />
+        </>
+      )}
 
       {/* ── Soft blue watercolor wash background accents ── */}
       <div
