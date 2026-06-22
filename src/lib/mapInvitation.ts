@@ -6,44 +6,7 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
   const { wedding } = invitation;
   const events: WeddingEvent[] = [];
 
-  // Prefer event_schedule saved in invitation settings (editor-sourced)
-  const sched = (invitation.settings?.event_schedule ?? {}) as Record<string, string>;
-  if (sched.ceremony_venue || sched.date) {
-    const isoDate = sched.date ? `${sched.date}T${sched.time ?? "00:00"}Z` : "";
-    const timeLabel = sched.time
-      ? new Date(`1970-01-01T${sched.time}Z`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
-      : "";
-
-    if (sched.ceremony_venue) {
-      events.push({
-        id: "evt-ceremony",
-        title: "ពិធីកាត់សក់បង្កក់សិរី (Ceremony)",
-        dateKh: "",
-        dateSolar: isoDate,
-        timeLabel,
-        locationName: sched.ceremony_venue,
-        googleMapsUrl: sched.maps_link ?? "",
-        sortOrder: 1,
-      });
-    }
-
-    if (sched.reception_venue && sched.reception_venue !== sched.ceremony_venue) {
-      events.push({
-        id: "evt-reception",
-        title: "ពិធីពិសាភោជនាហារ (Reception)",
-        dateKh: "",
-        dateSolar: isoDate,
-        timeLabel: "",
-        locationName: sched.reception_venue,
-        googleMapsUrl: sched.maps_link ?? "",
-        sortOrder: 2,
-      });
-    }
-
-    return events;
-  }
-
-  // Fall back to wedding.timeline_events if no editor schedule saved yet
+  // Use structured timeline_events if present
   if (wedding.timeline_events.length > 0) {
     wedding.timeline_events.forEach((evt, i) => {
       const date = evt.starts_at ? new Date(evt.starts_at) : null;
@@ -62,6 +25,39 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
       });
     });
     return events.sort((a, b) => a.sortOrder - b.sortOrder);
+  }
+
+  // Fall back to wedding_date + ceremony/reception venue fields
+  const baseDate = wedding.wedding_date ?? "";
+  const baseTime = wedding.wedding_time ?? "00:00:00";
+  const isoDate = baseDate ? `${baseDate}T${baseTime}Z` : "";
+
+  if (wedding.ceremony_venue) {
+    events.push({
+      id: "evt-ceremony",
+      title: "ពិធីកាត់សក់បង្កក់សិរី (Ceremony)",
+      dateKh: "",
+      dateSolar: isoDate,
+      timeLabel: wedding.wedding_time
+        ? new Date(`1970-01-01T${wedding.wedding_time}Z`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
+        : "",
+      locationName: wedding.ceremony_venue,
+      googleMapsUrl: wedding.google_map_link ?? "",
+      sortOrder: 1,
+    });
+  }
+
+  if (wedding.reception_venue && wedding.reception_venue !== wedding.ceremony_venue) {
+    events.push({
+      id: "evt-reception",
+      title: "ពិធីពិសាភោជនាហារ (Reception)",
+      dateKh: "",
+      dateSolar: isoDate,
+      timeLabel: "",
+      locationName: wedding.reception_venue,
+      googleMapsUrl: wedding.google_map_link ?? "",
+      sortOrder: 2,
+    });
   }
 
   return events;
@@ -114,12 +110,9 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
   const gallery = buildGallery(invitation);
   const loveStory = buildLoveStory(invitation);
 
-  const schedDate = ((invitation.settings?.event_schedule ?? {}) as Record<string, string>).date;
-  const deadlineDate = schedDate
-    ? `${schedDate}T00:00:00Z`
-    : wedding.wedding_date
-      ? `${wedding.wedding_date}T00:00:00Z`
-      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const deadlineDate = wedding.wedding_date
+    ? `${wedding.wedding_date}T00:00:00Z`
+    : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
   // Section visibility: editor saves to settings.sections; data availability gates the rest
   const savedSections = (invitation.settings?.sections ?? {}) as Partial<Record<string, boolean>>;
