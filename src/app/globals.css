@@ -3,6 +3,39 @@
 :root {
   --background: #faf7f2;
   --foreground: #1c1917;
+
+  /* Royal Khmer */
+  --rk-gold: #C9A84C;
+  --rk-gold-light: #E8C97A;
+  --rk-gold-dark: #8B6914;
+  --rk-ivory: #FAF6EF;
+  --rk-ivory-dark: #F0E8D8;
+  --rk-brown: #2C1810;
+  --rk-brown-mid: #4A2C1A;
+  --rk-crimson: #7A1C1C;
+  --rk-shadow: rgba(44, 24, 16, 0.15);
+
+  /* Butterfly Editorial */
+  --ed-blush: #F5E6E3;
+  --ed-blush-light: #FBF6F5;
+  --ed-gold: #C5A059;
+  --ed-gold-light: #E2CD9F;
+  --ed-gold-dark: #8F6F30;
+  --ed-ivory: #FCFBF9;
+  --ed-burgundy: #5A121D;
+  --ed-burgundy-light: #7E1E2C;
+  --ed-charcoal: #2A2A2A;
+
+  /* Emerald Elegance */
+  --ee-green-dark: #f0ead8;
+  --ee-green-main: #f8f6f0;
+  --ee-green-light: #ffffff;
+  --ee-gold: #c9a84c;
+  --ee-gold-light: #b08d35;
+  --ee-gold-bright: #8a6a1c;
+  --ee-ivory: #1e4529;
+  --ee-ivory-light: #12301a;
+  --ee-gray-warm: #4a6652;
 }
 
 @theme inline {
@@ -10,6 +43,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-serif: var(--font-serif);
+  --font-khmer-title: 'Khmer OS Moul Light', 'Moul', serif;
+  --font-khmer-body: 'Kantumruy Pro', 'Kantumruy', sans-serif;
+  --font-khmer-sub: 'Kantumruy Pro', 'Kantumruy', sans-serif;
+  --font-serif-sub: 'Kantumruy Pro', 'Kantumruy', serif;
+  --font-script: 'Pinyon Script', 'Playball', cursive;
 }
 
 /*
@@ -21,3 +59,273 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── Font utility classes used by templates ─────────────────────────── */
+.font-khmer-title  { font-family: var(--font-khmer-title)  !important; }
+.font-khmer-body   { font-family: var(--font-khmer-body)   !important; }
+.font-khmer-sub    { font-family: var(--font-khmer-sub)    !important; }
+.font-serif-en     { font-family: var(--font-serif)        !important; }
+.font-serif-sub    { font-family: var(--font-serif-sub)    !important; }
+.font-script       { font-family: var(--font-script)       !important; }
+
+.font-editorial-serif  { font-family: 'Cormorant Garamond', 'Playfair Display', serif !important; }
+.font-editorial-title  { font-family: 'Cinzel', 'Cormorant Garamond', serif !important; }
+.font-editorial-script { font-family: 'Pinyon Script', 'Playball', cursive !important; }
+.font-emerald-serif    { font-family: 'Playfair Display', 'Cormorant Garamond', serif !important; }
+.font-emerald-sans     { font-family: 'Montserrat', sans-serif !important; }
+.font-emerald-script   { font-family: 'Great Vibes', cursive !important; }
+
+/* ─── Color utilities ────────────────────────────────────────────────── */
+.text-gold       { color: var(--rk-gold); }
+.text-gold-light { color: var(--rk-gold-light); }
+.bg-ivory        { background-color: var(--rk-ivory); }
+.bg-brown        { background-color: var(--rk-brown); }
+
+.text-emerald-gold        { color: var(--ee-gold); }
+.text-emerald-gold-light  { color: var(--ee-gold-light); }
+.text-emerald-gold-bright { color: var(--ee-gold-bright); }
+.text-emerald-ivory       { color: var(--ee-ivory); }
+.text-emerald-gray        { color: var(--ee-gray-warm); }
+.bg-emerald-main  { background-color: var(--ee-green-main); }
+.bg-emerald-light { background-color: var(--ee-green-light); }
+.bg-emerald-dark  { background-color: var(--ee-green-dark); }
+
+.text-emerald-gradient {
+  background: linear-gradient(135deg, #1e4529 0%, #468c59 50%, #12301a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────────── */
+@keyframes float-particle {
+  0%   { transform: translateY(100vh) translateX(0px) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) translateX(60px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes shimmer-gold {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.3); }
+  50%       { box-shadow: 0 0 40px rgba(201,168,76,0.7), 0 0 80px rgba(201,168,76,0.2); }
+}
+
+@keyframes lotus-bloom {
+  0%   { transform: scale(0.8) rotate(-5deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes border-draw {
+  0%   { stroke-dashoffset: 1000; opacity: 0; }
+  50%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes subtle-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes slide-left-gate {
+  0%   { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(-100%); opacity: 0; }
+}
+
+@keyframes slide-right-gate {
+  0%   { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes scroll-marquee {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes emerald-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes emerald-breathing {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.02); }
+}
+
+@keyframes emerald-ripple {
+  0%   { width: 0; height: 0; opacity: 0.5; }
+  100% { width: 200%; padding-top: 200%; opacity: 0; }
+}
+
+/* ─── Animation utilities ────────────────────────────────────────────── */
+.animate-subtle-float    { animation: subtle-float 4s ease-in-out infinite; }
+.animate-pulse-glow      { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-lotus-bloom     { animation: lotus-bloom 1.2s cubic-bezier(0.16,1,0.3,1) forwards; }
+.animate-slide-left      { animation: slide-left-gate 1.2s cubic-bezier(0.77,0,0.175,1) forwards; }
+.animate-slide-right     { animation: slide-right-gate 1.2s cubic-bezier(0.77,0,0.175,1) forwards; }
+.animate-marquee         { animation: scroll-marquee 25s linear infinite; }
+.animate-marquee:hover   { animation-play-state: paused; }
+.animate-emerald-breathing { animation: emerald-breathing 6s ease-in-out infinite; }
+
+/* ─── Section base ───────────────────────────────────────────────────── */
+.rk-section {
+  padding: 6rem 1.5rem;
+  position: relative;
+}
+
+.rk-section-title {
+  font-family: var(--font-khmer-title);
+  color: var(--rk-gold);
+  font-size: 1.65rem;
+  line-height: 1.8;
+  text-align: center;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.rk-card {
+  background: rgba(250,246,239,0.04);
+  border: 1px solid rgba(201,168,76,0.18);
+  border-radius: 1.25rem;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* ─── Glassmorphism cards ────────────────────────────────────────────── */
+.glass-card-light {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 12px 40px rgba(106,140,178,0.08);
+}
+
+.glass-card-dark {
+  background: rgba(26,14,8,0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201,168,76,0.18);
+  box-shadow: 0 12px 45px rgba(0,0,0,0.35);
+}
+
+.double-border-gold {
+  position: relative;
+  border: 1px solid rgba(201,168,76,0.35);
+}
+.double-border-gold::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(201,168,76,0.12);
+  pointer-events: none;
+}
+
+.khmer-border-svg path {
+  stroke-dasharray: 1000;
+  animation: border-draw 2.5s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+/* ─── Gold shimmer text ──────────────────────────────────────────────── */
+.gold-shimmer {
+  background: linear-gradient(90deg, var(--rk-gold-dark) 0%, var(--rk-gold) 30%, var(--rk-gold-light) 50%, var(--rk-gold) 70%, var(--rk-gold-dark) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-gold 4s linear infinite;
+}
+
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--rk-gold) 50%, transparent 100%);
+}
+
+/* ─── Hover card tilt ────────────────────────────────────────────────── */
+.card-tilt-hover {
+  transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), border-color 0.4s ease, box-shadow 0.6s ease;
+}
+.card-tilt-hover:hover {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 30px rgba(201,168,76,0.15);
+}
+
+/* ─── Background patterns ────────────────────────────────────────────── */
+.bg-pattern-royal {
+  background-color: #2C1810;
+  background-image:
+    radial-gradient(circle at 50% 30%, rgba(74,44,26,0.3) 0%, rgba(26,14,8,0.95) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23C9A84C' stroke-width='0.55' stroke-opacity='0.09'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Ccircle cx='40' cy='40' r='1.5' fill='%23C9A84C' fill-opacity='0.15'/%3E%3Cpath d='M40 10 Q40 40 70 40 M40 70 Q40 40 70 40 M40 10 Q40 40 10 40 M40 70 Q40 40 10 40' stroke-opacity='0.04'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.bg-pattern-angkor {
+  background-color: #FFF8E8;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.45) 0%, rgba(255,243,208,0.9) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0 C45 0 60 15 60 30 C60 45 45 60 30 60 C15 60 0 45 0 30 C0 15 15 0 30 0 Z' stroke='%23D4A020' stroke-width='0.55' stroke-opacity='0.07' fill='none'/%3E%3Cpath d='M30 10 L30 50 M10 30 L50 30' stroke='%23D4A020' stroke-width='0.4' stroke-opacity='0.05'/%3E%3Ccircle cx='30' cy='30' r='1.8' fill='%23D4A020' fill-opacity='0.12'/%3E%3C/svg%3E");
+}
+
+.bg-pattern-botanical {
+  background-color: #F8FAFC;
+  background-image:
+    linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 100%),
+    url("/blue-ethereal-bg.png");
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.bg-pattern-phanaroth {
+  background-color: #4A0404;
+  background-image:
+    radial-gradient(circle at 50% 30%, rgba(139,10,10,0.45) 0%, rgba(26,2,2,0.97) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 10 L45 30 L30 50 L15 30 Z' stroke='%23FAF6EF' stroke-width='0.45' stroke-opacity='0.07' fill='none'/%3E%3Ccircle cx='30' cy='30' r='1.2' fill='%23C9A84C' fill-opacity='0.15'/%3E%3Cpath d='M30 5 Q30 30 55 30 M30 55 Q30 30 55 30 M30 5 Q30 30 5 30 M30 55 Q30 30 5 30' stroke='%23C9A84C' stroke-width='0.3' stroke-opacity='0.04'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.bg-pattern-editorial {
+  background-color: var(--ed-ivory);
+  background-image: url('/butterfly-artwork-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.bg-pattern-emerald {
+  background-color: #f8f6f0;
+  background-image: url("/ethereal-bg.png");
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* ─── Emerald utilities ──────────────────────────────────────────────── */
+.emerald-gold-glow    { box-shadow: 0 0 8px rgba(201,168,76,0.4); }
+.emerald-shimmer-text { position: relative; }
+.emerald-shimmer-text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 30%, transparent 60%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: emerald-shimmer 5s linear infinite;
+  pointer-events: none;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; }
+::-webkit-scrollbar-track { background: var(--rk-brown); }
+::-webkit-scrollbar-thumb { background: var(--rk-gold-dark); border-radius: 3px; }

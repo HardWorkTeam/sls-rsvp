@@ -1,3 +1,95 @@
+// ─── Template Types (InvitationData shape used by all templates) ────────────
+
+export type TemplateId =
+  | 'royal-khmer-v1'
+  | 'angkor-heritage-v1'
+  | 'blue-botanical-v1'
+  | 'phanaroth-luxury-v1'
+  | 'butterfly-editorial-v1'
+  | 'emerald-elegance-v1'
+  | string;
+
+export interface CouplePerson {
+  nameKh: string;
+  nameEn: string;
+  father: string;
+  mother: string;
+  fatherEn?: string;
+  motherEn?: string;
+  photo: string;
+}
+
+export interface Couple {
+  groom: CouplePerson;
+  bride: CouplePerson;
+}
+
+export interface WeddingEvent {
+  id: string;
+  title: string;
+  dateKh: string;
+  dateSolar: string;
+  timeLabel: string;
+  locationName: string;
+  googleMapsUrl: string;
+  sortOrder: number;
+}
+
+export interface LoveStoryMilestone {
+  id: string;
+  title: string;
+  dateLabel: string;
+  description: string;
+  photoUrl?: string;
+  sortOrder: number;
+}
+
+export interface GiftRegistryItem {
+  id: string;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  qrCodeUrl: string;
+}
+
+export interface RsvpSettings {
+  deadline: string;
+  maxGuests: number;
+}
+
+export interface InvitationData {
+  slug: string;
+  templateId: TemplateId;
+  sectionsVisibility: {
+    Cover: boolean;
+    CoupleInfo: boolean;
+    LoveStory: boolean;
+    Schedule: boolean;
+    Gallery: boolean;
+    Location: boolean;
+    GiftRegistry: boolean;
+    RSVP: boolean;
+  };
+  couple: Couple;
+  events: WeddingEvent[];
+  loveStory: LoveStoryMilestone[];
+  gallery: string[];
+  rsvpSettings: RsvpSettings;
+  musicUrl?: string;
+  giftRegistries: GiftRegistryItem[];
+  invitationTextKh?: string;
+  invitationTextEn?: string;
+  lunarDateText?: string;
+  thankYouText?: string;
+  meta: {
+    title: string;
+    description: string;
+    coverImage: string;
+  };
+}
+
+// ─── Backend API Types (PublicInvitation shape from Laravel) ────────────────
+
 export interface PublicTimelineEvent {
   id: number;
   category: string;
