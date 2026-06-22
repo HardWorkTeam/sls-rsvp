@@ -151,7 +151,7 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
         fatherEn: groomExt.fatherEn ?? "",
         mother: groomExt.mother ?? "",
         motherEn: groomExt.motherEn ?? "",
-        photo: wedding.groom_photo_path ?? "",
+        photo: groomExt.photo || wedding.groom_photo_path ?? "",
       },
       bride: {
         nameKh: brideExt.nameKh || wedding.bride_name,
@@ -160,7 +160,7 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
         fatherEn: brideExt.fatherEn ?? "",
         mother: brideExt.mother ?? "",
         motherEn: brideExt.motherEn ?? "",
-        photo: wedding.bride_photo_path ?? "",
+        photo: brideExt.photo || wedding.bride_photo_path ?? "",
       },
     },
     events,
