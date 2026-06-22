@@ -110,19 +110,31 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
     ? `${wedding.wedding_date}T00:00:00Z`
     : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
+  // Section visibility: editor saves to settings.sections; data availability gates the rest
+  const savedSections = (invitation.settings?.sections ?? {}) as Partial<Record<string, boolean>>;
+  const sectionsVisibility = {
+    Cover:        savedSections.Cover        ?? true,
+    CoupleInfo:   savedSections.CoupleInfo   ?? true,
+    LoveStory:    savedSections.LoveStory    ?? loveStory.length > 0,
+    Schedule:     savedSections.Schedule     ?? events.length > 0,
+    Gallery:      savedSections.Gallery      ?? gallery.length > 0,
+    Location:     savedSections.Location     ?? events.length > 0,
+    GiftRegistry: savedSections.GiftRegistry ?? (showGift && giftRegistries.length > 0),
+    RSVP:         savedSections.RSVP         ?? true,
+  };
+
+  // Invitation text: editor saves to settings; fall back to defaults
+  const invTextKh = typeof invitation.settings?.invitation_text_kh === "string"
+    ? invitation.settings.invitation_text_kh
+    : "មានកិត្តិយសសូមគោរពអញ្ជើញ ចូលរួមជាភ្ញៀវកិត្តិយស";
+  const invTextEn = typeof invitation.settings?.invitation_text_en === "string"
+    ? invitation.settings.invitation_text_en
+    : "CORDIALLY REQUEST THE HONOR OF YOUR PRESENCE AT THE CELEBRATION OF THEIR WEDDING";
+
   return {
     slug: invitation.invitation_code,
     templateId,
-    sectionsVisibility: {
-      Cover: true,
-      CoupleInfo: true,
-      LoveStory: loveStory.length > 0,
-      Schedule: events.length > 0,
-      Gallery: gallery.length > 0,
-      Location: events.length > 0,
-      GiftRegistry: showGift && giftRegistries.length > 0,
-      RSVP: true,
-    },
+    sectionsVisibility,
     couple: {
       groom: {
         nameKh: wedding.groom_name,
@@ -147,8 +159,8 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
       maxGuests: 10,
     },
     giftRegistries,
-    invitationTextKh: "មានកិត្តិយសសូមគោរពអញ្ជើញ ចូលរួមជាភ្ញៀវកិត្តិយស",
-    invitationTextEn: "CORDIALLY REQUEST THE HONOR OF YOUR PRESENCE AT THE CELEBRATION OF THEIR WEDDING",
+    invitationTextKh: invTextKh,
+    invitationTextEn: invTextEn,
     meta: {
       title: `${wedding.bride_name} & ${wedding.groom_name} — Wedding Invitation`,
       description: wedding.story_description?.slice(0, 160) ??
