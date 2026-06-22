@@ -159,12 +159,15 @@ export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateT
   const sorted = [...events].sort((a, b) => a.sortOrder - b.sortOrder);
   const primaryEvent = sorted[0];
   
-  const solarDate = new Date(primaryEvent.dateSolar);
   const defaultLunar = primaryEvent.dateKh;
   const displayLunar = lunarDateText || defaultLunar;
 
-  const beYear = toKhmerNumber(solarDate.getFullYear() + 544);
-  const khSolarDate = `ព.ស. ${beYear} ត្រូវនឹងថ្ងៃទី ${toKhmerNumber(solarDate.getDate())} ខែ${getKhmerMonth(solarDate.getMonth())} ឆ្នាំ${toKhmerNumber(solarDate.getFullYear())}`;
+  const dateStr = (primaryEvent.dateSolar ?? '').split('T')[0];
+  const [yearNum = 0, monthNum = 1, dayNum = 1] = dateStr ? dateStr.split('-').map(Number) : [];
+  const beYear = yearNum ? toKhmerNumber(yearNum + 544) : '';
+  const khSolarDate = yearNum
+    ? `ព.ស. ${beYear} ត្រូវនឹងថ្ងៃទី ${toKhmerNumber(dayNum)} ខែ${getKhmerMonth(monthNum - 1)} ឆ្នាំ${toKhmerNumber(yearNum)}`
+    : '';
 
   const themeColor = 'var(--ee-gold)';
   const textColor = 'var(--ee-ivory)';

@@ -2,12 +2,15 @@
 
 import React from 'react';
 import { WeddingEvent } from '@/types/invitation';
+import { buildMapEmbedUrl } from '@/lib/mapUtils';
 
 interface LocationProps {
   primaryEvent: WeddingEvent;
 }
 
 export const Location: React.FC<LocationProps> = ({ primaryEvent }) => {
+  const embedUrl = buildMapEmbedUrl(primaryEvent.googleMapsUrl, primaryEvent.locationName);
+
   return (
     <section className="py-20 px-6 relative z-10" style={{ backdropFilter: 'blur(3px)' }}>
       <div className="max-w-md mx-auto space-y-6">
@@ -17,30 +20,40 @@ export const Location: React.FC<LocationProps> = ({ primaryEvent }) => {
           <div className="h-[1px] w-20 mx-auto" style={{ background: 'linear-gradient(90deg, transparent, rgba(232,201,122,0.4), transparent)' }} />
         </div>
 
-        <a
-          href={primaryEvent.googleMapsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block relative overflow-hidden rounded-2xl group border border-[#E8C97A]/25"
-          style={{
-            aspectRatio: '16/9',
-            background: 'rgba(92, 3, 12, 0.4)',
-          }}
-        >
-          <div className="w-full h-full flex flex-col items-center justify-center gap-3 transition-all group-hover:bg-black/10">
-            <span style={{ fontSize: '2.5rem' }}>🗺️</span>
-            <p className="font-khmer-body text-sm text-center px-4 text-[#FAF6EF]">
-              {primaryEvent.locationName}
-            </p>
-            <p className="font-serif-en text-xs tracking-widest uppercase text-[#E8C97A]">
-              Tap to open in Maps →
-            </p>
+        {embedUrl ? (
+          <div className="overflow-hidden rounded-2xl border border-[#E8C97A]/25" style={{ aspectRatio: '4/3', position: 'relative' }}>
+            <iframe
+              src={embedUrl}
+              width="100%"
+              height="100%"
+              style={{ border: 0, position: 'absolute', inset: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title={primaryEvent.locationName}
+            />
           </div>
-          <div className="absolute top-3 left-3 w-5 h-5 border-t border-l" style={{ borderColor: 'rgba(232,201,122,0.5)' }} />
-          <div className="absolute top-3 right-3 w-5 h-5 border-t border-r" style={{ borderColor: 'rgba(232,201,122,0.5)' }} />
-          <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l" style={{ borderColor: 'rgba(232,201,122,0.5)' }} />
-          <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r" style={{ borderColor: 'rgba(232,201,122,0.5)' }} />
-        </a>
+        ) : null}
+
+        {primaryEvent.locationName && (
+          <p className="font-khmer-body text-sm text-center text-[#FAF6EF]">
+            {primaryEvent.locationName}
+          </p>
+        )}
+
+        {primaryEvent.googleMapsUrl && (
+          <div className="text-center">
+            <a
+              href={primaryEvent.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-xs font-semibold tracking-widest uppercase transition hover:opacity-80"
+              style={{ background: 'rgba(232,201,122,0.1)', border: '1px solid rgba(232,201,122,0.35)', color: '#E8C97A' }}
+            >
+              Get Directions ↗
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );

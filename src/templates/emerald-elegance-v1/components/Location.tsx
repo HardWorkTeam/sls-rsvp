@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { WeddingEvent } from '@/types/invitation';
+import { buildMapEmbedUrl } from '@/lib/mapUtils';
 import { EtherealBorderFrame } from './BotanicalAssets';
 
 interface LocationProps {
@@ -9,6 +10,8 @@ interface LocationProps {
 }
 
 export const Location: React.FC<LocationProps> = ({ primaryEvent }) => {
+  const embedUrl = buildMapEmbedUrl(primaryEvent.googleMapsUrl, primaryEvent.locationName);
+
   return (
     <section className="py-16 px-6 text-center">
       <EtherealBorderFrame className="max-w-lg mx-auto space-y-8 py-10 px-4 md:px-8 shadow-sm">
@@ -20,23 +23,39 @@ export const Location: React.FC<LocationProps> = ({ primaryEvent }) => {
             ទីកន្លែងប្រព្រឹត្ត
           </h2>
         </div>
-        <a
-          href={primaryEvent.googleMapsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block relative overflow-hidden rounded-2xl group border border-emerald-gold/25"
-          style={{ aspectRatio: '16/9', background: 'rgba(201,168,76,0.05)' }}
-        >
-          <div className="w-full h-full flex flex-col items-center justify-center gap-3 transition-all group-hover:bg-black/5">
-            <span style={{ fontSize: '2.5rem' }}>🗺️</span>
-            <p className="font-sans text-sm text-center px-4 text-[#0A1C16]">
-              {primaryEvent.locationName}
-            </p>
-            <span className="font-serif-en text-[9px] uppercase tracking-widest text-emerald-gold mt-2 group-hover:underline">
-              Tap to Open in Maps &rarr;
-            </span>
+
+        {embedUrl ? (
+          <div className="overflow-hidden rounded-2xl border border-emerald-gold/25" style={{ aspectRatio: '4/3', position: 'relative' }}>
+            <iframe
+              src={embedUrl}
+              width="100%"
+              height="100%"
+              style={{ border: 0, position: 'absolute', inset: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title={primaryEvent.locationName}
+            />
           </div>
-        </a>
+        ) : null}
+
+        {primaryEvent.locationName && (
+          <p className="font-sans text-sm text-center text-[#0A1C16]">
+            {primaryEvent.locationName}
+          </p>
+        )}
+
+        {primaryEvent.googleMapsUrl && (
+          <a
+            href={primaryEvent.googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-xs font-semibold tracking-widest uppercase transition hover:opacity-80"
+            style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.3)', color: '#6B5A1E' }}
+          >
+            Get Directions ↗
+          </a>
+        )}
       </EtherealBorderFrame>
     </section>
   );

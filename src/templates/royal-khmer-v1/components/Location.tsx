@@ -2,12 +2,15 @@
 
 import React from 'react';
 import { WeddingEvent } from '@/types/invitation';
+import { buildMapEmbedUrl } from '@/lib/mapUtils';
 
 interface LocationProps {
   primaryEvent: WeddingEvent;
 }
 
 export const Location: React.FC<LocationProps> = ({ primaryEvent }) => {
+  const embedUrl = buildMapEmbedUrl(primaryEvent.googleMapsUrl, primaryEvent.locationName);
+
   return (
     <section
       className="rk-section"
@@ -15,57 +18,48 @@ export const Location: React.FC<LocationProps> = ({ primaryEvent }) => {
     >
       <div className="max-w-lg mx-auto space-y-8">
         <div className="text-center space-y-2">
-          <p
-            className="font-serif-en text-xs tracking-[0.35em] uppercase"
-            style={{ color: 'var(--rk-gold)', opacity: 0.7 }}
-          >
+          <p className="font-serif-en text-xs tracking-[0.35em] uppercase" style={{ color: 'var(--rk-gold)', opacity: 0.7 }}>
             Location
           </p>
-          <h2
-            className="font-khmer-title text-xl"
-            style={{ color: 'var(--rk-gold-light)', lineHeight: 1.7 }}
-          >
+          <h2 className="font-khmer-title text-xl" style={{ color: 'var(--rk-gold-light)', lineHeight: 1.7 }}>
             ទីកន្លែងប្រព្រឹត្ត
           </h2>
         </div>
 
-        {/* Embedded map placeholder linking out */}
-        <a
-          href={primaryEvent.googleMapsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block relative overflow-hidden rounded-2xl group"
-          style={{
-            border: '1px solid rgba(201,168,76,0.25)',
-            aspectRatio: '16/9',
-            background: 'rgba(250,246,239,0.04)',
-          }}
-        >
-          {/* Static map placeholder */}
-          <div
-            className="w-full h-full flex flex-col items-center justify-center gap-3 transition-all group-hover:bg-black/10"
-            style={{ background: 'rgba(201,168,76,0.05)' }}
-          >
-            <span style={{ fontSize: '2.5rem' }}>🗺️</span>
-            <p
-              className="font-khmer-body text-sm text-center px-4"
-              style={{ color: 'var(--rk-ivory)', opacity: 0.8 }}
-            >
-              {primaryEvent.locationName}
-            </p>
-            <p
-              className="font-serif-en text-xs tracking-widest uppercase"
-              style={{ color: 'var(--rk-gold)', opacity: 0.7 }}
-            >
-              Tap to open in Maps →
-            </p>
+        {embedUrl ? (
+          <div className="overflow-hidden rounded-2xl" style={{ border: '1px solid rgba(201,168,76,0.25)', aspectRatio: '4/3', position: 'relative' }}>
+            <iframe
+              src={embedUrl}
+              width="100%"
+              height="100%"
+              style={{ border: 0, position: 'absolute', inset: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title={primaryEvent.locationName}
+            />
           </div>
-          {/* Corner gold accents */}
-          <div className="absolute top-3 left-3 w-5 h-5 border-t border-l" style={{ borderColor: 'rgba(201,168,76,0.5)' }} />
-          <div className="absolute top-3 right-3 w-5 h-5 border-t border-r" style={{ borderColor: 'rgba(201,168,76,0.5)' }} />
-          <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l" style={{ borderColor: 'rgba(201,168,76,0.5)' }} />
-          <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r" style={{ borderColor: 'rgba(201,168,76,0.5)' }} />
-        </a>
+        ) : null}
+
+        {primaryEvent.locationName && (
+          <p className="font-khmer-body text-sm text-center" style={{ color: 'var(--rk-ivory)', opacity: 0.8 }}>
+            {primaryEvent.locationName}
+          </p>
+        )}
+
+        {primaryEvent.googleMapsUrl && (
+          <div className="text-center">
+            <a
+              href={primaryEvent.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-xs font-semibold tracking-widest uppercase transition hover:opacity-80"
+              style={{ background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.35)', color: 'var(--rk-gold)' }}
+            >
+              Get Directions ↗
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );

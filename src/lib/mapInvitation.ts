@@ -6,41 +6,22 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
   const { wedding } = invitation;
   const events: WeddingEvent[] = [];
 
-  // Use structured timeline_events if present
-  if (wedding.timeline_events.length > 0) {
-    wedding.timeline_events.forEach((evt, i) => {
-      const date = evt.starts_at ? new Date(evt.starts_at) : null;
-      const timeLabel = date
-        ? date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
-        : "";
-      events.push({
-        id: String(evt.id),
-        title: evt.title,
-        dateKh: "",
-        dateSolar: evt.starts_at ?? "",
-        timeLabel,
-        locationName: evt.location ?? wedding.ceremony_venue ?? "",
-        googleMapsUrl: wedding.google_map_link ?? "",
-        sortOrder: evt.sort_order ?? i,
-      });
-    });
-    return events.sort((a, b) => a.sortOrder - b.sortOrder);
-  }
-
-  // Fall back to wedding_date + ceremony/reception venue fields
+  // Primary source: wedding record fields (set via editor's Event Schedule section)
   const baseDate = wedding.wedding_date ?? "";
   const baseTime = wedding.wedding_time ?? "00:00:00";
-  const isoDate = baseDate ? `${baseDate}T${baseTime}Z` : "";
+  // No Z suffix — treat as local time so date display is always correct
+  const dateSolar = baseDate ? `${baseDate}T${baseTime}` : "";
+  const timeLabel = wedding.wedding_time
+    ? new Date(`1970-01-01T${wedding.wedding_time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
+    : "";
 
   if (wedding.ceremony_venue) {
     events.push({
       id: "evt-ceremony",
       title: "ពិធីកាត់សក់បង្កក់សិរី (Ceremony)",
       dateKh: "",
-      dateSolar: isoDate,
-      timeLabel: wedding.wedding_time
-        ? new Date(`1970-01-01T${wedding.wedding_time}Z`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
-        : "",
+      dateSolar,
+      timeLabel,
       locationName: wedding.ceremony_venue,
       googleMapsUrl: wedding.google_map_link ?? "",
       sortOrder: 1,
@@ -52,12 +33,30 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
       id: "evt-reception",
       title: "ពិធីពិសាភោជនាហារ (Reception)",
       dateKh: "",
-      dateSolar: isoDate,
+      dateSolar,
       timeLabel: "",
       locationName: wedding.reception_venue,
       googleMapsUrl: wedding.google_map_link ?? "",
       sortOrder: 2,
     });
+  }
+
+  // Fall back to structured timeline_events only when the editor has no venue set
+  if (events.length === 0 && wedding.timeline_events.length > 0) {
+    wedding.timeline_events.forEach((evt, i) => {
+      const date = evt.starts_at ? new Date(evt.starts_at) : null;
+      events.push({
+        id: String(evt.id),
+        title: evt.title,
+        dateKh: "",
+        dateSolar: evt.starts_at ?? "",
+        timeLabel: date ? date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) : "",
+        locationName: evt.location ?? wedding.ceremony_venue ?? "",
+        googleMapsUrl: wedding.google_map_link ?? "",
+        sortOrder: evt.sort_order ?? i,
+      });
+    });
+    return events.sort((a, b) => a.sortOrder - b.sortOrder);
   }
 
   return events;
