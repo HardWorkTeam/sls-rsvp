@@ -72,7 +72,7 @@ function buildGiftRegistries(invitation: PublicInvitation): GiftRegistryItem[] {
       bankName: bank.bank ?? "",
       accountName: bank.name,
       accountNumber: bank.number ?? "",
-      qrCodeUrl: "",
+      qrCodeUrl: bank.qr_url ?? "",
     },
   ];
 }
@@ -92,9 +92,13 @@ function buildLoveStory(invitation: PublicInvitation): LoveStoryMilestone[] {
 }
 
 function buildGallery(invitation: PublicInvitation): string[] {
-  return invitation.wedding.albums.flatMap(
+  const albumPhotos = invitation.wedding.albums.flatMap(
     (album) => (album.media_items ?? []).filter((m) => m.media_type === "photo").map((m) => m.url),
   );
+  const settingsUrls = Array.isArray(invitation.settings?.gallery_urls)
+    ? (invitation.settings.gallery_urls as string[]).filter(Boolean)
+    : [];
+  return [...albumPhotos, ...settingsUrls];
 }
 
 export function mapToInvitationData(invitation: PublicInvitation): InvitationData {
@@ -131,23 +135,31 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
     ? invitation.settings.invitation_text_en
     : "CORDIALLY REQUEST THE HONOR OF YOUR PRESENCE AT THE CELEBRATION OF THEIR WEDDING";
 
+  const ext = (invitation.settings?.couple_extended ?? {}) as Record<string, Record<string, string>>;
+  const groomExt = ext.groom ?? {};
+  const brideExt = ext.bride ?? {};
+
   return {
     slug: invitation.invitation_code,
     templateId,
     sectionsVisibility,
     couple: {
       groom: {
-        nameKh: wedding.groom_name,
-        nameEn: wedding.groom_name,
-        father: "",
-        mother: "",
+        nameKh: groomExt.nameKh || wedding.groom_name,
+        nameEn: groomExt.nameEn || wedding.groom_name,
+        father: groomExt.father ?? "",
+        fatherEn: groomExt.fatherEn ?? "",
+        mother: groomExt.mother ?? "",
+        motherEn: groomExt.motherEn ?? "",
         photo: wedding.groom_photo_path ?? "",
       },
       bride: {
-        nameKh: wedding.bride_name,
-        nameEn: wedding.bride_name,
-        father: "",
-        mother: "",
+        nameKh: brideExt.nameKh || wedding.bride_name,
+        nameEn: brideExt.nameEn || wedding.bride_name,
+        father: brideExt.father ?? "",
+        fatherEn: brideExt.fatherEn ?? "",
+        mother: brideExt.mother ?? "",
+        motherEn: brideExt.motherEn ?? "",
         photo: wedding.bride_photo_path ?? "",
       },
     },
