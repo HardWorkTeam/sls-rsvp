@@ -2,6 +2,22 @@ import type { PublicInvitation, InvitationData, WeddingEvent, GiftRegistryItem, 
 
 const DEFAULT_TEMPLATE = "royal-khmer-v1";
 
+// The platform targets Cambodia events; times stored as UTC must be displayed in local Cambodia time.
+const DISPLAY_TZ = "Asia/Phnom_Penh";
+
+function fmtTime(date: Date): string {
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: DISPLAY_TZ,
+  });
+}
+
+// Return the local calendar date string "YYYY-MM-DD" in the display timezone.
+function localDateStr(date: Date): string {
+  return date.toLocaleDateString("en-CA", { timeZone: DISPLAY_TZ }); // en-CA = YYYY-MM-DD
+}
+
 function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
   const { wedding } = invitation;
 
@@ -9,14 +25,14 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
   if (wedding.timeline_events.length > 0) {
     const mapped = wedding.timeline_events.map((evt, i) => {
       const date = evt.starts_at ? new Date(evt.starts_at) : null;
+      // dateSolar must reflect the LOCAL calendar date so Khmer date headers are correct.
+      const dateSolar = date ? `${localDateStr(date)}T${fmtTime(date)}` : (evt.starts_at ?? "");
       return {
         id: String(evt.id),
         title: evt.title,
         dateKh: "",
-        dateSolar: evt.starts_at ?? "",
-        timeLabel: date
-          ? date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
-          : "",
+        dateSolar,
+        timeLabel: date ? fmtTime(date) : "",
         locationName: evt.location ?? wedding.ceremony_venue ?? "",
         googleMapsUrl: wedding.google_map_link ?? "",
         sortOrder: evt.sort_order ?? i,
@@ -31,7 +47,7 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
   const baseTime = wedding.wedding_time ?? "00:00:00";
   const dateSolar = baseDate ? `${baseDate}T${baseTime}` : "";
   const timeLabel = wedding.wedding_time
-    ? new Date(`1970-01-01T${wedding.wedding_time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
+    ? new Date(`1970-01-01T${wedding.wedding_time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" })
     : "";
 
   if (wedding.ceremony_venue) {
