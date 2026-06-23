@@ -29,6 +29,14 @@ const getKhmerMonth = (monthIndex: number): string => {
   return months[monthIndex];
 };
 
+const formatKhmerEventDate = (dateSolar: string): string => {
+  const dateStr = (dateSolar ?? '').split('T')[0];
+  if (!dateStr) return '';
+  const [y, m, d] = dateStr.split('-').map(Number);
+  if (!y || !m || !d) return '';
+  return `ថ្ងៃទី ${toKhmerNumber(d)} ខែ${getKhmerMonth(m - 1)} ឆ្នាំ${toKhmerNumber(y)}`;
+};
+
 const translateTimeToKhmer = (timeStr: string): string => {
   const clean = timeStr.trim().toUpperCase();
   const match = clean.match(/(\d+):?(\d+)?\s*(AM|PM)?/);
@@ -244,6 +252,11 @@ export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateT
                     <span className="font-khmer-body font-bold text-xs tracking-wider text-[#6A8CB2]">
                       {translateTimeToKhmer(evt.timeLabel)}
                     </span>
+                    {formatKhmerEventDate(evt.dateSolar) ? (
+                      <span className="block font-khmer-body text-[11px] opacity-75" style={{ color: textColor }}>
+                        📅 {formatKhmerEventDate(evt.dateSolar)}
+                      </span>
+                    ) : null}
                     <h4 className="font-khmer-body font-bold text-sm leading-relaxed" style={{ color: textColor }}>
                       {evt.title}
                     </h4>

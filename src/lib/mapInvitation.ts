@@ -21,19 +21,31 @@ function localDateStr(date: Date): string {
 function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
   const { wedding } = invitation;
 
+  // Wedding-level fallbacks: events without their own date/time/location inherit these.
+  const weddingDate = wedding.wedding_date ?? "";
+  const weddingTime = wedding.wedding_time ?? "";
+  const weddingDateSolar = weddingDate
+    ? `${weddingDate}T${weddingTime || "00:00:00"}`
+    : "";
+  const weddingTimeLabel = weddingTime
+    ? new Date(`1970-01-01T${weddingTime}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" })
+    : "";
+
   // Primary source: timeline_events created in the invitation editor
   if (wedding.timeline_events.length > 0) {
     const mapped = wedding.timeline_events.map((evt, i) => {
       const date = evt.starts_at ? new Date(evt.starts_at) : null;
       // dateSolar must reflect the LOCAL calendar date so Khmer date headers are correct.
-      const dateSolar = date ? `${localDateStr(date)}T${fmtTime(date)}` : (evt.starts_at ?? "");
+      // When the event has no time set, inherit the wedding's date/time.
+      const dateSolar = date ? `${localDateStr(date)}T${fmtTime(date)}` : weddingDateSolar;
+      const timeLabel = date ? fmtTime(date) : weddingTimeLabel;
       return {
         id: String(evt.id),
         title: evt.title,
         dateKh: "",
         dateSolar,
-        timeLabel: date ? fmtTime(date) : "",
-        locationName: evt.location ?? wedding.ceremony_venue ?? "",
+        timeLabel,
+        locationName: evt.location ?? wedding.ceremony_venue ?? wedding.reception_venue ?? "",
         googleMapsUrl: wedding.google_map_link ?? "",
         sortOrder: evt.sort_order ?? i,
       };
@@ -43,20 +55,14 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
 
   // Fallback: derive events from wedding date/venue fields when no timeline events exist
   const events: WeddingEvent[] = [];
-  const baseDate = wedding.wedding_date ?? "";
-  const baseTime = wedding.wedding_time ?? "00:00:00";
-  const dateSolar = baseDate ? `${baseDate}T${baseTime}` : "";
-  const timeLabel = wedding.wedding_time
-    ? new Date(`1970-01-01T${wedding.wedding_time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" })
-    : "";
 
   if (wedding.ceremony_venue) {
     events.push({
       id: "evt-ceremony",
       title: "ពិធីកាត់សក់បង្កក់សិរី (Ceremony)",
       dateKh: "",
-      dateSolar,
-      timeLabel,
+      dateSolar: weddingDateSolar,
+      timeLabel: weddingTimeLabel,
       locationName: wedding.ceremony_venue,
       googleMapsUrl: wedding.google_map_link ?? "",
       sortOrder: 1,
@@ -68,7 +74,7 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
       id: "evt-reception",
       title: "ពិធីពិសាភោជនាហារ (Reception)",
       dateKh: "",
-      dateSolar,
+      dateSolar: weddingDateSolar,
       timeLabel: "",
       locationName: wedding.reception_venue,
       googleMapsUrl: wedding.google_map_link ?? "",
