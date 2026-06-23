@@ -4,12 +4,31 @@ const DEFAULT_TEMPLATE = "royal-khmer-v1";
 
 function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
   const { wedding } = invitation;
-  const events: WeddingEvent[] = [];
 
-  // Primary source: wedding record fields (set via editor's Event Schedule section)
+  // Primary source: timeline_events created in the invitation editor
+  if (wedding.timeline_events.length > 0) {
+    const mapped = wedding.timeline_events.map((evt, i) => {
+      const date = evt.starts_at ? new Date(evt.starts_at) : null;
+      return {
+        id: String(evt.id),
+        title: evt.title,
+        dateKh: "",
+        dateSolar: evt.starts_at ?? "",
+        timeLabel: date
+          ? date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
+          : "",
+        locationName: evt.location ?? wedding.ceremony_venue ?? "",
+        googleMapsUrl: wedding.google_map_link ?? "",
+        sortOrder: evt.sort_order ?? i,
+      };
+    });
+    return mapped.sort((a, b) => a.sortOrder - b.sortOrder);
+  }
+
+  // Fallback: derive events from wedding date/venue fields when no timeline events exist
+  const events: WeddingEvent[] = [];
   const baseDate = wedding.wedding_date ?? "";
   const baseTime = wedding.wedding_time ?? "00:00:00";
-  // No Z suffix — treat as local time so date display is always correct
   const dateSolar = baseDate ? `${baseDate}T${baseTime}` : "";
   const timeLabel = wedding.wedding_time
     ? new Date(`1970-01-01T${wedding.wedding_time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
@@ -39,24 +58,6 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
       googleMapsUrl: wedding.google_map_link ?? "",
       sortOrder: 2,
     });
-  }
-
-  // Fall back to structured timeline_events only when the editor has no venue set
-  if (events.length === 0 && wedding.timeline_events.length > 0) {
-    wedding.timeline_events.forEach((evt, i) => {
-      const date = evt.starts_at ? new Date(evt.starts_at) : null;
-      events.push({
-        id: String(evt.id),
-        title: evt.title,
-        dateKh: "",
-        dateSolar: evt.starts_at ?? "",
-        timeLabel: date ? date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) : "",
-        locationName: evt.location ?? wedding.ceremony_venue ?? "",
-        googleMapsUrl: wedding.google_map_link ?? "",
-        sortOrder: evt.sort_order ?? i,
-      });
-    });
-    return events.sort((a, b) => a.sortOrder - b.sortOrder);
   }
 
   return events;
