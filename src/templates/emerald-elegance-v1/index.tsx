@@ -138,7 +138,7 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
 
       {sectionsVisibility.Schedule && (
         <CinematicReveal>
-          <EventSchedule events={data.events} />
+          <EventSchedule events={data.scheduleEvents} />
         </CinematicReveal>
       )}
 

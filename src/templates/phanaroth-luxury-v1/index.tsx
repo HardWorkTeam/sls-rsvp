@@ -125,7 +125,7 @@ export default function PhanarothLuxuryV1Template({ data, guestName }: TemplateP
       {/* 5. EVENT SCHEDULE */}
       {sectionsVisibility.Schedule && (
         <CinematicReveal>
-          <EventSchedule events={data.events} lunarDateText={data.lunarDateText} />
+          <EventSchedule events={data.scheduleEvents} lunarDateText={data.lunarDateText} />
         </CinematicReveal>
       )}
 

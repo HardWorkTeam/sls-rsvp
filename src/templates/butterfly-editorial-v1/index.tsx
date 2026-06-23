@@ -124,7 +124,7 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
       {/* 6. EVENT SCHEDULE TIMELINE */}
       {sectionsVisibility.Schedule && (
         <CinematicReveal>
-          <EventSchedule events={data.events} lunarDateText={data.lunarDateText} />
+          <EventSchedule events={data.scheduleEvents} lunarDateText={data.lunarDateText} />
         </CinematicReveal>
       )}
 

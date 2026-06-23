@@ -120,7 +120,7 @@ export default function BlueBotanicalV1Template({ data, guestName }: TemplatePro
       {/* ── SCHEDULE ── */}
       {sectionsVisibility.Schedule && (
         <Reveal>
-          <EventSchedule events={data.events} lunarDateText={data.lunarDateText} />
+          <EventSchedule events={data.scheduleEvents} lunarDateText={data.lunarDateText} />
         </Reveal>
       )}
 

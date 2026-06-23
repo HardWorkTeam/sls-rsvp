@@ -116,7 +116,7 @@ export default function AngkorHeritageV1Template({ data, guestName }: TemplatePr
       {/* ── SCHEDULE ── */}
       {sectionsVisibility.Schedule && (
         <Reveal>
-          <EventSchedule events={data.events} lunarDateText={data.lunarDateText} />
+          <EventSchedule events={data.scheduleEvents} lunarDateText={data.lunarDateText} />
         </Reveal>
       )}
 

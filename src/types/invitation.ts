@@ -73,6 +73,7 @@ export interface InvitationData {
   };
   couple: Couple;
   events: WeddingEvent[];
+  scheduleEvents: WeddingEvent[];
   loveStory: LoveStoryMilestone[];
   gallery: string[];
   rsvpSettings: RsvpSettings;

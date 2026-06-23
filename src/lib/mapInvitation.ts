@@ -18,10 +18,12 @@ function localDateStr(date: Date): string {
   return date.toLocaleDateString("en-CA", { timeZone: DISPLAY_TZ }); // en-CA = YYYY-MM-DD
 }
 
-function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
+// Events derived from the wedding's own date/time/venue/map fields (the top of the
+// editor's "Event Schedule" section). These drive the Cover, Countdown and Location —
+// i.e. the general "wedding info", which must NOT come from individual timeline rows.
+function buildWeddingEvents(invitation: PublicInvitation): WeddingEvent[] {
   const { wedding } = invitation;
 
-  // Wedding-level fallbacks: events without their own date/time/location inherit these.
   const weddingDate = wedding.wedding_date ?? "";
   const weddingTime = wedding.wedding_time ?? "";
   const weddingDateSolar = weddingDate
@@ -31,29 +33,6 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
     ? new Date(`1970-01-01T${weddingTime}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" })
     : "";
 
-  // Primary source: timeline_events created in the invitation editor
-  if (wedding.timeline_events.length > 0) {
-    const mapped = wedding.timeline_events.map((evt, i) => {
-      const date = evt.starts_at ? new Date(evt.starts_at) : null;
-      // dateSolar must reflect the LOCAL calendar date so Khmer date headers are correct.
-      // When the event has no time set, inherit the wedding's date/time.
-      const dateSolar = date ? `${localDateStr(date)}T${fmtTime(date)}` : weddingDateSolar;
-      const timeLabel = date ? fmtTime(date) : weddingTimeLabel;
-      return {
-        id: String(evt.id),
-        title: evt.title,
-        dateKh: "",
-        dateSolar,
-        timeLabel,
-        locationName: evt.location ?? wedding.ceremony_venue ?? wedding.reception_venue ?? "",
-        googleMapsUrl: wedding.google_map_link ?? "",
-        sortOrder: evt.sort_order ?? i,
-      };
-    });
-    return mapped.sort((a, b) => a.sortOrder - b.sortOrder);
-  }
-
-  // Fallback: derive events from wedding date/venue fields when no timeline events exist
   const events: WeddingEvent[] = [];
 
   if (wedding.ceremony_venue) {
@@ -82,7 +61,55 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
     });
   }
 
+  // Last resort: a bare date-only event so Cover/Countdown still have a target date.
+  if (events.length === 0 && weddingDateSolar) {
+    events.push({
+      id: "evt-wedding",
+      title: wedding.wedding_name ?? "",
+      dateKh: "",
+      dateSolar: weddingDateSolar,
+      timeLabel: weddingTimeLabel,
+      locationName: "",
+      googleMapsUrl: wedding.google_map_link ?? "",
+      sortOrder: 1,
+    });
+  }
+
   return events;
+}
+
+// The schedule list itself: the timeline events managed in the editor. Drives EventSchedule.
+function buildScheduleEvents(invitation: PublicInvitation): WeddingEvent[] {
+  const { wedding } = invitation;
+
+  if (wedding.timeline_events.length === 0) {
+    // No timeline rows yet — fall back to the wedding-derived ceremony/reception.
+    return buildWeddingEvents(invitation);
+  }
+
+  const mapped = wedding.timeline_events.map((evt, i) => {
+    const date = evt.starts_at ? new Date(evt.starts_at) : null;
+    // dateSolar reflects the LOCAL calendar date so Khmer date labels are correct.
+    const dateSolar = date ? `${localDateStr(date)}T${fmtTime(date)}` : "";
+    return {
+      id: String(evt.id),
+      title: evt.title,
+      dateKh: "",
+      dateSolar,
+      timeLabel: date ? fmtTime(date) : "",
+      locationName: evt.location ?? wedding.ceremony_venue ?? wedding.reception_venue ?? "",
+      googleMapsUrl: wedding.google_map_link ?? "",
+      sortOrder: evt.sort_order ?? i,
+    };
+  });
+  return mapped.sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+// `events` (used for Cover/Location/Countdown) prefers the wedding fields; only when
+// none are set does it fall back to the timeline so those sections aren't empty.
+function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
+  const weddingEvents = buildWeddingEvents(invitation);
+  return weddingEvents.length > 0 ? weddingEvents : buildScheduleEvents(invitation);
 }
 
 function buildGiftRegistries(invitation: PublicInvitation): GiftRegistryItem[] {
@@ -129,6 +156,7 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
   const showGift = invitation.settings?.show_gift_section !== false;
   const giftRegistries = buildGiftRegistries(invitation);
   const events = buildEvents(invitation);
+  const scheduleEvents = buildScheduleEvents(invitation);
   const gallery = buildGallery(invitation);
   const loveStory = buildLoveStory(invitation);
 
@@ -142,7 +170,7 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
     Cover:        savedSections.Cover        ?? true,
     CoupleInfo:   savedSections.CoupleInfo   ?? true,
     LoveStory:    savedSections.LoveStory    ?? loveStory.length > 0,
-    Schedule:     savedSections.Schedule     ?? events.length > 0,
+    Schedule:     savedSections.Schedule     ?? scheduleEvents.length > 0,
     Gallery:      savedSections.Gallery      ?? gallery.length > 0,
     Location:     savedSections.Location     ?? events.length > 0,
     GiftRegistry: savedSections.GiftRegistry ?? (showGift && giftRegistries.length > 0),
@@ -190,6 +218,7 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
       },
     },
     events,
+    scheduleEvents,
     loveStory,
     gallery,
     rsvpSettings: {

@@ -133,7 +133,7 @@ export default function RoyalKhmerV1Template({ data, guestName }: TemplateProps)
       ══════════════════════════════════════════════════════════════════ */}
       {sectionsVisibility.Schedule && (
         <CinematicSection>
-          <EventSchedule events={data.events} lunarDateText={data.lunarDateText} />
+          <EventSchedule events={data.scheduleEvents} lunarDateText={data.lunarDateText} />
         </CinematicSection>
       )}
 
