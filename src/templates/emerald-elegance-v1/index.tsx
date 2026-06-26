@@ -44,7 +44,25 @@ const EmeraldDivider: React.FC = () => (
 
 export default function EmeraldEleganceV1Template({ data, guestName }: TemplateProps) {
   const { sectionsVisibility } = data;
-  
+
+  // Dates are driven by the real wedding/event date. We parse the calendar
+  // parts straight from the date string (like EventSchedule) so timezone never
+  // shifts the day, and build the display labels from them. The static literals
+  // inside Cover/Footer remain ONLY as a preview fallback when there is no
+  // event data (these resolve to undefined → component shows its placeholder).
+  const eventDateStr = (data.events[0]?.dateSolar ?? '').split('T')[0];
+  const [evtY, evtM, evtD] = eventDateStr ? eventDateStr.split('-').map(Number) : [];
+  const eventDate = evtY && evtM && evtD ? new Date(Date.UTC(evtY, evtM - 1, evtD, 12)) : null;
+  const eventWeekday = eventDate?.toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' });
+  const eventMonth = eventDate?.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
+
+  // "SATURDAY · 15 FEBRUARY 2025" for the Cover.
+  const coverDateLabel = data.lunarDateText
+    || (eventDate ? `${eventWeekday} · ${evtD} ${eventMonth} ${evtY}`.toUpperCase() : undefined);
+  // "February 15, 2025" for the Footer.
+  const footerDateLabel = data.lunarDateText
+    || (eventDate ? `${eventMonth} ${evtD}, ${evtY}` : undefined);
+
   // Custom Cursor state
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isDesktop, setIsDesktop] = useState(true);
@@ -96,7 +114,7 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
       {sectionsVisibility.Cover && (
         <Cover
           couple={data.couple}
-          dateLabel={data.lunarDateText}
+          dateLabel={coverDateLabel}
           venueName={data.events[0]?.locationName}
           coverImage={data.coverImage}
         />
@@ -177,10 +195,10 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
 
 
       <CinematicReveal>
-        <Footer 
-          couple={data.couple} 
-          dateLabel={data.lunarDateText} 
-          thankYouText={data.thankYouText} 
+        <Footer
+          couple={data.couple}
+          dateLabel={footerDateLabel}
+          thankYouText={data.thankYouText}
         />
       </CinematicReveal>
     </div>

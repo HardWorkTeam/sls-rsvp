@@ -34,10 +34,19 @@ const INITIAL_WISHES: Wish[] = [
 export const RsvpSection: React.FC<RsvpSectionProps> = ({
   weddingId,
   rsvpSettings,
-  deadlineText = 'November 10, 2026',
+  deadlineText,
   websiteUrl = 'www.srolanhwedding.com/butterfly-demo',
   contactInfo = { groomPhone: '012 345 678', bridePhone: '098 765 432' },
 }) => {
+  // RSVP deadline is driven by the real wedding data (rsvpSettings.deadline).
+  // We read the calendar parts straight from the ISO string so timezone never
+  // shifts the day. The static literal stays ONLY as a preview/no-data fallback.
+  const deadlineStr = (rsvpSettings?.deadline ?? '').split('T')[0];
+  const [dlY, dlM, dlD] = deadlineStr ? deadlineStr.split('-').map(Number) : [];
+  const formattedDeadline = deadlineText
+    ?? (dlY && dlM && dlD
+      ? `${new Date(Date.UTC(dlY, dlM - 1, dlD, 12)).toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' })} ${dlD}, ${dlY}`
+      : 'November 10, 2026');
   const [name, setName] = useState('');
   const [status, setStatus] = useState<AttendStatus>('');
   const [guests, setGuests] = useState<number | string>(1);
@@ -112,7 +121,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                 Confirm Your Presence
               </h2>
               <div className="text-xs text-[#2A2A2A]/70 mt-2 font-medium tracking-wider uppercase">
-                Please reply by <span className="text-[#5A121D] font-bold">{deadlineText}</span>
+                Please reply by <span className="text-[#5A121D] font-bold">{formattedDeadline}</span>
               </div>
               <div className="h-[0.5px] w-20 mx-auto mt-4 bg-[#C5A059]/40" />
             </div>
