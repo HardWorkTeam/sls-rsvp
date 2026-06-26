@@ -4,7 +4,7 @@ export type TemplateId =
   | 'royal-khmer-v1'
   | 'angkor-heritage-v1'
   | 'blue-botanical-v1'
-  | 'phanaroth-luxury-v1'
+  | 'red-rose-luxury-v1'
   | 'butterfly-editorial-v1'
   | 'emerald-elegance-v1'
   | string;
