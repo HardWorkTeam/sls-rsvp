@@ -10,11 +10,6 @@ interface RsvpSectionProps {
   weddingId: string;
   rsvpSettings: RsvpSettings;
   deadlineText?: string;
-  websiteUrl?: string;
-  contactInfo?: {
-    groomPhone?: string;
-    bridePhone?: string;
-  };
 }
 
 type AttendStatus = 'attending' | 'declined' | '';
@@ -35,8 +30,6 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
   weddingId,
   rsvpSettings,
   deadlineText,
-  websiteUrl = 'www.srolanhwedding.com/butterfly-demo',
-  contactInfo = { groomPhone: '012 345 678', bridePhone: '098 765 432' },
 }) => {
   // RSVP deadline is driven by the real wedding data (rsvpSettings.deadline).
   // We read the calendar parts straight from the ISO string so timezone never
@@ -348,35 +341,6 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                 </div>
               </div>
             )}
-
-            {/* Contact Info and Wedding Website block */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center border-t border-[#C5A059]/15 pt-6 mt-4">
-              {/* Host Contacts */}
-              <div className="space-y-1">
-                <h4 className="font-editorial-serif text-[9px] tracking-[0.25em] text-[#C5A059] uppercase font-bold">
-                  Contact Host
-                </h4>
-                <div className="text-[10px] text-[#2A2A2A]/70 space-y-0.5">
-                  <p>Groom: <span className="font-semibold text-[#5A121D]">{contactInfo.groomPhone}</span></p>
-                  <p>Bride: <span className="font-semibold text-[#5A121D]">{contactInfo.bridePhone}</span></p>
-                </div>
-              </div>
-
-              {/* Wedding Website URL */}
-              <div className="space-y-1">
-                <h4 className="font-editorial-serif text-[9px] tracking-[0.25em] text-[#C5A059] uppercase font-bold">
-                  Wedding Website
-                </h4>
-                <a
-                  href={`https://${websiteUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block text-[10px] text-[#5A121D] underline font-medium hover:text-[#7E1E2C] transition-colors"
-                >
-                  {websiteUrl}
-                </a>
-              </div>
-            </div>
           </div>
         </motion.div>
       </div>

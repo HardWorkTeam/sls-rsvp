@@ -163,7 +163,6 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
           <RsvpSection
             weddingId={data.slug}
             rsvpSettings={data.rsvpSettings}
-            websiteUrl={data.slug ? `www.srolanhwedding.com/${data.slug}` : undefined}
           />
         </CinematicReveal>
       )}
