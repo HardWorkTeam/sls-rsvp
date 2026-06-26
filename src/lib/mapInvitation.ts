@@ -29,8 +29,12 @@ function buildWeddingEvents(invitation: PublicInvitation): WeddingEvent[] {
   const weddingDateSolar = weddingDate
     ? `${weddingDate}T${weddingTime || "00:00:00"}`
     : "";
+  // `weddingTime` is a wall-clock time ("16:00:00") with no zone. Parse it as
+  // UTC (append "Z") and format in UTC so the displayed clock time matches the
+  // input exactly — otherwise the naive string is parsed in the server's local
+  // zone and shifted when formatted as UTC (e.g. "16:00" → "9:00 AM" at +07).
   const weddingTimeLabel = weddingTime
-    ? new Date(`1970-01-01T${weddingTime}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" })
+    ? new Date(`1970-01-01T${weddingTime}Z`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" })
     : "";
 
   const events: WeddingEvent[] = [];
