@@ -102,7 +102,7 @@ function buildScheduleEvents(invitation: PublicInvitation): WeddingEvent[] {
       dateSolar,
       timeLabel: date ? fmtTime(date) : "",
       locationName: evt.location ?? wedding.ceremony_venue ?? wedding.reception_venue ?? "",
-      googleMapsUrl: wedding.google_map_link ?? "",
+      googleMapsUrl: evt.google_map_link ?? wedding.google_map_link ?? "",
       sortOrder: evt.sort_order ?? i,
     };
   });

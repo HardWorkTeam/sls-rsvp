@@ -70,6 +70,7 @@ export function buildSampleInvitation(slug: string): PublicInvitation {
           description: null,
           starts_at: "2027-12-12T02:00:00Z",
           location: "Ballroom A",
+          google_map_link: "https://maps.google.com/?q=Phnom+Penh+Hotel",
           sort_order: 1,
         },
         {
@@ -79,6 +80,7 @@ export function buildSampleInvitation(slug: string): PublicInvitation {
           description: null,
           starts_at: "2027-12-12T09:00:00Z",
           location: "Grand Hall",
+          google_map_link: "https://maps.google.com/?q=Phnom+Penh+Hotel",
           sort_order: 2,
         },
       ],

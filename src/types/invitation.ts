@@ -99,6 +99,7 @@ export interface PublicTimelineEvent {
   description: string | null;
   starts_at: string | null;
   location: string | null;
+  google_map_link: string | null;
   sort_order: number;
 }
 
