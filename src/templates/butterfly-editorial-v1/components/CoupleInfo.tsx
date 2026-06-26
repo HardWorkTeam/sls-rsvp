@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { InvitationData } from '@/types/invitation';
+import { khmerSolarDate, khmerTimeLabel } from '@/lib/khmer';
 import { Butterfly } from './Butterfly';
 
 interface CoupleInfoProps {
@@ -48,9 +49,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
   const dateDay = weddingDate.getDate();
   const dateYear = weddingDate.getFullYear();
 
-  const formattedSolarKh = primaryEvent
-    ? `ត្រូវនឹងថ្ងៃទី ${weddingDate.getDate()} ខែ${weddingDate.toLocaleDateString('kh-KH', { month: 'long' })} ឆ្នាំ ${weddingDate.getFullYear()}`
-    : '';
+  const formattedSolarKh = primaryEvent ? khmerSolarDate(weddingDate) : '';
 
   // Clip path reveal for handwriting names
   const nameRevealVariants = {
@@ -276,7 +275,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
 
               {/* Khmer time label details */}
               <p className="font-sans text-[11px] opacity-75 font-light">
-                វេលាម៉ោង {timeLabel} ទៅ / Starting at {timeLabel}
+                {khmerTimeLabel(timeLabel)} ទៅ / Starting at {timeLabel}
               </p>
 
               {/* Ceremony location venue */}

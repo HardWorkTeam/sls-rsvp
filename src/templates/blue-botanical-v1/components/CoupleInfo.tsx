@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { InvitationData } from '@/types/invitation';
+import { khmerSolarDate, khmerTimeLabel } from '@/lib/khmer';
 import { SectionHeading, DiamondDivider, DrawBorderFrame, LotusOrnament } from '../../royal-khmer-v1/components/KhmerOrnaments';
 
 interface CoupleInfoProps {
@@ -39,9 +40,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
   const dateDay = weddingDate.getDate();
   const dateYear = weddingDate.getFullYear();
 
-  const formattedSolarKh = primaryEvent
-    ? `ត្រូវនឹងថ្ងៃទី ${weddingDate.getDate()} ខែ${weddingDate.toLocaleDateString('kh-KH', { month: 'long' })} ឆ្នាំ ${weddingDate.getFullYear()}`
-    : '';
+  const formattedSolarKh = primaryEvent ? khmerSolarDate(weddingDate) : '';
 
   return (
     <section
@@ -263,7 +262,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
 
               {/* Time detail */}
               <p className="font-khmer-body text-xs opacity-75">
-                វេលាម៉ោង {timeLabel} ទៅ / Starting at {timeLabel}
+                {khmerTimeLabel(timeLabel)} ទៅ / Starting at {timeLabel}
               </p>
 
               {/* Location */}
