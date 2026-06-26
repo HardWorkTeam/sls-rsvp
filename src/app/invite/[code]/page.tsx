@@ -15,6 +15,16 @@ import { StorySection } from "@/components/sections/story-section";
 
 interface InvitePageProps {
   params: Promise<{ code: string }>;
+  // `?to=<guest name>` personalizes the invitation. The link is generated from
+  // the guest list (the "send" action copies it), so the name rides in the URL.
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+// Normalize the `?to=` search param to a single trimmed guest name (or undefined).
+function readGuestName(value: string | string[] | undefined): string | undefined {
+  const raw = Array.isArray(value) ? value[0] : value;
+  const name = raw?.trim();
+  return name ? name : undefined;
 }
 
 export async function generateMetadata({ params }: InvitePageProps): Promise<Metadata> {
@@ -38,8 +48,9 @@ export async function generateMetadata({ params }: InvitePageProps): Promise<Met
   };
 }
 
-export default async function InvitePage({ params }: InvitePageProps) {
+export default async function InvitePage({ params, searchParams }: InvitePageProps) {
   const { code } = await params;
+  const guestName = readGuestName((await searchParams).to);
   const invitation = await getInvitation(code);
 
   if (!invitation) {
@@ -51,7 +62,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
 
   // Render the matching template when available
   if (TemplateComponent) {
-    return <TemplateComponent data={data} />;
+    return <TemplateComponent data={data} guestName={guestName} />;
   }
 
   // Fallback: plain section-based layout (no template assigned)
@@ -62,6 +73,12 @@ export default async function InvitePage({ params }: InvitePageProps) {
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 pb-24 sm:px-6">
+      {guestName ? (
+        <p className="pt-6 text-center font-[family-name:var(--font-serif)] text-lg text-emerald-800">
+          សូមគោរពអញ្ជើញ · Specially for{" "}
+          <span className="font-semibold">{guestName}</span>
+        </p>
+      ) : null}
       <CoverSection invitation={invitation} />
       {wedding.story_description ? <StorySection wedding={wedding} /> : null}
       {wedding.timeline_events.length > 0 ? (

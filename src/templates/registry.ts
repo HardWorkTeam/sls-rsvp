@@ -4,7 +4,7 @@ import { InvitationData } from '@/types/invitation';
 
 export interface TemplateProps {
   data: InvitationData;
-  guestName?: string; // From ?gid= URL param → guest table lookup
+  guestName?: string; // From the ?to= URL param (set by the guest list "send" action)
 }
 
 export const TEMPLATE_REGISTRY: Record<string, ComponentType<TemplateProps>> = {
