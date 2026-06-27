@@ -177,7 +177,7 @@ export default function RoyalKhmerV1Template({ data, guestName }: TemplateProps)
       ══════════════════════════════════════════════════════════════════ */}
       {sectionsVisibility.RSVP && (
         <CinematicSection>
-          <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} />
+          <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} guestName={guestName} />
         </CinematicSection>
       )}
 

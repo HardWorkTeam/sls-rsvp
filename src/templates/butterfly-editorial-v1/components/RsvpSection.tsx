@@ -10,6 +10,7 @@ interface RsvpSectionProps {
   weddingId: string;
   rsvpSettings: RsvpSettings;
   deadlineText?: string;
+  guestName?: string;
 }
 
 type AttendStatus = 'attending' | 'declined' | '';
@@ -30,6 +31,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
   weddingId,
   rsvpSettings,
   deadlineText,
+  guestName,
 }) => {
   // RSVP deadline is driven by the real wedding data (rsvpSettings.deadline).
   // We read the calendar parts straight from the ISO string so timezone never
@@ -40,7 +42,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
     ?? (dlY && dlM && dlD
       ? `${new Date(Date.UTC(dlY, dlM - 1, dlD, 12)).toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' })} ${dlD}, ${dlY}`
       : 'November 10, 2026');
-  const [name, setName] = useState('');
+  const [name, setName] = useState(guestName ?? '');
   const [status, setStatus] = useState<AttendStatus>('');
   const [guests, setGuests] = useState<number | string>(1);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -140,7 +142,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                   <button
                     onClick={() => {
                       setSuccess(false);
-                      setName('');
+                      setName(guestName ?? '');
                       setStatus('');
                       setWishes('');
                       setGuests(1);

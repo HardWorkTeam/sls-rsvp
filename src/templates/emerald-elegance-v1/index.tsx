@@ -189,7 +189,7 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
 
       {sectionsVisibility.RSVP && (
         <CinematicReveal>
-          <RsvpSection rsvpSettings={data.rsvpSettings} weddingId={data.slug} />
+          <RsvpSection rsvpSettings={data.rsvpSettings} weddingId={data.slug} guestName={guestName} />
         </CinematicReveal>
       )}
 

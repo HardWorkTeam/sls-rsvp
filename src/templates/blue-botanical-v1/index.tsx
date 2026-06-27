@@ -156,7 +156,7 @@ export default function BlueBotanicalV1Template({ data, guestName }: TemplatePro
       {/* ── RSVP ── */}
       {sectionsVisibility.RSVP && (
         <Reveal>
-          <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} />
+          <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} guestName={guestName} />
         </Reveal>
       )}
 

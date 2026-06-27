@@ -5,11 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
 import { submitRsvp } from '@/lib/rsvp';
 
-interface RsvpProps { weddingId: string; rsvpSettings: RsvpSettings; }
+interface RsvpProps { weddingId: string; rsvpSettings: RsvpSettings; guestName?: string; }
 type Status = 'attending' | 'declined' | '';
 
-export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings }) => {
-  const [name, setName] = useState('');
+export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestName }) => {
+  const [name, setName] = useState(guestName ?? '');
   const [status, setStatus] = useState<Status>('');
   const [guests, setGuests] = useState<number | string>(1);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -53,7 +53,7 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings }) => {
         <span style={{ fontSize: '3rem' }}>💙</span>
         <h3 className="font-khmer-title text-xl" style={{ color: '#2C3E56', lineHeight: 1.7 }}>អរគុណសម្រាប់ការឆ្លើយតប!</h3>
         <p className="font-serif-en italic text-sm" style={{ color: '#6A8CB2' }}>Thank you. We look forward to celebrating with you.</p>
-        <button onClick={() => { setSuccess(false); setName(''); setStatus(''); setWishes(''); }}
+        <button onClick={() => { setSuccess(false); setName(guestName ?? ''); setStatus(''); setWishes(''); }}
           className="font-serif-en text-xs tracking-widest underline" style={{ color: '#6A8CB2' }}>Submit another response</button>
       </div>
     </section>

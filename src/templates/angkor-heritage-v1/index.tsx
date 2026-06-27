@@ -151,7 +151,7 @@ export default function AngkorHeritageV1Template({ data, guestName }: TemplatePr
       {/* ── RSVP ── */}
       {sectionsVisibility.RSVP && (
         <Reveal>
-          <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} />
+          <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} guestName={guestName} />
         </Reveal>
       )}
 

@@ -9,12 +9,13 @@ import { EtherealBorderFrame, ThinGoldRule } from './BotanicalAssets';
 interface RsvpProps {
   rsvpSettings: RsvpSettings;
   weddingId: string;
+  guestName?: string;
 }
 
 type Status = 'attending' | 'declined' | '';
 
-export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId }) => {
-  const [name, setName] = useState('');
+export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, guestName }) => {
+  const [name, setName] = useState(guestName ?? '');
   const [status, setStatus] = useState<Status>('');
   const [guests, setGuests] = useState<number | string>(1);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -77,7 +78,7 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId }) =>
                   <ThinGoldRule />
                 </div>
                 <button 
-                  onClick={() => { setSuccess(false); setName(''); setStatus(''); setWishes(''); }}
+                  onClick={() => { setSuccess(false); setName(guestName ?? ''); setStatus(''); setWishes(''); }}
                   className="font-emerald-sans text-[10px] tracking-widest uppercase text-emerald-gold hover:text-emerald-ivory transition-colors underline"
                 >
                   Submit another response

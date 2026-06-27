@@ -161,7 +161,7 @@ export default function PhanarothLuxuryV1Template({ data, guestName }: TemplateP
       {/* 9. RSVP & LIVE WISHES WALL */}
       {sectionsVisibility.RSVP && (
         <CinematicReveal>
-          <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} />
+          <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} guestName={guestName} />
         </CinematicReveal>
       )}
 

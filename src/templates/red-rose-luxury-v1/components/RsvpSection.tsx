@@ -9,6 +9,7 @@ import { SectionHeading, DiamondDivider, LotusOrnament, DrawBorderFrame } from '
 interface RsvpFormProps {
   weddingId: string;
   rsvpSettings: RsvpSettings;
+  guestName?: string;
 }
 
 type AttendStatus = 'attending' | 'declined' | '';
@@ -27,8 +28,8 @@ const INITIAL_WISHES: Wish[] = [
   { id: 'w-5', name: 'ណារ៉ុង វិចិត្រ', message: 'Congratulations on your special day! Best wishes for a bright future together.' }
 ];
 
-export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings }) => {
-  const [name, setName] = useState('');
+export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, guestName }) => {
+  const [name, setName] = useState(guestName ?? '');
   const [status, setStatus] = useState<AttendStatus>('');
   const [guests, setGuests] = useState<number | string>(1);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -99,7 +100,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings }) =
               </p>
               <DiamondDivider color="#E8C97A" />
               <button
-                onClick={() => { setSuccess(false); setName(''); setStatus(''); setWishes(''); setGuests(1); }}
+                onClick={() => { setSuccess(false); setName(guestName ?? ''); setStatus(''); setWishes(''); setGuests(1); }}
                 className="font-serif-en text-[11px] tracking-widest underline text-[#E8C97A] cursor-pointer hover:text-white"
               >
                 Submit another response

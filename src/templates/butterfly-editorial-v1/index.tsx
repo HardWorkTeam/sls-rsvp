@@ -163,6 +163,7 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
           <RsvpSection
             weddingId={data.slug}
             rsvpSettings={data.rsvpSettings}
+            guestName={guestName}
           />
         </CinematicReveal>
       )}

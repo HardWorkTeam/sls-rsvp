@@ -26,13 +26,13 @@ const STATUS_OPTIONS = [
   { value: "declined", label: "Regretfully Decline", emoji: "💌" },
 ] as const;
 
-export function RsvpSection({ code }: { code: string }) {
+export function RsvpSection({ code, guestName }: { code: string; guestName?: string }) {
   const [submitted, setSubmitted] = useState<RsvpForm | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const form = useForm<RsvpForm>({
     resolver: zodResolver(rsvpSchema),
-    defaultValues: { guest_name: "", phone: "", number_of_guests: 1, message: "", status: "accepted" },
+    defaultValues: { guest_name: guestName ?? "", phone: "", number_of_guests: 1, message: "", status: "accepted" },
   });
   const status = form.watch("status");
 
