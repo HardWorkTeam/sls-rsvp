@@ -116,6 +116,7 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
           couple={data.couple}
           dateLabel={coverDateLabel}
           venueName={data.events[0]?.locationName}
+          guestName={guestName}
           coverImage={data.coverImage}
         />
       )}
