@@ -102,12 +102,12 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               initial={{ opacity: 0, y: -25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 1 }}
-              className="text-center space-y-1 mb-8"
+              className="text-center space-y-1 mb-6 sm:mb-8"
             >
-              <p className="font-serif-en text-[10px] tracking-[0.45em] text-[#E8C97A] uppercase">
+              <p className="font-serif-en text-[9px] sm:text-[10px] tracking-[0.45em] text-[#E8C97A] uppercase">
                 Wedding Celebration
               </p>
-              <h2 className="font-khmer-title text-base text-[#FAF6EF]/90 leading-relaxed">
+              <h2 className="font-khmer-title text-sm sm:text-base text-[#FAF6EF]/90 leading-relaxed">
                 ពិធីសិរីសួស្តីអាពាហ៍ពិពាហ៍
               </h2>
             </motion.div>
@@ -147,7 +147,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               <motion.div
                 animate={
                   envelopeState === 'sliding-card' || envelopeState === 'zoom-out'
-                    ? { y: -130, scale: 0.98 }
+                    ? { y: '-46%', scale: 0.98 }
                     : { y: 0, scale: 0.94 }
                 }
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
@@ -225,7 +225,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                   transformStyle: 'preserve-3d',
                   zIndex: envelopeState === 'closed' ? 20 : 2,
                 }}
-                className="absolute inset-x-0 top-0 h-[144px] pointer-events-none"
+                className="absolute inset-x-0 top-0 h-1/2 pointer-events-none"
               >
                 <svg
                   viewBox="0 0 420 144"
@@ -243,7 +243,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                   <motion.div
                     key="wax-seal"
                     exit={{ scale: 0, opacity: 0, transition: { duration: 0.35 } }}
-                    className="absolute left-1/2 top-[138px] -translate-x-1/2 -translate-y-1/2 z-30"
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
                   >
                     <button
                       onClick={handleOpen}
@@ -268,7 +268,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 1 }}
-              className="text-center space-y-1.5 mt-10 animate-pulse"
+              className="text-center space-y-1.5 mt-8 sm:mt-10 animate-pulse"
             >
               <p className="font-khmer-body text-xs text-[#E8C97A]">
                 សូមចុចលើត្រាមាសដើម្បីបើកលិខិតអញ្ជើញ

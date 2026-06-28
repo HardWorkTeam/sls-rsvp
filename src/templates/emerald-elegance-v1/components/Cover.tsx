@@ -128,7 +128,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
               <motion.div
                 animate={
                   envelopeState === 'sliding-card' || envelopeState === 'zoom-out'
-                    ? { y: -160, scale: 0.98 }
+                    ? { y: '-57%', scale: 0.98 }
                     : { y: 0, scale: 0.94 }
                 }
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
@@ -210,7 +210,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
                   transformStyle: 'preserve-3d',
                   zIndex: envelopeState === 'closed' ? 20 : 2,
                 }}
-                className="absolute inset-x-0 top-0 h-[144px] pointer-events-none"
+                className="absolute inset-x-0 top-0 h-1/2 pointer-events-none"
               >
                 <svg
                   viewBox="0 0 420 144"
@@ -228,7 +228,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
                   <motion.div
                     key="wax-seal"
                     exit={{ scale: 0, opacity: 0, transition: { duration: 0.35 } }}
-                    className="absolute left-1/2 top-[138px] -translate-x-1/2 -translate-y-1/2 z-30"
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
                   >
                     <button
                       onClick={handleOpen}
