@@ -44,16 +44,18 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
 
   return (
     <section className="relative w-full overflow-hidden flex flex-col items-center justify-center" style={{ minHeight: '100dvh' }}>
-      {/* User cover photo */}
+      {/* Subtle textured ivory background for revealed state (fallback when no
+          cover photo is set; the photo below sits above it when present) */}
+      <div className="absolute inset-0 bg-pattern-editorial" />
+
+      {/* User cover photo — must sit ABOVE the ivory texture so it isn't buried,
+          but below the revealed magazine card (z-10) and gold frame. */}
       {coverImage && (
         <>
-          <img src={coverImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ zIndex: 0 }} />
-          <div className="absolute inset-0" style={{ background: 'rgba(20,15,10,0.45)', zIndex: 1 }} />
+          <img src={coverImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ zIndex: 2 }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(20,15,10,0.45)', zIndex: 3 }} />
         </>
       )}
-
-      {/* Subtle textured ivory background for revealed state */}
-      <div className="absolute inset-0 bg-pattern-editorial" />
 
       {/* Thin gold page margin frame */}
       <div className="absolute inset-3 pointer-events-none z-10 border border-[#C5A059]/10 rounded-sm" />
