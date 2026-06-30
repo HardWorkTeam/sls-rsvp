@@ -1,9 +1,18 @@
-import type { PublicInvitation, InvitationData, WeddingEvent, GiftRegistryItem, LoveStoryMilestone } from "@/types/invitation";
+import type { PublicInvitation, InvitationData, WeddingEvent, GiftRegistryItem, LoveStoryMilestone, CalendarEvent } from "@/types/invitation";
 
 const DEFAULT_TEMPLATE = "royal-khmer-v1";
 
 // The platform targets Cambodia events; times stored as UTC must be displayed in local Cambodia time.
 const DISPLAY_TZ = "Asia/Phnom_Penh";
+
+// Cambodia has a single, fixed offset (+07:00, no DST), so a wall-clock wedding
+// time can be converted to a UTC instant by subtracting this. Used to build
+// calendar links that land on the right moment regardless of the guest's zone.
+const PHNOM_PENH_OFFSET_MIN = 7 * 60;
+
+// Weddings rarely span a fixed length; 4h is a sane default block for the
+// calendar entry when only a start time is known.
+const DEFAULT_EVENT_DURATION_MIN = 4 * 60;
 
 function fmtTime(date: Date): string {
   return date.toLocaleTimeString("en-US", {
@@ -116,6 +125,66 @@ function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
   return weddingEvents.length > 0 ? weddingEvents : buildScheduleEvents(invitation);
 }
 
+// Derive the "add to calendar" entry straight from the wedding's own fields
+// (not the display-formatted template events, whose time labels are localized
+// strings). Returns undefined when there's no date to anchor an event on.
+function buildCalendar(
+  invitation: PublicInvitation,
+  coupleTitle: string,
+): CalendarEvent | undefined {
+  const { wedding } = invitation;
+  const date = wedding.wedding_date;
+  if (!date) return undefined;
+
+  const time = wedding.wedding_time ?? "";
+  const location = wedding.ceremony_venue || wedding.reception_venue || "";
+
+  const descriptionParts = [
+    typeof invitation.settings?.invitation_text_en === "string"
+      ? invitation.settings.invitation_text_en
+      : `Join us to celebrate the wedding of ${coupleTitle}.`,
+    wedding.reception_venue && wedding.reception_venue !== wedding.ceremony_venue
+      ? `Reception: ${wedding.reception_venue}`
+      : "",
+    wedding.google_map_link ? `Map: ${wedding.google_map_link}` : "",
+  ].filter(Boolean);
+  const description = descriptionParts.join("\n");
+
+  const title = `${coupleTitle} — Wedding`;
+
+  // No time set → an all-day event. DTEND for all-day is exclusive, so it's the
+  // day after the wedding date.
+  if (!time) {
+    const next = new Date(`${date}T00:00:00Z`);
+    next.setUTCDate(next.getUTCDate() + 1);
+    return {
+      title,
+      location,
+      description,
+      start: date,
+      end: next.toISOString().slice(0, 10),
+      allDay: true,
+    };
+  }
+
+  // Timed event: interpret the wall-clock time as Cambodia local, convert to a
+  // UTC instant, and block out a default duration.
+  const [h = 0, m = 0, s = 0] = time.split(":").map(Number);
+  const [y, mo, d] = date.split("-").map(Number);
+  const startMs = Date.UTC(y, mo - 1, d, h, m, s) - PHNOM_PENH_OFFSET_MIN * 60_000;
+  const start = new Date(startMs);
+  const end = new Date(startMs + DEFAULT_EVENT_DURATION_MIN * 60_000);
+
+  return {
+    title,
+    location,
+    description,
+    start: start.toISOString(),
+    end: end.toISOString(),
+    allDay: false,
+  };
+}
+
 function buildGiftRegistries(invitation: PublicInvitation): GiftRegistryItem[] {
   const bank = invitation.settings?.bank_account as Record<string, string> | undefined;
   if (!bank || !bank.name) return [];
@@ -196,6 +265,11 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
   const groomNameEn = groomExt.nameEn ?? "";
   const brideNameEn = brideExt.nameEn ?? "";
 
+  const coupleTitle = brideNameEn && groomNameEn
+    ? `${brideNameEn} & ${groomNameEn}`
+    : wedding.wedding_name ?? "Our Wedding";
+  const calendar = buildCalendar(invitation, coupleTitle);
+
   return {
     slug: invitation.invitation_code,
     templateId,
@@ -229,6 +303,7 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
       deadline: deadlineDate,
       maxGuests: 10,
     },
+    calendar,
     giftRegistries,
     invitationTextKh: invTextKh,
     invitationTextEn: invTextEn,

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getInvitation } from "@/lib/api";
 import { mapToInvitationData } from "@/lib/mapInvitation";
 import { TEMPLATE_REGISTRY } from "@/templates/registry";
+import { AddToCalendar } from "@/components/AddToCalendar";
 
 // Fallback sections used when no matching template is registered
 import { CoverSection } from "@/components/sections/cover-section";
@@ -62,7 +63,12 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
 
   // Render the matching template when available
   if (TemplateComponent) {
-    return <TemplateComponent data={data} guestName={guestName} />;
+    return (
+      <>
+        <TemplateComponent data={data} guestName={guestName} />
+        {data.calendar ? <AddToCalendar event={data.calendar} slug={data.slug} /> : null}
+      </>
+    );
   }
 
   // Fallback: plain section-based layout (no template assigned)
@@ -97,6 +103,7 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
         </p>
         <p className="mt-1">With love, powered by Srolanh</p>
       </footer>
+      {data.calendar ? <AddToCalendar event={data.calendar} slug={data.slug} /> : null}
     </main>
   );
 }

@@ -57,6 +57,19 @@ export interface RsvpSettings {
   maxGuests: number;
 }
 
+// A single "add to calendar" entry for the wedding, derived from the wedding's
+// own date/time/venue. Times are resolved to UTC in the mapper so the calendar
+// links don't have to re-guess the (fixed, Cambodia) timezone. When no time is
+// set the event is all-day and `start`/`end` are date-only "YYYY-MM-DD".
+export interface CalendarEvent {
+  title: string;
+  location: string;
+  description: string;
+  start: string; // UTC ISO ("…Z") when timed, "YYYY-MM-DD" when allDay
+  end: string;   // UTC ISO ("…Z") when timed, exclusive "YYYY-MM-DD" when allDay
+  allDay: boolean;
+}
+
 export interface InvitationData {
   slug: string;
   templateId: TemplateId;
@@ -77,6 +90,7 @@ export interface InvitationData {
   loveStory: LoveStoryMilestone[];
   gallery: string[];
   rsvpSettings: RsvpSettings;
+  calendar?: CalendarEvent;
   musicUrl?: string;
   giftRegistries: GiftRegistryItem[];
   invitationTextKh?: string;

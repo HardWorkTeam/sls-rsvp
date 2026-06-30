@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { mapToInvitationData } from "@/lib/mapInvitation";
 import { buildSampleInvitation } from "@/lib/sampleInvitation";
 import { TEMPLATE_REGISTRY } from "@/templates/registry";
+import { AddToCalendar } from "@/components/AddToCalendar";
 
 interface PreviewPageProps {
   params: Promise<{ slug: string }>;
@@ -22,5 +23,10 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
 
   const data = mapToInvitationData(buildSampleInvitation(slug));
 
-  return <TemplateComponent data={data} />;
+  return (
+    <>
+      <TemplateComponent data={data} />
+      {data.calendar ? <AddToCalendar event={data.calendar} slug={data.slug} /> : null}
+    </>
+  );
 }
