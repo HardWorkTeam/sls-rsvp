@@ -4,6 +4,7 @@ import { getInvitation } from "@/lib/api";
 import { mapToInvitationData } from "@/lib/mapInvitation";
 import { TEMPLATE_REGISTRY } from "@/templates/registry";
 import { AddToCalendar } from "@/components/AddToCalendar";
+import { CheckInPass } from "@/components/CheckInPass";
 
 // Fallback sections used when no matching template is registered
 import { CoverSection } from "@/components/sections/cover-section";
@@ -51,7 +52,12 @@ export async function generateMetadata({ params }: InvitePageProps): Promise<Met
 
 export default async function InvitePage({ params, searchParams }: InvitePageProps) {
   const { code } = await params;
-  const guestName = readGuestName((await searchParams).to);
+  const query = await searchParams;
+  const guestName = readGuestName(query.to);
+  // `?t=<token>` carries the guest's personal check-in token (from the guest
+  // list). When present we show a "my check-in QR" pass they can present at the
+  // door on the wedding day.
+  const checkInToken = readGuestName(query.t);
   const invitation = await getInvitation(code);
 
   if (!invitation) {
@@ -66,6 +72,7 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
     return (
       <>
         <TemplateComponent data={data} guestName={guestName} />
+        {checkInToken ? <CheckInPass token={checkInToken} guestName={guestName} /> : null}
         {data.calendar ? <AddToCalendar event={data.calendar} slug={data.slug} /> : null}
       </>
     );
@@ -103,6 +110,7 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
         </p>
         <p className="mt-1">With love, powered by Srolanh</p>
       </footer>
+      {checkInToken ? <CheckInPass token={checkInToken} guestName={guestName} /> : null}
       {data.calendar ? <AddToCalendar event={data.calendar} slug={data.slug} /> : null}
     </main>
   );
