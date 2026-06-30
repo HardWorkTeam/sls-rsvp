@@ -139,16 +139,10 @@ function buildCalendar(
   const time = wedding.wedding_time ?? "";
   const location = wedding.ceremony_venue || wedding.reception_venue || "";
 
-  const descriptionParts = [
-    typeof invitation.settings?.invitation_text_en === "string"
-      ? invitation.settings.invitation_text_en
-      : `Join us to celebrate the wedding of ${coupleTitle}.`,
-    wedding.reception_venue && wedding.reception_venue !== wedding.ceremony_venue
-      ? `Reception: ${wedding.reception_venue}`
-      : "",
-    wedding.google_map_link ? `Map: ${wedding.google_map_link}` : "",
-  ].filter(Boolean);
-  const description = descriptionParts.join("\n");
+  // Calendar entry carries only the essentials: couple title, location, map and
+  // the date/time taken from the wedding fields. The description holds just the
+  // map link (location lives in its own field).
+  const description = wedding.google_map_link ? `Map: ${wedding.google_map_link}` : "";
 
   const title = `${coupleTitle} — Wedding`;
 
