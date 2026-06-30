@@ -58,15 +58,17 @@ export interface RsvpSettings {
 }
 
 // A single "add to calendar" entry for the wedding, derived from the wedding's
-// own date/time/venue. Times are resolved to UTC in the mapper so the calendar
-// links don't have to re-guess the (fixed, Cambodia) timezone. When no time is
-// set the event is all-day and `start`/`end` are date-only "YYYY-MM-DD".
+// own date/time/venue. Timed events carry the Cambodia (Asia/Phnom_Penh)
+// wall-clock time as a *floating* local datetime; the calendar builders anchor
+// it to the Cambodia timezone so every guest's calendar shows the same clock
+// time. When no time is set the event is all-day and `start`/`end` are
+// date-only "YYYY-MM-DD".
 export interface CalendarEvent {
   title: string;
   location: string;
   description: string;
-  start: string; // UTC ISO ("…Z") when timed, "YYYY-MM-DD" when allDay
-  end: string;   // UTC ISO ("…Z") when timed, exclusive "YYYY-MM-DD" when allDay
+  start: string; // local "YYYY-MM-DDTHH:MM:SS" (Cambodia time) when timed, "YYYY-MM-DD" when allDay
+  end: string;   // same as start when timed, exclusive "YYYY-MM-DD" when allDay
   allDay: boolean;
 }
 

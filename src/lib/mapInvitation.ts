@@ -5,11 +5,6 @@ const DEFAULT_TEMPLATE = "royal-khmer-v1";
 // The platform targets Cambodia events; times stored as UTC must be displayed in local Cambodia time.
 const DISPLAY_TZ = "Asia/Phnom_Penh";
 
-// Cambodia has a single, fixed offset (+07:00, no DST), so a wall-clock wedding
-// time can be converted to a UTC instant by subtracting this. Used to build
-// calendar links that land on the right moment regardless of the guest's zone.
-const PHNOM_PENH_OFFSET_MIN = 7 * 60;
-
 function fmtTime(date: Date): string {
   return date.toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -157,20 +152,20 @@ function buildCalendar(
     };
   }
 
-  // Timed event: interpret the wall-clock time as Cambodia local, convert to a
-  // UTC instant. The event points at the start only (no duration), so the end
-  // equals the start.
-  const [h = 0, m = 0, s = 0] = time.split(":").map(Number);
-  const [y, mo, d] = date.split("-").map(Number);
-  const startMs = Date.UTC(y, mo - 1, d, h, m, s) - PHNOM_PENH_OFFSET_MIN * 60_000;
-  const start = new Date(startMs);
+  // Timed event: emit the wall-clock time as a *floating* local datetime (no "Z"
+  // / no UTC conversion) so calendar apps show the same clock time as the
+  // invitation (e.g. 7:00 AM) regardless of the guest's timezone. The event
+  // points at the start only (no duration), so the end equals the start.
+  const [hh = "00", mm = "00", ss = "00"] = time.split(":");
+  const pad = (v: string) => v.padStart(2, "0");
+  const start = `${date}T${pad(hh)}:${pad(mm)}:${pad(ss)}`;
 
   return {
     title,
     location,
     description,
-    start: start.toISOString(),
-    end: start.toISOString(),
+    start,
+    end: start,
     allDay: false,
   };
 }
