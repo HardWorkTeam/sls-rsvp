@@ -10,10 +10,6 @@ const DISPLAY_TZ = "Asia/Phnom_Penh";
 // calendar links that land on the right moment regardless of the guest's zone.
 const PHNOM_PENH_OFFSET_MIN = 7 * 60;
 
-// Weddings rarely span a fixed length; 4h is a sane default block for the
-// calendar entry when only a start time is known.
-const DEFAULT_EVENT_DURATION_MIN = 4 * 60;
-
 function fmtTime(date: Date): string {
   return date.toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -146,8 +142,8 @@ function buildCalendar(
 
   const title = `${coupleTitle} — Wedding`;
 
-  // No time set → an all-day event. DTEND for all-day is exclusive, so it's the
-  // day after the wedding date.
+  // No time set → an all-day event anchored on the single wedding date. DTEND
+  // for all-day is exclusive, so it's the day after to cover that one day.
   if (!time) {
     const next = new Date(`${date}T00:00:00Z`);
     next.setUTCDate(next.getUTCDate() + 1);
@@ -162,19 +158,19 @@ function buildCalendar(
   }
 
   // Timed event: interpret the wall-clock time as Cambodia local, convert to a
-  // UTC instant, and block out a default duration.
+  // UTC instant. The event points at the start only (no duration), so the end
+  // equals the start.
   const [h = 0, m = 0, s = 0] = time.split(":").map(Number);
   const [y, mo, d] = date.split("-").map(Number);
   const startMs = Date.UTC(y, mo - 1, d, h, m, s) - PHNOM_PENH_OFFSET_MIN * 60_000;
   const start = new Date(startMs);
-  const end = new Date(startMs + DEFAULT_EVENT_DURATION_MIN * 60_000);
 
   return {
     title,
     location,
     description,
     start: start.toISOString(),
-    end: end.toISOString(),
+    end: start.toISOString(),
     allDay: false,
   };
 }
