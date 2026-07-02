@@ -54,9 +54,9 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
   const { code } = await params;
   const query = await searchParams;
   const guestName = readGuestName(query.to);
-  // `?t=<token>` carries the guest's personal check-in token (from the guest
+  // `?t=<code>` carries the guest's short personal check-in code (from the guest
   // list). When present we show a "my check-in QR" pass they can present at the
-  // door on the wedding day.
+  // door on the wedding day — or read the code out for manual check-in.
   const checkInToken = readGuestName(query.t);
   const invitation = await getInvitation(code);
 
