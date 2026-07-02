@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SectionHeading } from '../../royal-khmer-v1/components/KhmerOrnaments';
 
@@ -16,6 +16,19 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
   const prevPhoto = () => setLightboxIndex((i) => (i !== null ? (i - 1 + photos.length) % photos.length : null));
   const nextPhoto = () => setLightboxIndex((i) => (i !== null ? (i + 1) % photos.length : null));
 
+  // Keyboard navigation while the lightbox is open.
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') prevPhoto();
+      else if (e.key === 'ArrowRight') nextPhoto();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lightboxIndex === null]);
+
   return (
     <section
       className="rk-section"
@@ -28,8 +41,9 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
           sub="Moments worth remembering"
         />
 
-        {/* Grid */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* Masonry columns: every photo keeps its natural aspect ratio —
+            no cropping — while the two columns stay visually balanced. */}
+        <div className="columns-2 gap-3 [&>*]:mb-3">
           {photos.map((url, i) => (
             <motion.button
               key={i}
@@ -38,15 +52,16 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => openLightbox(i)}
-              className={`relative overflow-hidden rounded-2xl group cursor-pointer border border-[#E8C97A]/20 ${
-                i === 0 ? 'col-span-2 aspect-[16/9]' : 'aspect-square'
-              }`}
+              className="relative block w-full break-inside-avoid overflow-hidden rounded-2xl group cursor-pointer border border-[#E8C97A]/20"
+              aria-label={`View photo ${i + 1} of ${photos.length}`}
             >
               {/* Ken Burns zoom effect */}
               <img
                 src={url}
                 alt={`Gallery photo ${i + 1}`}
-                className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
+                loading="lazy"
+                decoding="async"
+                className="w-full h-auto transition-transform duration-[1200ms] ease-out group-hover:scale-110"
                 style={{ filter: 'sepia(10%) brightness(0.85) contrast(1.05)' }}
               />
 
@@ -94,14 +109,21 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.82, opacity: 0 }}
                 transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="relative max-w-sm w-full max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl"
+                drag={photos.length > 1 ? 'x' : false}
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.6}
+                onDragEnd={(_, info) => {
+                  if (info.offset.x < -60) nextPhoto();
+                  else if (info.offset.x > 60) prevPhoto();
+                }}
+                className="relative max-w-sm w-full max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl touch-pan-y"
                 style={{ border: '1px solid rgba(232, 201, 122, 0.35)' }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <img
                   src={photos[lightboxIndex]}
                   alt={`Expanded Photo ${lightboxIndex + 1}`}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain pointer-events-none select-none"
                   style={{ maxHeight: '75vh' }}
                 />
                 {/* Image counter indicator */}
@@ -117,23 +139,27 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 </div>
               </motion.div>
 
-              {/* Prev / Next navigation arrows */}
-              <button
-                onClick={(e) => { e.stopPropagation(); prevPhoto(); }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
-                style={{ background: 'rgba(232,201,122,0.15)', color: '#E8C97A', border: '1px solid rgba(232,201,122,0.3)' }}
-                aria-label="Previous photo"
-              >
-                ‹
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); nextPhoto(); }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
-                style={{ background: 'rgba(232,201,122,0.15)', color: '#E8C97A', border: '1px solid rgba(232,201,122,0.3)' }}
-                aria-label="Next photo"
-              >
-                ›
-              </button>
+              {/* Prev / Next navigation arrows — pointless with a single photo */}
+              {photos.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); prevPhoto(); }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
+                    style={{ background: 'rgba(232,201,122,0.15)', color: '#E8C97A', border: '1px solid rgba(232,201,122,0.3)' }}
+                    aria-label="Previous photo"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); nextPhoto(); }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
+                    style={{ background: 'rgba(232,201,122,0.15)', color: '#E8C97A', border: '1px solid rgba(232,201,122,0.3)' }}
+                    aria-label="Next photo"
+                  >
+                    ›
+                  </button>
+                </>
+              )}
 
               {/* Close button */}
               <button

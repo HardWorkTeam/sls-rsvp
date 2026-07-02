@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
 import { submitRsvp } from '@/lib/rsvp';
@@ -55,6 +55,19 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
   const [wishesList, setWishesList] = useState<Wish[]>(INITIAL_WISHES);
 
   const [error, setError] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close the guest-count dropdown when tapping anywhere outside it.
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => document.removeEventListener('pointerdown', onPointerDown);
+  }, [isDropdownOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,7 +77,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
     try {
       await submitRsvp(weddingId, { name, status, guests: Number(guests) || 1, wishes });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to submit. Please try again.');
+      setError(err instanceof Error ? err.message : 'មិនអាចផ្ញើបានទេ សូមព្យាយាមម្តងទៀត / Failed to submit. Please try again.');
       setSubmitting(false);
       return;
     }
@@ -235,7 +248,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                               </button>
                             </div>
                           ) : (
-                            <div className="relative">
+                            <div className="relative" ref={dropdownRef}>
                               <div 
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                 className="flex items-center justify-between cursor-pointer w-full bg-white border border-[#C5A059]/20 hover:border-[#5A121D]/50 rounded-lg text-[#2A2A2A] text-xs px-3.5 py-3 outline-none transition-all duration-300 shadow-xs"

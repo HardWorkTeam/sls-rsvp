@@ -100,9 +100,40 @@ export const FallingLeaves: React.FC<{ count?: number }> = ({ count = 20 }) => {
       rafRef.current = requestAnimationFrame(animate);
     };
 
-    rafRef.current = requestAnimationFrame(animate);
-    return () => {
+    // Guests with motion sensitivity get a single static frame; everyone
+    // else gets the animation only while the canvas is on screen, so the
+    // rAF loop isn't draining phone batteries for the whole visit.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let running = false;
+    const startLoop = () => {
+      if (running) return;
+      running = true;
+      rafRef.current = requestAnimationFrame(function loop() {
+        if (!running) return;
+        animate();
+      });
+    };
+    const stopLoop = () => {
+      running = false;
       cancelAnimationFrame(rafRef.current);
+    };
+
+    let observer: IntersectionObserver | undefined;
+    if (reduceMotion) {
+      animate();
+      cancelAnimationFrame(rafRef.current);
+    } else {
+      observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) startLoop();
+        else stopLoop();
+      });
+      observer.observe(canvas);
+    }
+
+    return () => {
+      stopLoop();
+      observer?.disconnect();
       window.removeEventListener('resize', resize);
     };
   }, [count]);

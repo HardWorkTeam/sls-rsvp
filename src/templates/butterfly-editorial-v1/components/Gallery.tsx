@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GalleryProps {
@@ -10,6 +10,18 @@ interface GalleryProps {
 export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  // Keyboard navigation while the lightbox is open.
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxOpen(false);
+      else if (e.key === 'ArrowLeft') setCurrentIndex((p) => (p - 1 + photos.length) % photos.length);
+      else if (e.key === 'ArrowRight') setCurrentIndex((p) => (p + 1) % photos.length);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightboxOpen, photos.length]);
 
   if (!photos || photos.length === 0) return null;
 
@@ -64,26 +76,37 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                      drag={photos.length > 1 ? 'x' : false}
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={0.6}
+                      onDragEnd={(_, info) => {
+                        if (info.offset.x < -60) nextSlide();
+                        else if (info.offset.x > 60) prevSlide();
+                      }}
                       onClick={() => setLightboxOpen(true)}
-                      className="w-full h-full object-cover filter sepia-[10%] cursor-pointer"
+                      className="w-full h-full object-contain filter sepia-[10%] cursor-pointer touch-pan-y"
                     />
                   </AnimatePresence>
 
-                  {/* Navigation Arrows */}
-                  <button
-                    onClick={prevSlide}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm border border-[#C5A059]/30 flex items-center justify-center text-xs text-[#5A121D] shadow-sm cursor-pointer hover:bg-white transition-colors z-20"
-                    aria-label="Previous slide"
-                  >
-                    ⟨
-                  </button>
-                  <button
-                    onClick={nextSlide}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm border border-[#C5A059]/30 flex items-center justify-center text-xs text-[#5A121D] shadow-sm cursor-pointer hover:bg-white transition-colors z-20"
-                    aria-label="Next slide"
-                  >
-                    ⟩
-                  </button>
+                  {/* Navigation Arrows — pointless with a single photo */}
+                  {photos.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevSlide}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm border border-[#C5A059]/30 flex items-center justify-center text-xs text-[#5A121D] shadow-sm cursor-pointer hover:bg-white transition-colors z-20"
+                        aria-label="Previous slide"
+                      >
+                        ⟨
+                      </button>
+                      <button
+                        onClick={nextSlide}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm border border-[#C5A059]/30 flex items-center justify-center text-xs text-[#5A121D] shadow-sm cursor-pointer hover:bg-white transition-colors z-20"
+                        aria-label="Next slide"
+                      >
+                        ⟩
+                      </button>
+                    </>
+                  )}
 
                   {/* Page indicator */}
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded bg-black/45 backdrop-blur-sm text-[9px] font-mono tracking-widest text-[#FCFBF9] z-20 pointer-events-none">
@@ -106,7 +129,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                     }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={p} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover filter sepia-[10%]" />
+                    <img src={p} alt={`Thumbnail ${idx + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover filter sepia-[10%]" />
                   </button>
                 ))}
               </div>
@@ -131,13 +154,20 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.82, opacity: 0 }}
                 transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="relative max-w-sm w-full max-h-[85vh] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(90,18,29,0.15)] bg-white border border-[#C5A059]/20"
+                drag={photos.length > 1 ? 'x' : false}
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.6}
+                onDragEnd={(_, info) => {
+                  if (info.offset.x < -60) nextSlide();
+                  else if (info.offset.x > 60) prevSlide();
+                }}
+                className="relative max-w-sm w-full max-h-[85vh] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(90,18,29,0.15)] bg-white border border-[#C5A059]/20 touch-pan-y"
                 onClick={(e) => e.stopPropagation()}
               >
                 <img
                   src={photos[currentIndex]}
                   alt={`Expanded Photo ${currentIndex + 1}`}
-                  className="w-full h-full object-contain p-2"
+                  className="w-full h-full object-contain p-2 pointer-events-none select-none"
                   style={{ maxHeight: '75vh' }}
                 />
                 <div
@@ -147,20 +177,27 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 </div>
               </motion.div>
 
-              <button
-                onClick={(e) => { e.stopPropagation(); prevSlide(); }}
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 active:scale-95 bg-white text-[#5A121D] shadow-lg border border-[#C5A059]/30 text-xl"
-              >
-                ‹
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); nextSlide(); }}
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 active:scale-95 bg-white text-[#5A121D] shadow-lg border border-[#C5A059]/30 text-xl"
-              >
-                ›
-              </button>
+              {photos.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                    aria-label="Previous photo"
+                    className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 active:scale-95 bg-white text-[#5A121D] shadow-lg border border-[#C5A059]/30 text-xl"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                    aria-label="Next photo"
+                    className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 active:scale-95 bg-white text-[#5A121D] shadow-lg border border-[#C5A059]/30 text-xl"
+                  >
+                    ›
+                  </button>
+                </>
+              )}
               <button
                 onClick={(e) => { e.stopPropagation(); setLightboxOpen(false); }}
+                aria-label="Close photo viewer"
                 className="absolute top-4 right-4 md:right-8 md:top-8 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 active:scale-95 bg-white text-[#5A121D] shadow-lg border border-[#C5A059]/30 text-xl"
               >
                 ×

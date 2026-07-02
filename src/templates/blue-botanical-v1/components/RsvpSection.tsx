@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
 import { submitRsvp } from '@/lib/rsvp';
@@ -18,6 +18,19 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close the guest-count dropdown when tapping anywhere outside it.
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => document.removeEventListener('pointerdown', onPointerDown);
+  }, [isDropdownOpen]);
 
   const inputStyle: React.CSSProperties = {
     background: 'rgba(255,255,255,0.05)',
@@ -40,7 +53,7 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
       await submitRsvp(weddingId, { name, status, guests: Number(guests) || 1, wishes });
       setSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to submit. Please try again.');
+      setError(err instanceof Error ? err.message : 'មិនអាចផ្ញើបានទេ សូមព្យាយាមម្តងទៀត / Failed to submit. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -128,7 +141,7 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
                   </button>
                 </div>
               ) : (
-                <div className="relative">
+                <div className="relative" ref={dropdownRef}>
                   <div 
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="flex items-center justify-between cursor-pointer transition-colors"
