@@ -179,7 +179,6 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={groom.photo} alt={groom.nameEn} className="w-full h-full object-cover" />
                     </div>
-                    <span className="font-khmer-body text-[9px] text-[#C9A84C]/70 tracking-widest uppercase">花郎</span>
                   </div>
                 )}
                 <div className="w-[1px] h-16 self-center" style={{ background: 'rgba(201,168,76,0.2)' }} />
@@ -189,7 +188,6 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={bride.photo} alt={bride.nameEn} className="w-full h-full object-cover" />
                     </div>
-                    <span className="font-khmer-body text-[9px] text-[#C9A84C]/70 tracking-widest uppercase">花嫁</span>
                   </div>
                 )}
               </div>

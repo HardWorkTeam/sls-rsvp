@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
 import { submitRsvp } from '@/lib/rsvp';
@@ -24,6 +24,19 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close the guest-count dropdown when tapping anywhere outside it.
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => document.removeEventListener('pointerdown', onPointerDown);
+  }, [isDropdownOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +47,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
       await submitRsvp(weddingId, { name, status, guests: Number(guests) || 1, wishes });
       setSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to submit. Please try again.');
+      setError(err instanceof Error ? err.message : 'មិនអាចផ្ញើបានទេ សូមព្យាយាមម្តងទៀត / Failed to submit. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -187,8 +200,8 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
                       </button>
                     </div>
                   ) : (
-                    <div className="relative">
-                      <div 
+                    <div className="relative" ref={dropdownRef}>
+                      <div
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         className="flex items-center justify-between cursor-pointer w-full bg-[#faf6ef]/[0.04] border border-[#C9A84C]/25 hover:border-[#C9A84C]/50 focus:border-[#C9A84C] focus:ring-1 focus:ring-[#C9A84C]/35 rounded-xl text-[#FAF6EF] text-xs px-4 py-3.5 outline-none transition-all duration-300 font-khmer-body"
                       >
