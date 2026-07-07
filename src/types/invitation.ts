@@ -108,6 +108,16 @@ export interface InvitationData {
 
 // ─── Backend API Types (PublicInvitation shape from Laravel) ────────────────
 
+// One day of a multi-day wedding (Khmer weddings commonly span 2 days:
+// traditional ceremony day + reception day). Saved by the editor into
+// invitation settings as `wedding_days`. Display titles are derived from the
+// day position (day 1 = traditional ceremony, later days = reception).
+export interface PublicWeddingDay {
+  date?: string;   // "YYYY-MM-DD"
+  time?: string;   // wall-clock "HH:MM" or "HH:MM:SS" (Cambodia time)
+  venue?: string;  // optional per-day venue override
+}
+
 export interface PublicTimelineEvent {
   id: number;
   category: string;
@@ -141,6 +151,7 @@ export interface PublicInvitation {
   settings: {
     show_gift_section?: boolean;
     bank_account?: { bank?: string; name?: string; number?: string };
+    wedding_days?: PublicWeddingDay[];
     [key: string]: unknown;
   } | null;
   template?: {

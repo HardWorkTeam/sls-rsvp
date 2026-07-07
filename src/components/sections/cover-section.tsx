@@ -4,6 +4,23 @@ import type { PublicInvitation } from "@/types/invitation";
 export function CoverSection({ invitation }: { invitation: PublicInvitation }) {
   const { wedding } = invitation;
 
+  // Multi-day weddings (settings.wedding_days) show one card per day; older
+  // invitations fall back to the wedding's single date/time.
+  const weddingDays = (invitation.settings?.wedding_days ?? []).filter((d) => d.date);
+  const days = weddingDays.length > 0
+    ? weddingDays.map((d, i) => ({
+        date: d.date as string,
+        time: d.time ?? "",
+        venue: d.venue || (i === 0 ? wedding.ceremony_venue : wedding.reception_venue || wedding.ceremony_venue) || "",
+      }))
+    : wedding.wedding_date
+      ? [{
+          date: wedding.wedding_date,
+          time: wedding.wedding_time ?? "",
+          venue: wedding.ceremony_venue ?? "",
+        }]
+      : [];
+
   return (
     <section className="relative flex min-h-[88dvh] flex-col items-center justify-center py-20 text-center">
       <div
@@ -26,17 +43,29 @@ export function CoverSection({ invitation }: { invitation: PublicInvitation }) {
         request the pleasure of your company at the celebration of their wedding
       </p>
 
-      {wedding.wedding_date ? (
-        <div className="relative mt-10 inline-flex flex-col items-center gap-1 rounded-2xl border border-emerald-200 bg-white/80 px-8 py-5 shadow-sm backdrop-blur">
-          <p className="font-[family-name:var(--font-serif)] text-xl font-semibold text-emerald-900">
-            {formatLongDate(wedding.wedding_date)}
-          </p>
-          {wedding.wedding_time ? (
-            <p className="text-sm text-zinc-500">at {formatTime(wedding.wedding_time)}</p>
-          ) : null}
-          {wedding.ceremony_venue ? (
-            <p className="mt-1 text-sm text-zinc-600">{wedding.ceremony_venue}</p>
-          ) : null}
+      {days.length > 0 ? (
+        <div className="relative mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
+          {days.map((day, i) => (
+            <div
+              key={i}
+              className="inline-flex flex-col items-center gap-1 rounded-2xl border border-emerald-200 bg-white/80 px-8 py-5 shadow-sm backdrop-blur"
+            >
+              {days.length > 1 ? (
+                <p className="text-xs uppercase tracking-[0.2em] text-emerald-700">
+                  ថ្ងៃទី{i + 1} · Day {i + 1}
+                </p>
+              ) : null}
+              <p className="font-[family-name:var(--font-serif)] text-xl font-semibold text-emerald-900">
+                {formatLongDate(day.date)}
+              </p>
+              {day.time ? (
+                <p className="text-sm text-zinc-500">at {formatTime(day.time)}</p>
+              ) : null}
+              {day.venue ? (
+                <p className="mt-1 text-sm text-zinc-600">{day.venue}</p>
+              ) : null}
+            </div>
+          ))}
         </div>
       ) : null}
 

@@ -24,6 +24,11 @@ export function buildSampleInvitation(slug: string): PublicInvitation {
       // wedding to collect responses for, so hide the RSVP section.
       sections: { RSVP: false },
       show_gift_section: true,
+      // Typical Khmer wedding: traditional ceremony day + reception day.
+      wedding_days: [
+        { date: "2026-11-21", time: "07:00", venue: "គេហដ្ឋានខាងកូនក្រមុំ" },
+        { date: "2026-11-22", time: "17:00", venue: "មជ្ឈមណ្ឌល ពិភពមង្គល" },
+      ],
       bank_account: {
         bank: "ABA Bank",
         name: "Chan Vireakboth",
@@ -65,15 +70,16 @@ export function buildSampleInvitation(slug: string): PublicInvitation {
       google_map_link: "https://share.google/A4wcVREVh1b523C1h",
       story_description:
         "Introduced by a mutual friend, Veasna and Chanreah began their journey with a simple conversation. What started as friendship soon blossomed into love, leading to a heartfelt engagement. Now, with grateful hearts and the blessings of their families, they are ready to begin their forever together.",
+      // Two-day program matching wedding_days above.
       timeline_events: [
         {
           id: 1,
           category: "ceremony",
           title: "Traditional Ceremony",
           description: null,
-          // 17:00 Asia/Phnom_Penh (+07) === 10:00 UTC
-          starts_at: "2026-11-21T10:00:00Z",
-          location: "មជ្ឈមណ្ឌល ពិភពមង្គល",
+          // Day 1 — 07:00 Asia/Phnom_Penh (+07) === 00:00 UTC
+          starts_at: "2026-11-21T00:00:00Z",
+          location: "គេហដ្ឋានខាងកូនក្រមុំ",
           google_map_link: "https://share.google/A4wcVREVh1b523C1h",
           sort_order: 1,
         },
@@ -82,8 +88,8 @@ export function buildSampleInvitation(slug: string): PublicInvitation {
           category: "reception",
           title: "Reception & Dinner",
           description: null,
-          // 18:30 Asia/Phnom_Penh (+07) === 11:30 UTC
-          starts_at: "2026-11-21T11:30:00Z",
+          // Day 2 — 17:00 Asia/Phnom_Penh (+07) === 10:00 UTC
+          starts_at: "2026-11-22T10:00:00Z",
           location: "មជ្ឈមណ្ឌល ពិភពមង្គល",
           google_map_link: "https://share.google/A4wcVREVh1b523C1h",
           sort_order: 2,

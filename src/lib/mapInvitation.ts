@@ -1,4 +1,4 @@
-import type { PublicInvitation, InvitationData, WeddingEvent, GiftRegistryItem, LoveStoryMilestone, CalendarEvent } from "@/types/invitation";
+import type { PublicInvitation, PublicWeddingDay, InvitationData, WeddingEvent, GiftRegistryItem, LoveStoryMilestone, CalendarEvent } from "@/types/invitation";
 
 const DEFAULT_TEMPLATE = "royal-khmer-v1";
 
@@ -18,24 +18,59 @@ function localDateStr(date: Date): string {
   return date.toLocaleDateString("en-CA", { timeZone: DISPLAY_TZ }); // en-CA = YYYY-MM-DD
 }
 
+// Wall-clock times ("16:00" / "16:00:00") carry no zone. Parse as UTC (append
+// "Z") and format in UTC so the displayed clock time matches the input exactly
+// — otherwise the naive string is parsed in the server's local zone and
+// shifted when formatted as UTC (e.g. "16:00" → "9:00 AM" at +07).
+function wallClockLabel(time: string): string {
+  return new Date(`1970-01-01T${time}Z`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" });
+}
+
+// The wedding-day rows saved by the editor (settings.wedding_days) — Khmer
+// weddings commonly span 2 days. Only rows with a date are usable.
+function parseWeddingDays(invitation: PublicInvitation): PublicWeddingDay[] {
+  const days = invitation.settings?.wedding_days;
+  if (!Array.isArray(days)) return [];
+  return days.filter((d): d is PublicWeddingDay => Boolean(d && typeof d === "object" && d.date));
+}
+
 // Events derived from the wedding's own date/time/venue/map fields (the top of the
 // editor's "Event Schedule" section). These drive the Cover, Countdown and Location —
 // i.e. the general "wedding info", which must NOT come from individual timeline rows.
 function buildWeddingEvents(invitation: PublicInvitation): WeddingEvent[] {
   const { wedding } = invitation;
 
+  // Multi-day weddings: one event per day. Day 1 defaults to the ceremony
+  // venue, later days to the reception venue (the usual Khmer pattern:
+  // traditional ceremony first day, reception party the next).
+  const weddingDays = parseWeddingDays(invitation);
+  if (weddingDays.length > 0) {
+    return weddingDays.map((day, i) => {
+      const fallbackVenue = i === 0
+        ? wedding.ceremony_venue ?? wedding.reception_venue
+        : wedding.reception_venue ?? wedding.ceremony_venue;
+      const title = weddingDays.length > 1
+        ? (i === 0 ? "ពិធីតាមប្រពៃណី (Traditional Ceremony)" : "ពិធីជប់លៀង (Reception)")
+        : "ពិធីមង្គលការ (Wedding Ceremony)";
+      return {
+        id: `evt-day-${i + 1}`,
+        title,
+        dateKh: "",
+        dateSolar: `${day.date}T${day.time || "00:00:00"}`,
+        timeLabel: day.time ? wallClockLabel(day.time) : "",
+        locationName: day.venue || fallbackVenue || "",
+        googleMapsUrl: wedding.google_map_link ?? "",
+        sortOrder: i + 1,
+      };
+    });
+  }
+
   const weddingDate = wedding.wedding_date ?? "";
   const weddingTime = wedding.wedding_time ?? "";
   const weddingDateSolar = weddingDate
     ? `${weddingDate}T${weddingTime || "00:00:00"}`
     : "";
-  // `weddingTime` is a wall-clock time ("16:00:00") with no zone. Parse it as
-  // UTC (append "Z") and format in UTC so the displayed clock time matches the
-  // input exactly — otherwise the naive string is parsed in the server's local
-  // zone and shifted when formatted as UTC (e.g. "16:00" → "9:00 AM" at +07).
-  const weddingTimeLabel = weddingTime
-    ? new Date(`1970-01-01T${weddingTime}Z`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" })
-    : "";
+  const weddingTimeLabel = weddingTime ? wallClockLabel(weddingTime) : "";
 
   const events: WeddingEvent[] = [];
 
@@ -124,10 +159,31 @@ function buildCalendar(
   coupleTitle: string,
 ): CalendarEvent | undefined {
   const { wedding } = invitation;
-  const date = wedding.wedding_date;
+  const weddingDays = parseWeddingDays(invitation);
+
+  // Multi-day wedding: a single all-day entry spanning every day (DTEND is
+  // exclusive, so it's the day after the last day). Dates come sorted from the
+  // editor but sort defensively anyway.
+  if (weddingDays.length > 1) {
+    const dates = weddingDays.map((d) => d.date as string).sort();
+    const last = new Date(`${dates[dates.length - 1]}T00:00:00Z`);
+    last.setUTCDate(last.getUTCDate() + 1);
+    return {
+      title: `${coupleTitle} — Wedding`,
+      location: wedding.ceremony_venue || wedding.reception_venue || "",
+      description: wedding.google_map_link ? `Map: ${wedding.google_map_link}` : "",
+      start: dates[0],
+      end: last.toISOString().slice(0, 10),
+      allDay: true,
+    };
+  }
+
+  // Single day: prefer the wedding-day row (kept in sync with the wedding
+  // fields by the editor, but the row is authoritative when present).
+  const date = weddingDays[0]?.date ?? wedding.wedding_date;
   if (!date) return undefined;
 
-  const time = wedding.wedding_time ?? "";
+  const time = weddingDays[0]?.time ?? wedding.wedding_time ?? "";
   const location = wedding.ceremony_venue || wedding.reception_venue || "";
 
   // Calendar entry carries only the essentials: couple title, location, map and

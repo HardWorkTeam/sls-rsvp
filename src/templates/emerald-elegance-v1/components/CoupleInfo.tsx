@@ -28,19 +28,22 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
   const lunarDate = data.lunarDateText || (primaryEvent ? primaryEvent.dateKh : '');
   const thankYou = data.thankYouText || 'THANK YOU! / សូមអរគុណ';
 
-  const locationName = primaryEvent ? primaryEvent.locationName : '';
-  const timeLabel = primaryEvent ? primaryEvent.timeLabel : '';
-
-  const weddingDate = primaryEvent
-    ? new Date(primaryEvent.dateSolar)
-    : new Date();
-
-  const monthName = weddingDate.toLocaleDateString('en-US', { month: 'long' }).toUpperCase();
-  const dayName = weddingDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
-  const dateDay = weddingDate.getDate();
-  const dateYear = weddingDate.getFullYear();
-
-  const formattedSolarKh = primaryEvent ? khmerSolarDate(weddingDate) : '';
+  // One date/venue entry per wedding day — Khmer weddings often span two days.
+  // data.events carries one event per wedding day (see mapInvitation).
+  const eventDays = data.events.map((evt) => {
+    const d = new Date(evt.dateSolar);
+    return {
+      id: evt.id,
+      monthName: d.toLocaleDateString('en-US', { month: 'long' }).toUpperCase(),
+      dayName: d.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase(),
+      dateDay: d.getDate(),
+      dateYear: d.getFullYear(),
+      solarKh: khmerSolarDate(d),
+      timeLabel: evt.timeLabel,
+      locationName: evt.locationName,
+    };
+  });
+  const multiDay = eventDays.length > 1;
 
   return (
     <section className="relative w-full py-20 overflow-hidden flex flex-col items-center bg-transparent">
@@ -215,42 +218,54 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               <ThinGoldRule />
             </div>
 
-            {/* Dates & Location block */}
+            {/* Dates & Location block — one entry per wedding day */}
             <div className="space-y-5 w-full text-xs text-emerald-ivory">
-              {/* Lunar Khmer date */}
-              <p className="font-emerald-serif leading-relaxed text-emerald-gold">
-                {lunarDate}
-                {formattedSolarKh && (
-                  <span className="block mt-1 font-semibold text-emerald-ivory">
-                    {formattedSolarKh}
-                  </span>
-                )}
-              </p>
-
-              {/* English grid date format */}
-              <div className="border-y border-emerald-gold/20 py-3 max-w-sm mx-auto flex items-center justify-center gap-6 font-emerald-sans text-[11px] md:text-xs tracking-[0.2em] text-emerald-gold uppercase">
-                <span>{monthName}</span>
-                <div className="flex flex-col items-center border-x border-emerald-gold/20 px-5">
-                  <span className="text-[9px]">{dayName}</span>
-                  <span className="text-2xl md:text-3xl font-emerald-serif font-bold my-1 text-emerald-ivory">{dateDay}</span>
-                  <span className="text-[9px]">{dateYear}</span>
-                </div>
-                <span>AT {timeLabel || '5 PM'}</span>
-              </div>
-
-              {/* Time detail */}
-              <p className="font-emerald-serif text-xs opacity-80">
-                {khmerTimeLabel(timeLabel)} ទៅ / Starting at {timeLabel}
-              </p>
-
-              {/* Location */}
-              {locationName && (
-                <div className="space-y-1">
-                  <p className="font-emerald-sans text-emerald-gold text-[11px] uppercase tracking-wider font-bold">
-                    📍 {locationName}
-                  </p>
-                </div>
+              {/* Lunar Khmer date (applies to the whole celebration) */}
+              {lunarDate && (
+                <p className="font-emerald-serif leading-relaxed text-emerald-gold">
+                  {lunarDate}
+                </p>
               )}
+
+              {eventDays.map((day, i) => (
+                <div key={day.id} className="space-y-2.5">
+                  {multiDay && (
+                    <p className="font-emerald-sans text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-gold">
+                      ថ្ងៃទី{i + 1} · Day {i + 1}
+                    </p>
+                  )}
+                  {day.solarKh && (
+                    <p className="font-emerald-serif font-semibold text-emerald-ivory">
+                      {day.solarKh}
+                    </p>
+                  )}
+
+                  {/* English grid date format */}
+                  <div className="border-y border-emerald-gold/20 py-3 max-w-sm mx-auto flex items-center justify-center gap-6 font-emerald-sans text-[11px] md:text-xs tracking-[0.2em] text-emerald-gold uppercase">
+                    <span>{day.monthName}</span>
+                    <div className="flex flex-col items-center border-x border-emerald-gold/20 px-5">
+                      <span className="text-[9px]">{day.dayName}</span>
+                      <span className="text-2xl md:text-3xl font-emerald-serif font-bold my-1 text-emerald-ivory">{day.dateDay}</span>
+                      <span className="text-[9px]">{day.dateYear}</span>
+                    </div>
+                    <span>AT {day.timeLabel || '5 PM'}</span>
+                  </div>
+
+                  {/* Time detail */}
+                  {day.timeLabel && (
+                    <p className="font-emerald-serif text-xs opacity-80">
+                      {khmerTimeLabel(day.timeLabel)} ទៅ / Starting at {day.timeLabel}
+                    </p>
+                  )}
+
+                  {/* Location */}
+                  {day.locationName && (
+                    <p className="font-emerald-sans text-emerald-gold text-[11px] uppercase tracking-wider font-bold">
+                      📍 {day.locationName}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
 
             <div className="w-1/4 my-4">
