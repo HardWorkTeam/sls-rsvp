@@ -28,7 +28,7 @@ export const Footer: React.FC<FooterProps> = ({ couple }) => {
           សូមអរគុណចំពោះការចូលរួម
         </p>
         <p className="font-serif-en text-[10px] tracking-widest uppercase text-[#E8C97A]/40">
-          Srolanh Wedding · Phanaroth Luxury Template
+          Srolanh Wedding · Red Rose Luxury Template
         </p>
       </div>
     </footer>

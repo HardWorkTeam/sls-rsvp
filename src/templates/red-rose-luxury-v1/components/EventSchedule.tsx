@@ -175,7 +175,7 @@ export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateT
     ? `ព.ស. ${beYear} ត្រូវនឹងថ្ងៃទី ${toKhmerNumber(dayNum)} ខែ${getKhmerMonth(monthNum - 1)} ឆ្នាំ${toKhmerNumber(yearNum)}`
     : '';
 
-  const themeColor = '#E8C97A'; // Gold accent for Phanaroth
+  const themeColor = '#E8C97A'; // Gold accent for Red Rose
   const textColor = '#FAF6EF'; // Ivory text
 
   return (

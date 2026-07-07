@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * Phanaroth Luxury V1 — Master Template Entry
+ * Red Rose Luxury V1 — Master Template Entry
  * ════════════════════════════════════════════════════════════════════════
- * Theme:      Phanaroth Luxury (Crimson & Gold Premium Cambodian Wedding)
+ * Theme:      Red Rose Luxury (Crimson & Gold Premium Cambodian Wedding)
  * Mood:       Wow · Prestige · Cultural · High-Prestige
  * Colors:     Crimson #5C030C · Gold #E8C97A · Ivory #FAF6EF
  * Fonts:      Moul (Khmer Title) · Battambang (Khmer Body) · Playfair Display (English)
@@ -53,13 +53,13 @@ const CrimsonDivider: React.FC = () => (
   </div>
 );
 
-export default function PhanarothLuxuryV1Template({ data, guestName }: TemplateProps) {
+export default function RedRoseLuxuryV1Template({ data, guestName }: TemplateProps) {
   const { sectionsVisibility } = data;
   const primaryEvent = data.events[0];
 
   return (
     <div
-      className="min-h-screen antialiased bg-pattern-phanaroth"
+      className="min-h-screen antialiased bg-pattern-red-rose"
       style={{ color: 'var(--rk-ivory)' }}
     >
       {/* 1. COVER (Bi-parting doors gate opener) */}

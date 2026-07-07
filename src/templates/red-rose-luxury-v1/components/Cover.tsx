@@ -58,7 +58,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
 
   return (
     <section
-      className="relative w-full overflow-hidden flex flex-col items-center justify-center bg-pattern-phanaroth"
+      className="relative w-full overflow-hidden flex flex-col items-center justify-center bg-pattern-red-rose"
       style={{
         minHeight: '100dvh',
       }}
@@ -305,7 +305,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
 
               <div className="space-y-1">
                 <p className="font-serif-en text-[10px] tracking-[0.45em] text-[#E8C97A] uppercase font-bold">
-                  Phanaroth digital template
+                  Red Rose digital template
                 </p>
                 <div className="w-16 h-[0.5px] bg-[#E8C97A]/20 mx-auto mt-2" />
               </div>
