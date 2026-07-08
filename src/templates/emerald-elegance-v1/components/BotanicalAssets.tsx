@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 export const TopBotanicalBranch: React.FC<{ className?: string }> = ({ className }) => (
   <svg
@@ -10,7 +10,7 @@ export const TopBotanicalBranch: React.FC<{ className?: string }> = ({ className
     preserveAspectRatio="xMidYMid meet"
   >
     {/* Left branch */}
-    <motion.path
+    <m.path
       d="M20,100 C80,60 160,20 190,10"
       stroke="var(--ee-ivory)"
       strokeWidth="1.5"
@@ -19,12 +19,12 @@ export const TopBotanicalBranch: React.FC<{ className?: string }> = ({ className
       animate={{ pathLength: 1 }}
       transition={{ duration: 1.5, ease: "easeOut" }}
     />
-    <motion.path d="M100,50 Q110,40 120,45" stroke="#c9a84c" strokeWidth="1" fill="none" />
-    <motion.path d="M60,75 Q70,60 80,70" stroke="var(--ee-ivory)" strokeWidth="1" fill="none" />
-    <motion.path d="M150,25 Q160,15 170,25" stroke="#c9a84c" strokeWidth="1" fill="none" />
+    <m.path d="M100,50 Q110,40 120,45" stroke="#c9a84c" strokeWidth="1" fill="none" />
+    <m.path d="M60,75 Q70,60 80,70" stroke="var(--ee-ivory)" strokeWidth="1" fill="none" />
+    <m.path d="M150,25 Q160,15 170,25" stroke="#c9a84c" strokeWidth="1" fill="none" />
     
     {/* Right branch */}
-    <motion.path
+    <m.path
       d="M380,100 C320,60 240,20 210,10"
       stroke="var(--ee-ivory)"
       strokeWidth="1.5"
@@ -33,9 +33,9 @@ export const TopBotanicalBranch: React.FC<{ className?: string }> = ({ className
       animate={{ pathLength: 1 }}
       transition={{ duration: 1.5, ease: "easeOut" }}
     />
-    <motion.path d="M300,50 Q290,40 280,45" stroke="#c9a84c" strokeWidth="1" fill="none" />
-    <motion.path d="M340,75 Q330,60 320,70" stroke="var(--ee-ivory)" strokeWidth="1" fill="none" />
-    <motion.path d="M250,25 Q240,15 230,25" stroke="#c9a84c" strokeWidth="1" fill="none" />
+    <m.path d="M300,50 Q290,40 280,45" stroke="#c9a84c" strokeWidth="1" fill="none" />
+    <m.path d="M340,75 Q330,60 320,70" stroke="var(--ee-ivory)" strokeWidth="1" fill="none" />
+    <m.path d="M250,25 Q240,15 230,25" stroke="#c9a84c" strokeWidth="1" fill="none" />
   </svg>
 );
 
@@ -48,7 +48,7 @@ export const BottomBotanicalBranch: React.FC<{ className?: string }> = ({ classN
     preserveAspectRatio="xMidYMid meet"
   >
     {/* Left branch */}
-    <motion.path
+    <m.path
       d="M20,20 C80,60 160,100 190,110"
       stroke="var(--ee-ivory)"
       strokeWidth="1.5"
@@ -57,11 +57,11 @@ export const BottomBotanicalBranch: React.FC<{ className?: string }> = ({ classN
       animate={{ pathLength: 1 }}
       transition={{ duration: 1.5, ease: "easeOut" }}
     />
-    <motion.path d="M100,70 Q110,80 120,75" stroke="#c9a84c" strokeWidth="1" fill="none" />
-    <motion.path d="M60,45 Q70,60 80,50" stroke="var(--ee-ivory)" strokeWidth="1" fill="none" />
+    <m.path d="M100,70 Q110,80 120,75" stroke="#c9a84c" strokeWidth="1" fill="none" />
+    <m.path d="M60,45 Q70,60 80,50" stroke="var(--ee-ivory)" strokeWidth="1" fill="none" />
     
     {/* Right branch */}
-    <motion.path
+    <m.path
       d="M380,20 C320,60 240,100 210,110"
       stroke="var(--ee-ivory)"
       strokeWidth="1.5"
@@ -70,14 +70,14 @@ export const BottomBotanicalBranch: React.FC<{ className?: string }> = ({ classN
       animate={{ pathLength: 1 }}
       transition={{ duration: 1.5, ease: "easeOut" }}
     />
-    <motion.path d="M300,70 Q290,80 280,75" stroke="#c9a84c" strokeWidth="1" fill="none" />
-    <motion.path d="M340,45 Q330,60 320,50" stroke="var(--ee-ivory)" strokeWidth="1" fill="none" />
+    <m.path d="M300,70 Q290,80 280,75" stroke="#c9a84c" strokeWidth="1" fill="none" />
+    <m.path d="M340,45 Q330,60 320,50" stroke="var(--ee-ivory)" strokeWidth="1" fill="none" />
   </svg>
 );
 
 export const CornerOrnament: React.FC<{ className?: string, style?: React.CSSProperties }> = ({ className, style }) => (
   <svg className={className} style={style} width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <motion.path
+    <m.path
       d="M2 38 L2 15 C2 5 5 2 15 2 L38 2"
       stroke="#c9a84c"
       strokeWidth="1"
@@ -101,7 +101,7 @@ export const DiamondSeparator: React.FC<{ className?: string }> = ({ className }
 
 export const ThinGoldRule: React.FC<{ width?: string, className?: string }> = ({ width = "60px", className = "" }) => (
   <div className={`flex justify-center w-full ${className}`}>
-    <motion.div
+    <m.div
       initial={{ width: 0 }}
       whileInView={{ width }}
       transition={{ duration: 0.8 }}
@@ -135,7 +135,7 @@ export const EtherealBorderFrame: React.FC<{
         style={{ borderRadius: '1rem' }}
       >
         {/* Outer border rect */}
-        <motion.rect
+        <m.rect
           x="4"
           y="4"
           width="calc(100% - 8px)"
@@ -149,7 +149,7 @@ export const EtherealBorderFrame: React.FC<{
           transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
         />
         {/* Inner border rect */}
-        <motion.rect
+        <m.rect
           x="8"
           y="8"
           width="calc(100% - 16px)"

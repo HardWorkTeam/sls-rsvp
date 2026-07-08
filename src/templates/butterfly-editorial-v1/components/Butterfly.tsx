@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 interface ButterflyProps {
   size?: number;
@@ -57,7 +57,7 @@ export const Butterfly: React.FC<ButterflyProps> = ({
       {/* Gold dust sparkle particles */}
       <div className="absolute inset-0 pointer-events-none overflow-visible">
         {[...Array(6)].map((_, i) => (
-          <motion.div
+          <m.div
             key={i}
             className="absolute rounded-full"
             style={{
@@ -85,7 +85,7 @@ export const Butterfly: React.FC<ButterflyProps> = ({
       </div>
 
       {/* 3D Butterfly with CSS perspective transforms */}
-      <motion.div
+      <m.div
         animate={{
           y: [0, -10, 3, -8, 0],
           x: [0, 4, -3, 2, 0],
@@ -111,7 +111,7 @@ export const Butterfly: React.FC<ButterflyProps> = ({
           style={{ transformStyle: 'preserve-3d' }}
         >
           {/* LEFT WING */}
-          <motion.div
+          <m.div
             animate={{
               rotateY: [15, 65, 5, 55, 15],
             }}
@@ -185,10 +185,10 @@ export const Butterfly: React.FC<ButterflyProps> = ({
               <path d="M34 5 C22 14, 10 22, 6 28" stroke={wingColor.vein} strokeWidth="0.4" fill="none" opacity="0.5" />
               <circle cx="16" cy="20" r="2.5" fill={wingColor.spot} />
             </svg>
-          </motion.div>
+          </m.div>
 
           {/* RIGHT WING */}
-          <motion.div
+          <m.div
             animate={{
               rotateY: [-15, -65, -5, -55, -15],
             }}
@@ -247,7 +247,7 @@ export const Butterfly: React.FC<ButterflyProps> = ({
               <path d="M34 5 C22 14, 10 22, 6 28" stroke={wingColor.vein} strokeWidth="0.4" fill="none" opacity="0.5" />
               <circle cx="16" cy="20" r="2.5" fill={wingColor.spot} />
             </svg>
-          </motion.div>
+          </m.div>
 
           {/* BODY (Central thorax & abdomen) */}
           <div className="absolute left-1/2 top-[10%] -translate-x-1/2 z-20" style={{ width: size * 0.08, height: size * 0.65 }}>
@@ -267,10 +267,10 @@ export const Butterfly: React.FC<ButterflyProps> = ({
             </svg>
           </div>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Dynamic ground shadow */}
-      <motion.div
+      <m.div
         animate={{
           scale: [1, 0.7, 1.1, 0.75, 1],
           opacity: [0.15, 0.06, 0.18, 0.08, 0.15],

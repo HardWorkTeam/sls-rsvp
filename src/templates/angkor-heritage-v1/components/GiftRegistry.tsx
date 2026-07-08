@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { GiftRegistryItem } from '@/types/invitation';
 
 interface GiftProps { registries: GiftRegistryItem[]; }
@@ -30,7 +30,7 @@ export const GiftRegistry: React.FC<GiftProps> = ({ registries }) => {
       </div>
 
       {registries.map((item, i) => (
-        <motion.div
+        <m.div
           key={item.id}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -71,7 +71,7 @@ export const GiftRegistry: React.FC<GiftProps> = ({ registries }) => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       ))}
     </div>
   </section>

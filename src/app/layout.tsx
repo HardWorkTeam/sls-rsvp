@@ -7,6 +7,11 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+// Self-hosted + preloaded via next/font. This is the ONLY Cormorant source —
+// the editorial/emerald templates reference it through `--font-serif` too, so
+// it is no longer also pulled from the Google Fonts <link> below (which would
+// download the same typeface a second time). Italic is synthesized by the
+// browser for the rare `font-editorial-serif italic` usages.
 const cormorant = Cormorant_Garamond({
   variable: "--font-serif",
   subsets: ["latin"],
@@ -32,7 +37,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Moul&family=Kantumruy:wght@300;400;700&family=Kantumruy+Pro:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Pinyon+Script&family=Playball&family=Montserrat:wght@300;400;600&family=Great+Vibes&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Moul&family=Kantumruy+Pro:wght@300;400;500;700&family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Pinyon+Script&family=Playball&family=Montserrat:wght@300;400;600&family=Great+Vibes&display=swap"
           rel="stylesheet"
         />
       </head>

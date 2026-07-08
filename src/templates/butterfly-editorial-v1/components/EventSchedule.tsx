@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { WeddingEvent } from '@/types/invitation';
 import { Butterfly } from './Butterfly';
 
@@ -29,12 +29,11 @@ const getKhmerMonth = (monthIndex: number): string => {
   return months[monthIndex];
 };
 
-const formatKhmerEventDate = (dateSolar: string): string => {
-  const dateStr = (dateSolar ?? '').split('T')[0];
-  if (!dateStr) return '';
-  const [y, m, d] = dateStr.split('-').map(Number);
-  if (!y || !m || !d) return '';
-  return `ថ្ងៃទី ${toKhmerNumber(d)} ខែ${getKhmerMonth(m - 1)} ឆ្នាំ${toKhmerNumber(y)}`;
+// "ព.ស. ២៥៧០ ត្រូវនឹងថ្ងៃទី ២១ ខែវិច្ឆិកា ឆ្នាំ២០២៦" for a YYYY-MM-DD date.
+const formatBeSolar = (dateKey: string): string => {
+  const [y = 0, mo = 1, d = 1] = dateKey ? dateKey.split('-').map(Number) : [];
+  if (!y) return '';
+  return `ព.ស. ${toKhmerNumber(y + 544)} ត្រូវនឹងថ្ងៃទី ${toKhmerNumber(d)} ខែ${getKhmerMonth(mo - 1)} ឆ្នាំ${toKhmerNumber(y)}`;
 };
 
 const translateTimeToKhmer = (timeStr: string): string => {
@@ -163,17 +162,22 @@ const getEventIcon = (title: string, color: string) => {
 
 export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateText }) => {
   const sorted = [...events].sort((a, b) => a.sortOrder - b.sortOrder);
-  const primaryEvent = sorted[0];
 
-  const defaultLunar = primaryEvent ? primaryEvent.dateKh : '';
-  const displayLunar = lunarDateText || defaultLunar;
-
-  const dateStr = (primaryEvent?.dateSolar ?? '').split('T')[0];
-  const [yearNum = 0, monthNum = 1, dayNum = 1] = dateStr ? dateStr.split('-').map(Number) : [];
-  const beYear = yearNum ? toKhmerNumber(yearNum + 544) : '';
-  const khSolarDate = yearNum
-    ? `ព.ស. ${beYear} ត្រូវនឹងថ្ងៃទី ${toKhmerNumber(dayNum)} ខែ${getKhmerMonth(monthNum - 1)} ឆ្នាំ${toKhmerNumber(yearNum)}`
-    : '';
+  // Group the schedule by wedding date so each day gets its own titled card —
+  // Khmer weddings commonly span two days.
+  const dayGroups: { date: string; events: WeddingEvent[] }[] = [];
+  const byDate = new Map<string, { date: string; events: WeddingEvent[] }>();
+  for (const evt of sorted) {
+    const key = (evt.dateSolar ?? '').split('T')[0] || 'no-date';
+    let group = byDate.get(key);
+    if (!group) {
+      group = { date: key, events: [] };
+      byDate.set(key, group);
+      dayGroups.push(group);
+    }
+    group.events.push(evt);
+  }
+  const multiDay = dayGroups.length > 1;
 
   const themeColor = '#C5A059'; // Gold
   const textColor = '#2A2A2A'; // Charcoal
@@ -219,15 +223,39 @@ export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateT
             The Wedding Itinerary
           </h2>
           
-          <div className="space-y-2 mt-4 bg-[#F5E6E3]/30 px-6 py-4 rounded-xl border border-[#C5A059]/10 max-w-md mx-auto shadow-xs">
-            <p className="font-sans font-bold tracking-wide text-[#5A121D] text-xs md:text-sm">{displayLunar}</p>
-            <p className="font-sans font-light tracking-wide text-xs text-[#2A2A2A]">{khSolarDate}</p>
-          </div>
+          {lunarDateText ? (
+            <div className="space-y-2 mt-4 bg-[#F5E6E3]/30 px-6 py-4 rounded-xl border border-[#C5A059]/10 max-w-md mx-auto shadow-xs">
+              <p className="font-sans font-bold tracking-wide text-[#5A121D] text-xs md:text-sm">{lunarDateText}</p>
+            </div>
+          ) : null}
           <div className="h-[0.5px] w-24 mx-auto mt-4 bg-[#C5A059]/40" />
         </div>
 
+        {/* One titled card per wedding day */}
+        {dayGroups.map((group, gi) => (
+          <div key={group.date} className="space-y-5">
+            {/* Per-day date header */}
+            <m.div
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-center space-y-1.5"
+            >
+              {multiDay ? (
+                <p className="font-editorial-serif text-[10px] tracking-[0.4em] uppercase font-bold text-[#C5A059]">
+                  ថ្ងៃទី {toKhmerNumber(gi + 1)} · Day {gi + 1}
+                </p>
+              ) : null}
+              {formatBeSolar(group.date) ? (
+                <p className="font-sans font-light tracking-wide text-xs text-[#2A2A2A]">
+                  {formatBeSolar(group.date)}
+                </p>
+              ) : null}
+            </m.div>
+
         {/* Editorial container card (filled blush card style) */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -241,15 +269,15 @@ export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateT
           <div className="absolute inset-3.5 border border-[#C5A059]/10 rounded-xl pointer-events-none" />
 
           {/* Timeline Grid */}
-          <motion.div
+          <m.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             className="relative space-y-2 max-w-lg mx-auto z-10"
           >
-            {sorted.map((evt, index) => (
-              <motion.div
+            {group.events.map((evt, index) => (
+              <m.div
                 key={evt.id}
                 variants={rowVariants}
                 className="grid grid-cols-[56px_28px_1fr] gap-x-4 items-center min-h-[95px] group hover:bg-[#F5E6E3]/10 p-2.5 rounded-xl transition-colors duration-300"
@@ -273,7 +301,7 @@ export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateT
                   {index > 0 && (
                     <div className="absolute top-0 bottom-1/2 w-[0.5px]" style={{ backgroundColor: themeColor, opacity: 0.25 }} />
                   )}
-                  {index < sorted.length - 1 && (
+                  {index < group.events.length - 1 && (
                     <div className="absolute top-1/2 bottom-0 w-[0.5px]" style={{ backgroundColor: themeColor, opacity: 0.25 }} />
                   )}
 
@@ -291,11 +319,6 @@ export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateT
                   <span className="font-sans font-bold text-xs tracking-wider text-[#C5A059] block">
                     {translateTimeToKhmer(evt.timeLabel)}
                   </span>
-                  {formatKhmerEventDate(evt.dateSolar) ? (
-                    <span className="block font-sans text-[11px] opacity-70" style={{ color: textColor }}>
-                      📅 {formatKhmerEventDate(evt.dateSolar)}
-                    </span>
-                  ) : null}
                   <h4 className="font-sans font-bold text-sm leading-relaxed" style={{ color: textColor }}>
                     {evt.title}
                   </h4>
@@ -313,10 +336,12 @@ export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateT
                     🗺️ មើលផែនទី · View on Maps
                   </a>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
+          </div>
+        ))}
       </div>
     </section>
   );

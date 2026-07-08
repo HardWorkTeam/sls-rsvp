@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { GiftRegistryItem as RegistryType } from '@/types/invitation';
 import { EtherealBorderFrame, ThinGoldRule, DiamondSeparator } from './BotanicalAssets';
 
@@ -32,7 +32,7 @@ export const GiftRegistry: React.FC<{ registries: RegistryType[] }> = ({ registr
         </div>
 
         {/* Registry Frame Wrapper */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -101,7 +101,7 @@ export const GiftRegistry: React.FC<{ registries: RegistryType[] }> = ({ registr
             </div>
 
           </EtherealBorderFrame>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

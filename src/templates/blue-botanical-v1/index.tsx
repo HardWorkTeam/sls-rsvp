@@ -14,7 +14,8 @@
  */
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
+import { MotionProvider } from '@/components/MotionProvider';
 import { TemplateProps } from '../registry';
 
 import { Cover }          from './components/Cover';
@@ -32,14 +33,14 @@ import { FallingLeaves }  from './components/FallingLeaves';
 
 // ── Clean reveal wrapper ──────────────────────────────────────────────────────
 const Reveal: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => (
-  <motion.div
+  <m.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: '-6% 0px' }}
     transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
   >
     {children}
-  </motion.div>
+  </m.div>
 );
 
 // ── Botanical divider ─────────────────────────────────────────────────────────
@@ -56,6 +57,7 @@ export default function BlueBotanicalV1Template({ data, guestName }: TemplatePro
   const primaryEvent = data.events[0];
 
   return (
+    <MotionProvider>
     <div className="min-h-screen antialiased relative bg-pattern-botanical" style={{ color: '#2C3E56' }}>
       {/* Background drifting leaves */}
       <FallingLeaves />
@@ -163,5 +165,6 @@ export default function BlueBotanicalV1Template({ data, guestName }: TemplatePro
       {/* ── FOOTER ── */}
       <Footer couple={data.couple} />
     </div>
+    </MotionProvider>
   );
 }

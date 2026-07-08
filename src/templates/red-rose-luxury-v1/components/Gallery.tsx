@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
+import { Photo } from '@/components/Photo';
 import { SectionHeading } from '../../royal-khmer-v1/components/KhmerOrnaments';
 
 interface GalleryProps {
@@ -45,7 +46,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
             no cropping — while the two columns stay visually balanced. */}
         <div className="columns-2 gap-3 [&>*]:mb-3">
           {photos.map((url, i) => (
-            <motion.button
+            <m.button
               key={i}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -56,11 +57,10 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               aria-label={`View photo ${i + 1} of ${photos.length}`}
             >
               {/* Ken Burns zoom effect */}
-              <img
+              <Photo
                 src={url}
                 alt={`Gallery photo ${i + 1}`}
-                loading="lazy"
-                decoding="async"
+                sizes="(max-width: 768px) 50vw, 240px"
                 className="w-full h-auto transition-transform duration-[1200ms] ease-out group-hover:scale-110"
                 style={{ filter: 'sepia(10%) brightness(0.85) contrast(1.05)' }}
               />
@@ -88,14 +88,14 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                   borderLeft: '1px solid #E8C97A',
                 }}
               />
-            </motion.button>
+            </m.button>
           ))}
         </div>
 
         {/* Fullscreen Lightbox Modal */}
         <AnimatePresence>
           {lightboxIndex !== null && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -104,7 +104,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               style={{ background: 'rgba(20,2,3,0.97)', backdropFilter: 'blur(24px)' }}
               onClick={closeLightbox}
             >
-              <motion.div
+              <m.div
                 initial={{ scale: 0.82, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.82, opacity: 0 }}
@@ -120,10 +120,11 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 style={{ border: '1px solid rgba(232, 201, 122, 0.35)' }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <img
+                <Photo
                   src={photos[lightboxIndex]}
                   alt={`Expanded Photo ${lightboxIndex + 1}`}
-                  className="w-full h-full object-contain pointer-events-none select-none"
+                  sizes="(max-width: 768px) 100vw, 640px"
+                  className="object-contain pointer-events-none select-none"
                   style={{ maxHeight: '75vh' }}
                 />
                 {/* Image counter indicator */}
@@ -137,7 +138,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 >
                   {lightboxIndex + 1} / {photos.length}
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* Prev / Next navigation arrows — pointless with a single photo */}
               {photos.length > 1 && (
@@ -170,7 +171,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               >
                 ×
               </button>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

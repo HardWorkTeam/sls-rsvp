@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
 import { submitRsvp } from '@/lib/rsvp';
 import { SectionHeading, DiamondDivider, LotusOrnament, DrawBorderFrame } from '../../royal-khmer-v1/components/KhmerOrnaments';
@@ -96,7 +96,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
         />
 
         {success ? (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             className="card-tilt-hover w-full"
@@ -119,9 +119,9 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
                 Submit another response
               </button>
             </DrawBorderFrame>
-          </motion.div>
+          </m.div>
         ) : (
-          <motion.form
+          <m.form
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -175,7 +175,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
               {/* Guest Count / Details */}
               <AnimatePresence>
                 {status === 'attending' && (
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
@@ -215,7 +215,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
                             className="flex items-center justify-between cursor-pointer w-full bg-[#FAF6EF]/[0.05] border border-[#E8C97A]/25 hover:border-[#E8C97A]/50 rounded-xl text-[#FAF6EF] text-xs px-4 py-3.5 outline-none transition-all duration-300 font-khmer-body"
                           >
                             <span>{guests} {guests === 1 ? 'Guest' : 'Guests'} / នាក់</span>
-                            <motion.svg 
+                            <m.svg 
                               animate={{ rotate: isDropdownOpen ? 180 : 0 }} 
                               className="w-4 h-4 text-[#E8C97A]" 
                               fill="none" 
@@ -223,12 +223,12 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
                               stroke="currentColor"
                             >
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </motion.svg>
+                            </m.svg>
                           </div>
 
                           <AnimatePresence>
                             {isDropdownOpen && (
-                              <motion.div 
+                              <m.div 
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
@@ -256,13 +256,13 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
                                 >
                                   4+ Guests (Enter number)...
                                 </div>
-                              </motion.div>
+                              </m.div>
                             )}
                           </AnimatePresence>
                         </div>
                       )}
                     </div>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
 
@@ -312,7 +312,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
                 )}
               </button>
             </DrawBorderFrame>
-          </motion.form>
+          </m.form>
         )}
 
         {/* ─── LIVE BLESSINGS / WISHES WALL MARQUEE ─── */}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
 import { submitRsvp } from '@/lib/rsvp';
 
@@ -81,7 +81,7 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
           <div className="h-[1px] w-20 mx-auto" style={{ background: 'linear-gradient(90deg, transparent, rgba(106,140,178,0.4), transparent)' }} />
         </div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.7 }}
           className="p-6 md:p-8 rounded-xl"
@@ -113,7 +113,7 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
           </div>
 
           {status === 'attending' && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-1.5">
+            <m.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-1.5">
               <label className="font-serif-en text-[10px] tracking-[0.3em] uppercase" style={{ color: 'rgba(232, 201, 122, 0.7)' }}>
                 Number of Guests
               </label>
@@ -148,7 +148,7 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
                     style={inputStyle}
                   >
                     <span>{guests} {guests === 1 ? 'Guest' : 'Guests'} / នាក់</span>
-                    <motion.svg 
+                    <m.svg 
                       animate={{ rotate: isDropdownOpen ? 180 : 0 }} 
                       className="w-4 h-4 text-[#6A8CB2]" 
                       fill="none" 
@@ -156,12 +156,12 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
                       stroke="currentColor"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </motion.svg>
+                    </m.svg>
                   </div>
 
                   <AnimatePresence>
                     {isDropdownOpen && (
-                      <motion.div 
+                      <m.div 
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
@@ -189,12 +189,12 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
                         >
                           4+ Guests (Enter number)...
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
                   </AnimatePresence>
                 </div>
               )}
-            </motion.div>
+            </m.div>
           )}
 
           <div className="space-y-1.5">
@@ -217,7 +217,7 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
             {submitting ? 'កំពុងផ្ញើ...' : 'ផ្ញើការឆ្លើយតប · Submit RSVP'}
           </button>
         </form>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

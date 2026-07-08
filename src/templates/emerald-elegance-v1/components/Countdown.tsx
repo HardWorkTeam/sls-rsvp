@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { DiamondSeparator, ThinGoldRule } from './BotanicalAssets';
 
 interface CountdownProps {
@@ -46,7 +46,7 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
   if (!isMounted) return null;
 
   const TimeUnit = ({ label, value, delay }: { label: string; value: number; delay: number }) => (
-    <motion.div 
+    <m.div 
       className="flex flex-col items-center justify-center w-[70px]"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -54,7 +54,7 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
       viewport={{ once: true }}
     >
       <AnimatePresence mode="popLayout">
-        <motion.span
+        <m.span
           key={value}
           initial={{ y: -10, opacity: 0, scale: 0.9 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -63,16 +63,16 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
           className="font-emerald-serif text-4xl sm:text-5xl font-bold text-emerald-gradient"
         >
           {String(value).padStart(2, '0')}
-        </motion.span>
+        </m.span>
       </AnimatePresence>
       <span className="font-emerald-sans text-[9px] tracking-[0.2em] text-emerald-ivory mt-2 uppercase font-semibold">
         {label}
       </span>
-    </motion.div>
+    </m.div>
   );
 
   return (
-    <motion.section 
+    <m.section 
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
@@ -94,6 +94,6 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
       </div>
 
       <ThinGoldRule width="60px" />
-    </motion.section>
+    </m.section>
   );
 };

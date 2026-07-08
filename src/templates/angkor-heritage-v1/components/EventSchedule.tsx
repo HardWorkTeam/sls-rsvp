@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { WeddingEvent } from '@/types/invitation';
 import { DrawBorderFrame } from '../../royal-khmer-v1/components/KhmerOrnaments';
 
@@ -27,14 +27,6 @@ const getKhmerMonth = (monthIndex: number): string => {
     'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'
   ];
   return months[monthIndex];
-};
-
-const formatKhmerEventDate = (dateSolar: string): string => {
-  const dateStr = (dateSolar ?? '').split('T')[0];
-  if (!dateStr) return '';
-  const [y, m, d] = dateStr.split('-').map(Number);
-  if (!y || !m || !d) return '';
-  return `ថ្ងៃទី ${toKhmerNumber(d)} ខែ${getKhmerMonth(m - 1)} ឆ្នាំ${toKhmerNumber(y)}`;
 };
 
 const translateTimeToKhmer = (timeStr: string): string => {
@@ -161,129 +153,161 @@ const getEventIcon = (title: string, color: string) => {
   );
 };
 
+// "ព.ស. ២៥៧០ ត្រូវនឹងថ្ងៃទី ២១ ខែវិច្ឆិកា ឆ្នាំ២០២៦" for a YYYY-MM-DD date.
+const formatBeSolar = (dateKey: string): string => {
+  const [y = 0, mo = 1, d = 1] = dateKey ? dateKey.split('-').map(Number) : [];
+  if (!y) return '';
+  return `ព.ស. ${toKhmerNumber(y + 544)} ត្រូវនឹងថ្ងៃទី ${toKhmerNumber(d)} ខែ${getKhmerMonth(mo - 1)} ឆ្នាំ${toKhmerNumber(y)}`;
+};
+
 export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateText }) => {
   const sorted = [...events].sort((a, b) => a.sortOrder - b.sortOrder);
-  const primaryEvent = sorted[0];
-  
-  const defaultLunar = primaryEvent ? primaryEvent.dateKh : '';
-  const displayLunar = lunarDateText || defaultLunar;
 
-  const dateStr = (primaryEvent?.dateSolar ?? '').split('T')[0];
-  const [yearNum = 0, monthNum = 1, dayNum = 1] = dateStr ? dateStr.split('-').map(Number) : [];
-  const beYear = yearNum ? toKhmerNumber(yearNum + 544) : '';
-  const khSolarDate = yearNum
-    ? `ព.ស. ${beYear} ត្រូវនឹងថ្ងៃទី ${toKhmerNumber(dayNum)} ខែ${getKhmerMonth(monthNum - 1)} ឆ្នាំ${toKhmerNumber(yearNum)}`
-    : '';
+  // Group the schedule by wedding date so each day gets its own titled card —
+  // Khmer weddings commonly span two days.
+  const dayGroups: { date: string; events: WeddingEvent[] }[] = [];
+  const byDate = new Map<string, { date: string; events: WeddingEvent[] }>();
+  for (const evt of sorted) {
+    const key = (evt.dateSolar ?? '').split('T')[0] || 'no-date';
+    let group = byDate.get(key);
+    if (!group) {
+      group = { date: key, events: [] };
+      byDate.set(key, group);
+      dayGroups.push(group);
+    }
+    group.events.push(evt);
+  }
+  const multiDay = dayGroups.length > 1;
 
   const themeColor = '#D4A020'; // Amber gold matching Angkor
   const textColor = '#FAF6EF'; // Light text inside container
 
   return (
-    <section 
-      className="py-20 px-6" 
+    <section
+      className="py-20 px-6"
       style={{
         backdropFilter: 'blur(1px)'
       }}
     >
-      <div className="max-w-2xl mx-auto space-y-10">
+      <div className="max-w-2xl mx-auto space-y-12">
         {/* Khmer Heritage Header */}
         <div className="text-center space-y-3">
           <h2 className="font-khmer-title text-2xl md:text-3xl text-white leading-relaxed">
             កម្មវិធីមង្គលអាពាហ៍ពិពាហ៍
           </h2>
-          <div className="space-y-1 text-xs md:text-sm text-white/90">
-            <p className="font-khmer-body font-semibold">{displayLunar}</p>
-            <p className="font-khmer-body opacity-90">{khSolarDate}</p>
-          </div>
+          {lunarDateText ? (
+            <p className="font-khmer-body font-semibold text-xs md:text-sm text-white/90">
+              {lunarDateText}
+            </p>
+          ) : null}
           <div className="h-[1px] w-28 mx-auto" style={{ background: 'linear-gradient(90deg, transparent, #ffffff, transparent)' }} />
         </div>
 
-        {/* DrawBorderFrame Container Wrapper */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="card-tilt-hover transition-all w-full mt-10"
-        >
-          <DrawBorderFrame
-            className="p-6 md:p-10"
-            style={{
-              background: 'linear-gradient(185deg, rgba(92, 58, 0, 0.94) 0%, rgba(61, 34, 0, 0.98) 100%)',
-              borderColor: 'rgba(212, 160, 32, 0.35)',
-            }}
-          >
-            {/* Timeline Rows */}
-            <div className="relative space-y-0.5 max-w-xl mx-auto">
-              {sorted.map((evt, index) => (
-                <div
-                  key={evt.id}
-                  className="grid grid-cols-[64px_32px_1fr] gap-x-4 items-center min-h-[90px]"
-                >
-                  {/* 1. Icon Column */}
-                  <div className="flex justify-center">
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ 
-                        border: `1.5px solid ${themeColor}`, 
-                        background: 'rgba(255,255,255,0.08)',
-                        boxShadow: `0 0 10px rgba(255,255,255,0.15)`
-                      }}
-                    >
-                      {getEventIcon(evt.title, themeColor)}
-                    </div>
-                  </div>
+        {/* One titled card per wedding day */}
+        {dayGroups.map((group, gi) => (
+          <div key={group.date} className="space-y-4">
+            {/* Per-day date header */}
+            <m.div
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-center space-y-1"
+            >
+              {multiDay ? (
+                <p className="font-khmer-body font-bold text-sm tracking-wider" style={{ color: themeColor }}>
+                  ថ្ងៃទី {toKhmerNumber(gi + 1)} · Day {gi + 1}
+                </p>
+              ) : null}
+              {formatBeSolar(group.date) ? (
+                <p className="font-khmer-body text-xs md:text-sm text-white/90">
+                  {formatBeSolar(group.date)}
+                </p>
+              ) : null}
+            </m.div>
 
-                  {/* 2. Timeline Divider / Node */}
-                  <div className="relative h-full flex justify-center items-center">
-                    {index > 0 && (
-                      <div className="absolute top-0 bottom-1/2 w-[1.5px]" style={{ backgroundColor: themeColor, opacity: 0.25 }} />
-                    )}
-                    {index < sorted.length - 1 && (
-                      <div className="absolute top-1/2 bottom-0 w-[1.5px]" style={{ backgroundColor: themeColor, opacity: 0.25 }} />
-                    )}
-                    
-                    <div className="relative z-10 py-1 bg-transparent">
-                      <svg viewBox="0 0 24 24" className="w-6 h-6 text-white">
-                        <circle cx="12" cy="12" r="3" fill="currentColor" />
-                        <circle cx="12" cy="12" r="5.5" fill="none" stroke="currentColor" strokeWidth="0.75" opacity="0.5" />
-                        <path d="M12 7c0-1.5-0.75-2.5-0.75-2.5s0.75 1 0.75 2.5zM12 17c0 1.5-0.75 2.5-0.75 2.5s0.75-1 0.75-2.5zM7 12c-1.5 0-2.5-0.75-2.5-0.75s1 0.75 2.5 0.75zM17 12c1.5 0 2.5-0.75 2.5-0.75s-1 0.75-2.5 0.75z" fill="currentColor" />
-                      </svg>
-                    </div>
-                  </div>
-
-                  {/* 3. Text Column */}
-                  <div className="py-4 space-y-1 text-left text-white">
-                    <span className="font-khmer-body font-bold text-xs tracking-wider text-white">
-                      {translateTimeToKhmer(evt.timeLabel)}
-                    </span>
-                    {formatKhmerEventDate(evt.dateSolar) ? (
-                      <span className="block font-khmer-body text-[11px] opacity-75" style={{ color: textColor }}>
-                        📅 {formatKhmerEventDate(evt.dateSolar)}
-                      </span>
-                    ) : null}
-                    <h4 className="font-khmer-body font-bold text-sm leading-relaxed" style={{ color: textColor }}>
-                      {evt.title}
-                    </h4>
-                    {evt.locationName && (
-                      <p className="font-khmer-body text-xs opacity-75 leading-relaxed" style={{ color: textColor }}>
-                        📍 {evt.locationName}
-                      </p>
-                    )}
-                    <a 
-                      href={evt.googleMapsUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="inline-flex items-center gap-1.5 text-[10px] font-khmer-body font-bold tracking-wider uppercase hover:opacity-80 mt-1 cursor-pointer text-white underline"
+            <m.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="card-tilt-hover transition-all w-full"
+            >
+              <DrawBorderFrame
+                className="p-6 md:p-10"
+                style={{
+                  background: 'linear-gradient(185deg, rgba(92, 58, 0, 0.94) 0%, rgba(61, 34, 0, 0.98) 100%)',
+                  borderColor: 'rgba(212, 160, 32, 0.35)',
+                }}
+              >
+                {/* Timeline Rows */}
+                <div className="relative space-y-0.5 max-w-xl mx-auto">
+                  {group.events.map((evt, index) => (
+                    <div
+                      key={evt.id}
+                      className="grid grid-cols-[64px_32px_1fr] gap-x-4 items-center min-h-[90px]"
                     >
-                      🗺️ មើលផែនទី · View on Maps
-                    </a>
-                  </div>
+                      {/* 1. Icon Column */}
+                      <div className="flex justify-center">
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+                          style={{
+                            border: `1.5px solid ${themeColor}`,
+                            background: 'rgba(255,255,255,0.08)',
+                            boxShadow: `0 0 10px rgba(255,255,255,0.15)`
+                          }}
+                        >
+                          {getEventIcon(evt.title, themeColor)}
+                        </div>
+                      </div>
+
+                      {/* 2. Timeline Divider / Node */}
+                      <div className="relative h-full flex justify-center items-center">
+                        {index > 0 && (
+                          <div className="absolute top-0 bottom-1/2 w-[1.5px]" style={{ backgroundColor: themeColor, opacity: 0.25 }} />
+                        )}
+                        {index < group.events.length - 1 && (
+                          <div className="absolute top-1/2 bottom-0 w-[1.5px]" style={{ backgroundColor: themeColor, opacity: 0.25 }} />
+                        )}
+
+                        <div className="relative z-10 py-1 bg-transparent">
+                          <svg viewBox="0 0 24 24" className="w-6 h-6 text-white">
+                            <circle cx="12" cy="12" r="3" fill="currentColor" />
+                            <circle cx="12" cy="12" r="5.5" fill="none" stroke="currentColor" strokeWidth="0.75" opacity="0.5" />
+                            <path d="M12 7c0-1.5-0.75-2.5-0.75-2.5s0.75 1 0.75 2.5zM12 17c0 1.5-0.75 2.5-0.75 2.5s0.75-1 0.75-2.5zM7 12c-1.5 0-2.5-0.75-2.5-0.75s1 0.75 2.5 0.75zM17 12c1.5 0 2.5-0.75 2.5-0.75s-1 0.75-2.5 0.75z" fill="currentColor" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* 3. Text Column */}
+                      <div className="py-4 space-y-1 text-left text-white">
+                        <span className="font-khmer-body font-bold text-xs tracking-wider text-white">
+                          {translateTimeToKhmer(evt.timeLabel)}
+                        </span>
+                        <h4 className="font-khmer-body font-bold text-sm leading-relaxed" style={{ color: textColor }}>
+                          {evt.title}
+                        </h4>
+                        {evt.locationName && (
+                          <p className="font-khmer-body text-xs opacity-75 leading-relaxed" style={{ color: textColor }}>
+                            📍 {evt.locationName}
+                          </p>
+                        )}
+                        <a
+                          href={evt.googleMapsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-[10px] font-khmer-body font-bold tracking-wider uppercase hover:opacity-80 mt-1 cursor-pointer text-white underline"
+                        >
+                          🗺️ មើលផែនទី · View on Maps
+                        </a>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </DrawBorderFrame>
-        </motion.div>
+              </DrawBorderFrame>
+            </m.div>
+          </div>
+        ))}
       </div>
     </section>
   );

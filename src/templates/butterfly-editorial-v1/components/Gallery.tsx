@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
+import { cldUrl } from '@/lib/cloudinaryLoader';
 
 interface GalleryProps {
   photos: string[];
@@ -36,7 +37,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
   return (
     <section className="relative py-20 px-4 md:px-8 bg-transparent overflow-hidden">
       <div className="max-w-md mx-auto relative z-10">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -68,9 +69,9 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
 
               <div className="relative w-full h-full overflow-hidden rounded-xl bg-stone-100">
                 <AnimatePresence mode="wait">
-                    <motion.img
+                    <m.img
                       key={currentIndex}
-                      src={photos[currentIndex]}
+                      src={cldUrl(photos[currentIndex], 800)}
                       alt={`Pre-wedding photo ${currentIndex + 1}`}
                       initial={{ opacity: 0, scale: 1.05 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -129,18 +130,18 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                     }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={p} alt={`Thumbnail ${idx + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover filter sepia-[10%]" />
+                    <img src={cldUrl(p, 160)} alt={`Thumbnail ${idx + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover filter sepia-[10%]" />
                   </button>
                 ))}
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* Fullscreen Lightbox Modal */}
         <AnimatePresence>
           {lightboxOpen && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -149,7 +150,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               style={{ background: 'rgba(252,251,249,0.97)', backdropFilter: 'blur(20px)' }}
               onClick={() => setLightboxOpen(false)}
             >
-              <motion.div
+              <m.div
                 initial={{ scale: 0.82, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.82, opacity: 0 }}
@@ -164,8 +165,9 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 className="relative max-w-sm w-full max-h-[85vh] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(90,18,29,0.15)] bg-white border border-[#C5A059]/20 touch-pan-y"
                 onClick={(e) => e.stopPropagation()}
               >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={photos[currentIndex]}
+                  src={cldUrl(photos[currentIndex], 1080)}
                   alt={`Expanded Photo ${currentIndex + 1}`}
                   className="w-full h-full object-contain p-2 pointer-events-none select-none"
                   style={{ maxHeight: '75vh' }}
@@ -175,7 +177,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 >
                   {currentIndex + 1} / {photos.length}
                 </div>
-              </motion.div>
+              </m.div>
 
               {photos.length > 1 && (
                 <>
@@ -202,7 +204,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               >
                 ×
               </button>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </section>

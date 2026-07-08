@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
 import { submitRsvp } from '@/lib/rsvp';
 import { EtherealBorderFrame, ThinGoldRule } from './BotanicalAssets';
@@ -72,7 +72,7 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
     return (
       <section className="relative w-full py-20 bg-transparent overflow-hidden px-6">
         <div className="max-w-2xl mx-auto space-y-10">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -98,7 +98,7 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
                 </button>
               </div>
             </EtherealBorderFrame>
-          </motion.div>
+          </m.div>
         </div>
       </section>
     );
@@ -122,7 +122,7 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
         </div>
 
         {/* Form Frame Wrapper */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -176,7 +176,7 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
 
               <AnimatePresence>
                 {status === 'attending' && (
-                  <motion.div 
+                  <m.div 
                     initial={{ opacity: 0, height: 0 }} 
                     animate={{ opacity: 1, height: 'auto' }} 
                     exit={{ opacity: 0, height: 0 }}
@@ -216,7 +216,7 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
                           style={inputStyle}
                         >
                           <span>{guests} {guests === 1 ? 'Guest' : 'Guests'} / នាក់</span>
-                          <motion.svg 
+                          <m.svg 
                             animate={{ rotate: isDropdownOpen ? 180 : 0 }} 
                             className="w-4 h-4 text-emerald-gold" 
                             fill="none" 
@@ -224,12 +224,12 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
                             stroke="currentColor"
                           >
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </motion.svg>
+                          </m.svg>
                         </div>
 
                         <AnimatePresence>
                           {isDropdownOpen && (
-                            <motion.div 
+                            <m.div 
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
@@ -257,12 +257,12 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
                               >
                                 4+ Guests (Enter number)...
                               </div>
-                            </motion.div>
+                            </m.div>
                           )}
                         </AnimatePresence>
                       </div>
                     )}
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
 
@@ -301,7 +301,7 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
             </form>
 
           </EtherealBorderFrame>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Couple } from '@/types/invitation';
 import { ThinGoldRule } from './BotanicalAssets';
 
@@ -13,7 +13,7 @@ export const Footer: React.FC<FooterProps> = ({ couple, dateLabel, thankYouText 
   return (
     <section className="relative w-full h-[100svh] bg-white/40 backdrop-blur-md border-t border-emerald-gold/20 overflow-hidden flex flex-col items-center justify-center py-12 px-6">
       {/* Elaborate Botanical */}
-      <motion.svg
+      <m.svg
         className="w-full max-w-[400px] h-auto mb-8 text-emerald-ivory opacity-90"
         viewBox="0 0 400 300"
         fill="none"
@@ -49,10 +49,10 @@ export const Footer: React.FC<FooterProps> = ({ couple, dateLabel, thankYouText 
           <circle cx="300" cy="150" r="5" stroke="#c9a84c" fill="none" />
           <circle cx="200" cy="50" r="8" stroke="#c9a84c" fill="none" />
         </g>
-      </motion.svg>
+      </m.svg>
 
       <div className="flex flex-col items-center z-10 text-center">
-        <motion.p 
+        <m.p 
           className="font-emerald-script text-[38px] text-emerald-gold mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -60,9 +60,9 @@ export const Footer: React.FC<FooterProps> = ({ couple, dateLabel, thankYouText 
           viewport={{ once: true }}
         >
           {thankYouText || "See you there!"}
-        </motion.p>
+        </m.p>
 
-        <motion.h2 
+        <m.h2 
           className="font-emerald-serif italic text-[28px] text-emerald-gold-bright mb-4"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -70,9 +70,9 @@ export const Footer: React.FC<FooterProps> = ({ couple, dateLabel, thankYouText 
           viewport={{ once: true }}
         >
           {couple.bride.nameEn.split(' ')[0]} & {couple.groom.nameEn.split(' ')[0]}
-        </motion.h2>
+        </m.h2>
 
-        <motion.p 
+        <m.p 
           className="font-emerald-sans text-[10px] tracking-[0.3em] text-emerald-gray mb-6 uppercase"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -80,9 +80,9 @@ export const Footer: React.FC<FooterProps> = ({ couple, dateLabel, thankYouText 
           viewport={{ once: true }}
         >
           {dateLabel || "February 15, 2025"}
-        </motion.p>
+        </m.p>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.1 }}
@@ -91,7 +91,7 @@ export const Footer: React.FC<FooterProps> = ({ couple, dateLabel, thankYouText 
         >
           <ThinGoldRule width="60px" className="mb-4" />
           <span className="text-emerald-gold text-lg">♥</span>
-        </motion.div>
+        </m.div>
       </div>
 
       <style dangerouslySetInnerHTML={{__html: `

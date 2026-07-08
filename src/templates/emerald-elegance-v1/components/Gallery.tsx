@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
+import { Photo } from '@/components/Photo';
 
 export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -28,7 +29,7 @@ export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
           no cropping — and the columns stagger themselves naturally. */}
       <div className="w-full max-w-2xl px-4 columns-2 gap-4 [&>*]:mb-4">
         {photos.map((photoUrl, index) => (
-          <motion.div
+          <m.div
             key={index}
             onClick={() => setLightboxIndex(index)}
             className="relative group w-full break-inside-avoid cursor-pointer border border-emerald-gold/50 transition-colors duration-300 hover:border-emerald-gold p-[4px]"
@@ -41,11 +42,10 @@ export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
           >
             {/* Image Container inside the 4px gold frame gap */}
             <div className="relative overflow-hidden transition-transform duration-300 group-hover:scale-[1.03]">
-              <img
+              <Photo
                 src={photoUrl}
                 alt="Gallery"
-                loading="lazy"
-                decoding="async"
+                sizes="(max-width: 768px) 50vw, 240px"
                 className="w-full h-auto"
               />
               
@@ -63,19 +63,19 @@ export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
             <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center bg-[#0A1C16]/20 pointer-events-none">
               <span className="text-emerald-gold text-2xl">⊕</span>
             </div>
-          </motion.div>
+          </m.div>
         ))}
       </div>
 
       {/* Lightbox */}
       <AnimatePresence>
         {lightboxIndex !== null && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0A1C16]/95 backdrop-blur-md"
             onClick={() => setLightboxIndex(null)}
           >
-            <motion.div
+            <m.div
               initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               drag={photos.length > 1 ? 'x' : false}
@@ -88,12 +88,12 @@ export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
               className="relative max-w-sm w-full max-h-[85vh] rounded-2xl overflow-hidden border border-emerald-gold/30 shadow-[0_0_50px_rgba(201,168,76,0.15)] touch-pan-y"
               onClick={(e) => e.stopPropagation()}
             >
-              <img src={photos[lightboxIndex]} alt="Expanded" className="w-full h-full object-contain pointer-events-none select-none" style={{ maxHeight: '75vh' }} />
+              <Photo src={photos[lightboxIndex]} alt="Expanded" sizes="(max-width: 768px) 100vw, 640px" className="object-contain pointer-events-none select-none" style={{ maxHeight: '75vh' }} />
               
               <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full font-serif-en text-xs bg-[#0A1C16]/80 text-emerald-gold border border-emerald-gold/30">
                 {lightboxIndex + 1} / {photos.length}
               </div>
-            </motion.div>
+            </m.div>
 
             {photos.length > 1 && (
               <>
@@ -111,7 +111,7 @@ export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
               aria-label="Close photo viewer"
               className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center cursor-pointer bg-[#0A1C16]/80 text-emerald-gold border border-emerald-gold/30 text-xl"
             >×</button>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </section>

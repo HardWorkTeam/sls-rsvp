@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { GiftRegistryItem } from '@/types/invitation';
 import { SectionHeading, DiamondDivider, DrawBorderFrame } from '../../royal-khmer-v1/components/KhmerOrnaments';
 
@@ -38,7 +38,7 @@ export const GiftRegistry: React.FC<GiftProps> = ({ registries }) => {
 
         <div className="space-y-6">
           {registries.map((item, index) => (
-            <motion.div
+            <m.div
               key={item.id}
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -115,7 +115,7 @@ export const GiftRegistry: React.FC<GiftProps> = ({ registries }) => {
                   </div>
                 </div>
               </DrawBorderFrame>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

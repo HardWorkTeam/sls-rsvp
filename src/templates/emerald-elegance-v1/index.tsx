@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { m, useScroll, useSpring } from 'framer-motion';
+import { MotionProvider } from '@/components/MotionProvider';
 import { TemplateProps } from '../registry';
 
 // ─── Section components ──────────────────────────────────────────────────────
@@ -23,14 +24,14 @@ const CinematicReveal: React.FC<{
   children: React.ReactNode;
   delay?: number;
 }> = ({ children, delay = 0 }) => (
-  <motion.div
+  <m.div
     initial={{ opacity: 0, y: 45 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: '-8% 0px' }}
     transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
   >
     {children}
-  </motion.div>
+  </m.div>
 );
 
 // ─── Emerald Gold Divider ───────────────────────────────────────────────────
@@ -87,16 +88,17 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
   });
 
   return (
+    <MotionProvider>
     <div className={`min-h-screen antialiased bg-pattern-emerald text-emerald-ivory selection:bg-emerald-gold/30 selection:text-emerald-gold-bright overflow-x-hidden ${isDesktop ? 'emerald-cursor' : ''}`}>
       {/* ── Custom Cursor ── */}
       {isDesktop && (
         <>
-          <motion.div
+          <m.div
             className="fixed top-0 left-0 w-3 h-3 rounded-full bg-emerald-gold pointer-events-none z-50 mix-blend-screen shadow-[0_0_8px_rgba(201,168,76,0.8)]"
             animate={{ x: mousePosition.x - 6, y: mousePosition.y - 6 }}
             transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.5 }}
           />
-          <motion.div
+          <m.div
             className="fixed top-0 left-0 w-1 h-1 rounded-full bg-emerald-gold pointer-events-none z-50 mix-blend-screen"
             animate={{ x: mousePosition.x - 2, y: mousePosition.y - 2 }}
             transition={{ type: 'spring', stiffness: 250, damping: 20, mass: 0.8 }}
@@ -105,7 +107,7 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
       )}
 
       {/* ── Scroll Progress Bar ── */}
-      <motion.div
+      <m.div
         className="fixed top-0 right-0 w-[2px] h-full bg-emerald-gold origin-top z-40 opacity-70 shadow-[0_0_8px_rgba(201,168,76,0.5)]"
         style={{ scaleY }}
       />
@@ -203,5 +205,6 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
         />
       </CinematicReveal>
     </div>
+    </MotionProvider>
   );
 }

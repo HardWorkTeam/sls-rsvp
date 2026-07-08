@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { LoveStoryMilestone } from '@/types/invitation';
+import { Photo } from '@/components/Photo';
 
 interface LoveStoryProps { milestones: LoveStoryMilestone[]; }
 
@@ -22,9 +23,9 @@ export const LoveStory: React.FC<LoveStoryProps> = ({ milestones }) => {
           <div className="absolute left-[11px] top-0 bottom-0 w-[1px]"
             style={{ background: 'linear-gradient(to bottom, transparent, rgba(106,140,178,0.35) 10%, rgba(106,140,178,0.35) 90%, transparent)' }} />
           <div className="space-y-8">
-            {sorted.map((m, i) => (
-              <motion.div
-                key={m.id}
+            {sorted.map((milestone, i) => (
+              <m.div
+                key={milestone.id}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -37,16 +38,16 @@ export const LoveStory: React.FC<LoveStoryProps> = ({ milestones }) => {
                 </div>
                 <div className="flex-1 rounded-xl p-4 space-y-2"
                   style={{ background: 'linear-gradient(185deg, rgba(28, 48, 74, 0.94) 0%, rgba(14, 28, 48, 0.98) 100%)', border: '1px solid rgba(106, 140, 178, 0.3)', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-                  {m.photoUrl && (
-                    <div className="h-36 rounded-lg overflow-hidden mb-2">
-                      <img src={m.photoUrl} alt={m.title} className="w-full h-full object-cover" />
+                  {milestone.photoUrl && (
+                    <div className="relative h-36 rounded-lg overflow-hidden mb-2">
+                      <Photo src={milestone.photoUrl} alt={milestone.title} fill sizes="(max-width: 768px) 90vw, 400px" />
                     </div>
                   )}
-                  <span className="font-serif-en text-xs tracking-widest uppercase" style={{ color: '#E8C97A' }}>{m.dateLabel}</span>
-                  <h4 className="font-khmer-body font-bold" style={{ color: '#FAF6EF' }}>{m.title}</h4>
-                  <p className="font-khmer-body text-sm leading-relaxed" style={{ color: '#FAF6EF', opacity: 0.85 }}>{m.description}</p>
+                  <span className="font-serif-en text-xs tracking-widest uppercase" style={{ color: '#E8C97A' }}>{milestone.dateLabel}</span>
+                  <h4 className="font-khmer-body font-bold" style={{ color: '#FAF6EF' }}>{milestone.title}</h4>
+                  <p className="font-khmer-body text-sm leading-relaxed" style={{ color: '#FAF6EF', opacity: 0.85 }}>{milestone.description}</p>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>

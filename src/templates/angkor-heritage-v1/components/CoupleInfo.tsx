@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import { color, motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { InvitationData } from '@/types/invitation';
 import { khmerSolarDate, khmerTimeLabel } from '@/lib/khmer';
+import { Photo } from '@/components/Photo';
 import { SectionHeading, DiamondDivider, DrawBorderFrame, LotusOrnament } from '../../royal-khmer-v1/components/KhmerOrnaments';
 
 interface CoupleInfoProps {
@@ -30,7 +31,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
 
   // One date/venue entry per wedding day — Khmer weddings often span two days.
   // data.events carries one event per wedding day (see mapInvitation).
-  const eventDays = data.events.map((evt) => {
+  const eventDays = data.events.slice(0, 1).map((evt) => {
     const d = new Date(evt.dateSolar);
     return {
       id: evt.id,
@@ -77,7 +78,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
         </div>
 
         {/* Digital Representation of the Physical Invitation Card */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -185,18 +186,16 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               <div className="flex items-end justify-center gap-4 w-full py-2">
                 {groom.photo && (
                   <div className="flex flex-col items-center gap-1.5">
-                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#D4A020]/50 shadow-[0_0_0_3px_rgba(212,160,32,0.12)]">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={groom.photo} alt={groom.nameEn} className="w-full h-full object-cover" />
+                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#D4A020]/50 shadow-[0_0_0_3px_rgba(212,160,32,0.12)]">
+                      <Photo src={groom.photo} alt={groom.nameEn} fill sizes="80px" />
                     </div>
                   </div>
                 )}
                 <div className="w-[1px] h-16 self-center" style={{ background: 'rgba(212,160,32,0.2)' }} />
                 {bride.photo && (
                   <div className="flex flex-col items-center gap-1.5">
-                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#D4A020]/50 shadow-[0_0_0_3px_rgba(212,160,32,0.12)]">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={bride.photo} alt={bride.nameEn} className="w-full h-full object-cover" />
+                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#D4A020]/50 shadow-[0_0_0_3px_rgba(212,160,32,0.12)]">
+                      <Photo src={bride.photo} alt={bride.nameEn} fill sizes="80px" />
                     </div>
                   </div>
                 )}
@@ -300,7 +299,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               {thankYou}
             </p>
           </DrawBorderFrame>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
+import { Photo } from '@/components/Photo';
 import { SectionHeading } from './KhmerOrnaments';
 
 interface GalleryProps {
@@ -46,7 +47,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
             no cropping — while the two columns stay visually balanced. */}
         <div className="columns-2 gap-2.5 [&>*]:mb-2.5">
           {photos.map((url, i) => (
-            <motion.button
+            <m.button
               key={i}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -57,11 +58,10 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               style={{ border: '1px solid rgba(201,168,76,0.2)' }}
               aria-label={`View photo ${i + 1} of ${photos.length}`}
             >
-              <img
+              <Photo
                 src={url}
                 alt={`Gallery ${i + 1}`}
-                loading="lazy"
-                decoding="async"
+                sizes="(max-width: 768px) 50vw, 240px"
                 className="w-full h-auto transition-transform duration-700 group-hover:scale-110"
                 style={{ filter: 'sepia(15%) brightness(0.85) contrast(1.05)' }}
               />
@@ -81,14 +81,14 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                   borderLeft: 'none',
                 }}
               />
-            </motion.button>
+            </m.button>
           ))}
         </div>
 
         {/* Lightbox */}
         <AnimatePresence>
           {lightboxIndex !== null && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -97,7 +97,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               style={{ background: 'rgba(26,14,8,0.96)', backdropFilter: 'blur(20px)' }}
               onClick={closeLightbox}
             >
-              <motion.div
+              <m.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
@@ -113,10 +113,11 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 style={{ border: '1px solid rgba(201,168,76,0.3)' }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <img
+                <Photo
                   src={photos[lightboxIndex]}
                   alt={`Photo ${lightboxIndex + 1}`}
-                  className="w-full h-full object-contain pointer-events-none select-none"
+                  sizes="(max-width: 768px) 100vw, 640px"
+                  className="object-contain pointer-events-none select-none"
                   style={{ maxHeight: '75vh' }}
                 />
                 {/* Counter */}
@@ -130,7 +131,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 >
                   {lightboxIndex + 1} / {photos.length}
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* Prev/Next — pointless with a single photo */}
               {photos.length > 1 && (
@@ -163,7 +164,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               >
                 ×
               </button>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

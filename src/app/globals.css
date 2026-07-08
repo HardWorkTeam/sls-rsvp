@@ -72,10 +72,10 @@ html {
 .font-serif-sub    { font-family: var(--font-serif-sub)    !important; }
 .font-script       { font-family: var(--font-script)       !important; }
 
-.font-editorial-serif  { font-family: 'Cormorant Garamond', 'Playfair Display', serif !important; }
-.font-editorial-title  { font-family: 'Cinzel', 'Cormorant Garamond', serif !important; }
+.font-editorial-serif  { font-family: var(--font-serif), 'Playfair Display', serif !important; }
+.font-editorial-title  { font-family: 'Cinzel', var(--font-serif), serif !important; }
 .font-editorial-script { font-family: 'Pinyon Script', 'Playball', cursive !important; }
-.font-emerald-serif    { font-family: 'Playfair Display', 'Cormorant Garamond', serif !important; }
+.font-emerald-serif    { font-family: 'Playfair Display', var(--font-serif), serif !important; }
 .font-emerald-sans     { font-family: 'Montserrat', sans-serif !important; }
 .font-emerald-script   { font-family: 'Great Vibes', cursive !important; }
 

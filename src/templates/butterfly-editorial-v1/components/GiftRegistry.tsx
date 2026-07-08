@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { GiftRegistryItem } from '@/types/invitation';
 
 interface GiftRegistryProps {
@@ -20,7 +20,7 @@ export const GiftRegistry: React.FC<GiftRegistryProps> = ({ registries }) => {
   return (
     <section className="relative py-20 px-4 md:px-8 bg-transparent overflow-hidden">
       <div className="max-w-md mx-auto relative z-10">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -51,7 +51,7 @@ export const GiftRegistry: React.FC<GiftRegistryProps> = ({ registries }) => {
             {/* Bank Tiles */}
             <div className="space-y-6">
               {registries.map((item, index) => (
-                <motion.div
+                <m.div
                   key={item.id}
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -114,11 +114,11 @@ export const GiftRegistry: React.FC<GiftRegistryProps> = ({ registries }) => {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

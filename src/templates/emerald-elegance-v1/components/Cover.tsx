@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { m, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Couple } from '@/types/invitation';
+import { CoverPhoto } from '@/components/CoverPhoto';
 import { TopBotanicalBranch, BottomBotanicalBranch, ThinGoldRule, DiamondSeparator } from './BotanicalAssets';
 
 interface CoverProps {
@@ -58,7 +59,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
       {/* User cover photo */}
       {coverImage && (
         <>
-          <img src={coverImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ zIndex: 0 }} />
+          <CoverPhoto src={coverImage} />
           <div className="absolute inset-0" style={{ background: 'rgba(255,255,255,0.55)', zIndex: 1 }} />
         </>
       )}
@@ -66,7 +67,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
       {/* ─── 3D PHYSICAL ENVELOPE GATE VIEW ─── */}
       <AnimatePresence>
         {!opened && (
-          <motion.div
+          <m.div
             key="envelope-gate"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -79,7 +80,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
             }}
           >
             {/* Header text */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: -25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 1 }}
@@ -91,10 +92,10 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
               <h2 className="font-emerald-serif text-xl text-emerald-ivory leading-relaxed tracking-wide">
                 ពិធីសិរីសួស្តីអាពាហ៍ពិពាហ៍
               </h2>
-            </motion.div>
+            </m.div>
 
             {/* 3D Physical Envelope Structure */}
-            <motion.div
+            <m.div
               animate={
                 envelopeState === 'zoom-out'
                   ? { scale: 1.35, opacity: 0 }
@@ -125,7 +126,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
               </div>
 
               {/* 2. Invitation Letter (slides UP out of envelope back wall) */}
-              <motion.div
+              <m.div
                 animate={
                   envelopeState === 'sliding-card' || envelopeState === 'zoom-out'
                     ? { y: '-57%', scale: 0.98 }
@@ -157,7 +158,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
                     <DiamondSeparator />
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* 3. Envelope Front Pocket (Left, Right, Bottom triangular panels) */}
               <div
@@ -200,7 +201,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
               )}
 
               {/* 5. Envelope Top Flap (rotates upwards around the top axis) */}
-              <motion.div
+              <m.div
                 animate={{
                   rotateX: envelopeState === 'closed' ? 0 : -175,
                 }}
@@ -220,12 +221,12 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
                   {/* Flap gold embroidery borders */}
                   <polygon points="12,6 408,6 210,132" fill="none" stroke="var(--ee-gold)" strokeWidth="0.65" strokeDasharray="4 4" opacity="0.5" />
                 </svg>
-              </motion.div>
+              </m.div>
 
               {/* 6. Gold Wax Seal (Floating Click Trigger Button) */}
               <AnimatePresence>
                 {envelopeState === 'closed' && (
-                  <motion.div
+                  <m.div
                     key="wax-seal"
                     exit={{ scale: 0, opacity: 0, transition: { duration: 0.35 } }}
                     className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
@@ -250,13 +251,13 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
                       <div className="absolute inset-[-8px] rounded-full border border-emerald-gold/40 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]" />
                       <div className="absolute inset-[-16px] rounded-full border border-emerald-gold/20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] animation-delay-500" />
                     </button>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </m.div>
 
             {/* Tap instruction */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 1 }}
@@ -268,50 +269,50 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
               <p className="font-emerald-sans text-[9px] tracking-[0.2em] uppercase text-emerald-gold">
                 Click the gold seal to open invitation
               </p>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       {/* ─── MAIN COVER CONTENT (REVEALED UNDERNEATH) ─── */}
       <AnimatePresence>
         {envelopeState !== 'closed' && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="absolute inset-0 z-10 flex flex-col items-center justify-between py-12 px-6"
           >
             {/* Top Botanical */}
-            <motion.div 
+            <m.div 
               style={{ y: topY }}
               className="w-[85%] max-w-[400px] mt-8 origin-top animate-emerald-breathing"
             >
               <TopBotanicalBranch />
-            </motion.div>
+            </m.div>
 
             {/* Center Content */}
             <div className="flex-1 flex flex-col items-center justify-center text-center w-full relative">
-              <motion.p 
+              <m.p 
                 className="font-emerald-sans text-[10px] tracking-[0.3em] text-emerald-gold uppercase mb-6"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.2 }}
               >
                 THE WEDDING OF
-              </motion.p>
+              </m.p>
 
               <div className="flex flex-col items-center justify-center w-full my-4">
-                <motion.h1 
+                <m.h1 
                   className="font-emerald-serif italic text-6xl sm:text-7xl text-emerald-gradient tracking-[-0.02em] leading-none"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, delay: 1.4 }}
                 >
                   {couple.bride.nameEn.split(' ')[0]}
-                </motion.h1>
+                </m.h1>
 
-                <motion.div 
+                <m.div 
                   className="w-12 h-12 flex items-center justify-center rounded-full border border-emerald-gold/20 bg-white/30 my-4 shadow-sm"
                   initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
                   animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -320,26 +321,26 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
                   <span className="font-emerald-script text-3xl text-emerald-gold">
                     &
                   </span>
-                </motion.div>
+                </m.div>
 
-                <motion.h1 
+                <m.h1 
                   className="font-emerald-serif italic text-6xl sm:text-7xl text-emerald-gradient tracking-[-0.02em] leading-none"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, delay: 1.8 }}
                 >
                   {couple.groom.nameEn.split(' ')[0]}
-                </motion.h1>
+                </m.h1>
               </div>
 
-              <motion.div
+              <m.div
                 initial={{ width: 0 }}
                 animate={{ width: "80px" }}
                 transition={{ duration: 0.8, delay: 2.0 }}
                 className="h-[1px] bg-emerald-gold opacity-60 my-8 emerald-gold-glow"
               />
 
-              <motion.div
+              <m.div
                 className="space-y-3"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -351,11 +352,11 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
                 <p className="font-emerald-serif italic text-lg text-emerald-gold">
                   {venueName || "GARDEN VILLA RESORT"}
                 </p>
-              </motion.div>
+              </m.div>
             </div>
 
             {/* Bottom Botanical */}
-            <motion.div 
+            <m.div 
               style={{ y: bottomY }}
               className="w-[85%] max-w-[400px] mb-8 origin-bottom animate-emerald-breathing"
               initial={{ opacity: 0 }}
@@ -363,8 +364,8 @@ export const Cover: React.FC<CoverProps> = ({ couple, dateLabel, venueName, gues
               transition={{ duration: 1, delay: 1.0 }}
             >
               <BottomBotanicalBranch />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </section>

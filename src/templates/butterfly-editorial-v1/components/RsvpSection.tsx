@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
 import { submitRsvp } from '@/lib/rsvp';
 import { Butterfly } from './Butterfly';
@@ -106,7 +106,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
       </div>
 
       <div className="max-w-xl mx-auto relative z-10">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -137,7 +137,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
             {/* Form Container with high-end card fill */}
             <div className="rounded-xl p-5 md:p-6 bg-[#FCFBF9] border border-[#C5A059]/15 relative overflow-hidden">
               {success ? (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="text-center py-8 space-y-4 relative z-10"
@@ -164,7 +164,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                   >
                     Submit another response
                   </button>
-                </motion.div>
+                </m.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5 relative z-10 text-left">
                   {/* Full Name input */}
@@ -214,7 +214,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                   {/* Guests Selector */}
                   <AnimatePresence>
                     {status === 'attending' && (
-                      <motion.div
+                      <m.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
@@ -254,7 +254,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                                 className="flex items-center justify-between cursor-pointer w-full bg-white border border-[#C5A059]/20 hover:border-[#5A121D]/50 rounded-lg text-[#2A2A2A] text-xs px-3.5 py-3 outline-none transition-all duration-300 shadow-xs"
                               >
                                 <span>{guests} {guests === 1 ? 'Guest' : 'Guests'}</span>
-                                <motion.svg 
+                                <m.svg 
                                   animate={{ rotate: isDropdownOpen ? 180 : 0 }} 
                                   className="w-4 h-4 text-[#C5A059]" 
                                   fill="none" 
@@ -262,12 +262,12 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                                   stroke="currentColor"
                                 >
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </motion.svg>
+                                </m.svg>
                               </div>
 
                               <AnimatePresence>
                                 {isDropdownOpen && (
-                                  <motion.div 
+                                  <m.div 
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
@@ -295,13 +295,13 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                                     >
                                       4+ Guests (Enter number)...
                                     </div>
-                                  </motion.div>
+                                  </m.div>
                                 )}
                               </AnimatePresence>
                             </div>
                           )}
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
                   </AnimatePresence>
 
@@ -339,7 +339,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                 </h4>
                 <div className="space-y-3 max-h-56 overflow-y-auto pr-2 scrollbar-thin">
                   {wishesList.map((w, index) => (
-                    <motion.div
+                    <m.div
                       key={w.id}
                       initial={{ opacity: 0, y: 15 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -351,13 +351,13 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                       <p className="font-sans text-[10px] text-[#2A2A2A]/85 italic leading-relaxed">
                         &ldquo;{w.message}&rdquo;
                       </p>
-                    </motion.div>
+                    </m.div>
                   ))}
                 </div>
               </div>
             )}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

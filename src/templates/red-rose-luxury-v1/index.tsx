@@ -12,7 +12,8 @@
  */
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
+import { MotionProvider } from '@/components/MotionProvider';
 import { TemplateProps } from '../registry';
 
 // ─── Section components ──────────────────────────────────────────────────────
@@ -34,14 +35,14 @@ const CinematicReveal: React.FC<{
   children: React.ReactNode;
   delay?: number;
 }> = ({ children, delay = 0 }) => (
-  <motion.div
+  <m.div
     initial={{ opacity: 0, y: 45 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: '-8% 0px' }}
     transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
   >
     {children}
-  </motion.div>
+  </m.div>
 );
 
 // ─── Gold Crimson Divider ───────────────────────────────────────────────────
@@ -58,6 +59,7 @@ export default function RedRoseLuxuryV1Template({ data, guestName }: TemplatePro
   const primaryEvent = data.events[0];
 
   return (
+    <MotionProvider>
     <div
       className="min-h-screen antialiased bg-pattern-red-rose"
       style={{ color: 'var(--rk-ivory)' }}
@@ -171,5 +173,6 @@ export default function RedRoseLuxuryV1Template({ data, guestName }: TemplatePro
         <Footer couple={data.couple} />
       </CinematicReveal>
     </div>
+    </MotionProvider>
   );
 }

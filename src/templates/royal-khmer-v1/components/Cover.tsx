@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Couple, WeddingEvent } from '@/types/invitation';
 import { GoldParticles } from './GoldParticles';
+import { CoverPhoto } from '@/components/CoverPhoto';
 import { LotusOrnament, DiamondDivider } from './KhmerOrnaments';
 
 interface CoverProps {
@@ -70,7 +71,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
       {/* User cover photo */}
       {coverImage && (
         <>
-          <img src={coverImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ zIndex: 0 }} />
+          <CoverPhoto src={coverImage} />
           <div className="absolute inset-0" style={{ background: 'rgba(14,7,4,0.62)', zIndex: 1 }} />
         </>
       )}
@@ -101,7 +102,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
       {/* ─── UNOPENED ENVELOPE GATE VIEW ─── */}
       <AnimatePresence>
         {!opened && (
-          <motion.div
+          <m.div
             key="envelope-gate"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -112,7 +113,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
             }}
           >
             {/* Header text */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: -25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 1 }}
@@ -130,10 +131,10 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               >
                 សេចក្តីគោរពអញ្ជើញ
               </h2>
-            </motion.div>
+            </m.div>
 
             {/* 3D Physical Envelope Structure */}
-            <motion.div
+            <m.div
               animate={
                 envelopeState === 'zoom-out'
                   ? { scale: 1.35, opacity: 0 }
@@ -164,7 +165,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               </div>
 
               {/* 2. Invitation Letter (slides UP out of envelope back wall) */}
-              <motion.div
+              <m.div
                 animate={
                   envelopeState === 'sliding-card' || envelopeState === 'zoom-out'
                     ? { y: '-46%', scale: 0.98 }
@@ -193,7 +194,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                     {couple.bride.nameKh}
                   </h4>
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* 3. Envelope Front Pocket (Left, Right, Bottom triangular panels) */}
               <div
@@ -235,7 +236,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               )}
 
               {/* 5. Envelope Top Flap (rotates upwards around the top axis) */}
-              <motion.div
+              <m.div
                 animate={{
                   rotateX: envelopeState === 'closed' ? 0 : -175,
                 }}
@@ -255,12 +256,12 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                   {/* Flap gold embroidery borders */}
                   <polygon points="12,6 408,6 210,132" fill="none" stroke="#E8C97A" strokeWidth="0.65" strokeDasharray="4 4" opacity="0.6" />
                 </svg>
-              </motion.div>
+              </m.div>
 
               {/* 6. Gold Wax Seal (Floating Click Trigger Button) */}
               <AnimatePresence>
                 {envelopeState === 'closed' && (
-                  <motion.div
+                  <m.div
                     key="wax-seal"
                     exit={{ scale: 0, opacity: 0, transition: { duration: 0.35 } }}
                     className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
@@ -283,13 +284,13 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                         style={{ animationDuration: '10s' }}
                       />
                     </button>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </m.div>
 
             {/* Tap instruction */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 1 }}
@@ -301,15 +302,15 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               <p className="font-serif-en text-[9px] tracking-widest uppercase text-[#FAF6EF]/60">
                 Click the gold seal to open invitation
               </p>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       {/* ─── OPENED INVITATION COVER CONTENT VIEW ─── */}
       <AnimatePresence>
         {opened && (
-          <motion.div
+          <m.div
             key="opened-cover-content"
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -318,7 +319,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
             style={{ minHeight: '100dvh', paddingTop: '4rem', paddingBottom: '4rem' }}
           >
             {/* Luxurious double gold border frame wrapping the names */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
@@ -425,7 +426,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                   </p>
                 </div>
               )}
-            </motion.div>
+            </m.div>
 
             {/* Bottom ornament spacer */}
             <div className="mt-8 opacity-25 flex justify-center">
@@ -433,7 +434,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
             </div>
 
             {/* Scroll indicator nudge */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.4, duration: 0.8 }}
@@ -445,14 +446,14 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               >
                 Scroll
               </span>
-              <motion.div
+              <m.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
                 className="w-[1px] h-6"
                 style={{ background: 'linear-gradient(to bottom, rgba(232,201,122,0.7), transparent)' }}
               />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </section>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { FallingPetals } from './FallingPetals';
 
 interface WelcomeMessageProps {
@@ -41,7 +41,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
       </div>
 
       <div className="max-w-2xl mx-auto space-y-12 relative z-10">
-        <motion.div
+        <m.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -53,15 +53,15 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
           </span>
           <h2 className="font-serif-en text-3xl md:text-4xl text-[#733F17] flex flex-wrap justify-center gap-x-2.5">
             {words.map((word, i) => (
-              <motion.span key={i} variants={wordVariants} className="inline-block">
+              <m.span key={i} variants={wordVariants} className="inline-block">
                 {word}
-              </motion.span>
+              </m.span>
             ))}
           </h2>
           <div className="w-16 h-[1px] bg-[#B36A26]/40 mx-auto mt-4" />
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -80,7 +80,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
               {invitationTextEn}
             </p>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

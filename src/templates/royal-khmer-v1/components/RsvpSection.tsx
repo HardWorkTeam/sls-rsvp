@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
 import { submitRsvp } from '@/lib/rsvp';
 import { SectionHeading, DiamondDivider, LotusOrnament, DrawBorderFrame } from './KhmerOrnaments';
@@ -59,7 +59,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
         className="rk-section flex flex-col items-center justify-center text-center"
         style={{ background: 'linear-gradient(180deg, #1a0e08 0%, #221208 100%)', minHeight: '40vh' }}
       >
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -85,7 +85,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
           >
             Submit another response
           </button>
-        </motion.div>
+        </m.div>
       </section>
     );
   }
@@ -102,7 +102,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
           sub="Kindly reply by the deadline"
         />
 
-        <motion.form
+        <m.form
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -162,7 +162,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
           {/* Guests count — only when attending */}
           <AnimatePresence>
             {status === 'attending' && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
@@ -206,7 +206,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
                         className="flex items-center justify-between cursor-pointer w-full bg-[#faf6ef]/[0.04] border border-[#C9A84C]/25 hover:border-[#C9A84C]/50 focus:border-[#C9A84C] focus:ring-1 focus:ring-[#C9A84C]/35 rounded-xl text-[#FAF6EF] text-xs px-4 py-3.5 outline-none transition-all duration-300 font-khmer-body"
                       >
                         <span>{guests} {guests === 1 ? 'Guest' : 'Guests'} / នាក់</span>
-                        <motion.svg 
+                        <m.svg 
                           animate={{ rotate: isDropdownOpen ? 180 : 0 }} 
                           className="w-4 h-4" 
                           style={{ color: 'var(--rk-gold)' }}
@@ -215,12 +215,12 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
                           stroke="currentColor"
                         >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </motion.svg>
+                        </m.svg>
                       </div>
 
                       <AnimatePresence>
                         {isDropdownOpen && (
-                          <motion.div 
+                          <m.div 
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
@@ -248,13 +248,13 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
                             >
                               4+ Guests (Enter number)...
                             </div>
-                          </motion.div>
+                          </m.div>
                         )}
                       </AnimatePresence>
                     </div>
                   )}
                 </div>
-                </motion.div>
+                </m.div>
             )}
           </AnimatePresence>
 
@@ -314,7 +314,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
             <p className="font-serif-en text-xs text-center text-red-400 mt-2">{error}</p>
           )}
           </DrawBorderFrame>
-        </motion.form>
+        </m.form>
       </div>
     </section>
   );

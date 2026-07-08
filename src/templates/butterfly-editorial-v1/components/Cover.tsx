@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Couple, WeddingEvent } from '@/types/invitation';
+import { CoverPhoto } from '@/components/CoverPhoto';
 import { Butterfly } from './Butterfly';
 
 interface CoverProps {
@@ -52,7 +53,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
           but below the revealed magazine card (z-10) and gold frame. */}
       {coverImage && (
         <>
-          <img src={coverImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ zIndex: 2 }} />
+          <CoverPhoto src={coverImage} zIndex={2} />
           <div className="absolute inset-0" style={{ background: 'rgba(20,15,10,0.45)', zIndex: 3 }} />
         </>
       )}
@@ -63,7 +64,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
       {/* ═══════ ENVELOPE STAGE ═══════ */}
       <AnimatePresence>
         {phase !== 'reveal' && (
-          <motion.div
+          <m.div
             key="envelope-stage"
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8 }}
@@ -73,7 +74,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
             }}
           >
             {/* Top label */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 1 }}
@@ -89,10 +90,10 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                 សេចក្តីគោរពអញ្ជើញ
               </p>
               <div className="w-10 h-[0.5px] bg-[#C5A059]/30 mx-auto mt-2" />
-            </motion.div>
+            </m.div>
 
             {/* ─── 3D ENVELOPE ─── */}
-            <motion.div
+            <m.div
               animate={
                 phase === 'card-fullscreen'
                   ? { scale: 1.15, opacity: 0, y: 40 }
@@ -120,7 +121,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               </div>
 
               {/* Inner card (slides up) */}
-              <motion.div
+              <m.div
                 animate={
                   phase === 'card-rise' || phase === 'card-fullscreen'
                     ? { y: '-52%', scale: 0.97 }
@@ -157,7 +158,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                     {couple.groom.nameEn.split(' ')[0]} &amp; {couple.bride.nameEn.split(' ')[0]}
                   </p>
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* Envelope pocket face (side flaps + bottom) */}
               <div className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden" style={{ zIndex: 10 }}>
@@ -185,7 +186,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               )}
 
               {/* Top flap (3D flip) */}
-              <motion.div
+              <m.div
                 animate={{ rotateX: phase === 'sealed' ? 0 : -178 }}
                 transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
                 style={{
@@ -200,12 +201,12 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                   <polygon points="0,0 420,0 210,140" fill="#4A0E17" stroke="#C5A059" strokeWidth="0.8" strokeOpacity="0.5" />
                   <polygon points="8,4 412,4 210,130" fill="none" stroke="#C5A059" strokeWidth="0.4" strokeDasharray="5 5" strokeOpacity="0.3" />
                 </svg>
-              </motion.div>
+              </m.div>
 
               {/* Wax seal button */}
               <AnimatePresence>
                 {phase === 'sealed' && (
-                  <motion.div
+                  <m.div
                     key="wax-seal"
                     exit={{ scale: 0, opacity: 0 }}
                     transition={{ duration: 0.4 }}
@@ -246,13 +247,13 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
                         style={{ animationDuration: '10s' }}
                       />
                     </button>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </m.div>
 
             {/* Instruction text */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: phase === 'sealed' ? 1 : 0 }}
               transition={{ delay: 0.8, duration: 1 }}
@@ -267,15 +268,15 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               >
                 Tap the butterfly seal to open
               </p>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       {/* ═══════ REVEALED CARD ═══════ */}
       <AnimatePresence>
         {phase === 'reveal' && (
-          <motion.div
+          <m.div
             key="revealed-card"
             initial={{ opacity: 0, scale: 0.9, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -407,7 +408,7 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
             </div>
 
             {/* Scroll indicator */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5, duration: 0.8 }}
@@ -419,14 +420,14 @@ export const Cover: React.FC<CoverProps> = ({ couple, events, guestName, coverIm
               >
                 Scroll Down
               </span>
-              <motion.div
+              <m.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
                 className="w-[1px] h-8"
                 style={{ background: 'linear-gradient(to bottom, #5A121D, transparent)' }}
               />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </section>

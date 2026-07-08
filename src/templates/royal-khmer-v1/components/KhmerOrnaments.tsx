@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 /** Inline SVG ornaments for the Royal Khmer template.
  *  All paths are hand-crafted to reflect traditional Cambodian decorative motifs:
@@ -152,7 +152,7 @@ export const DrawBorderFrame: React.FC<{
         style={{ borderRadius: '1rem' }}
       >
         {/* Outer border rect */}
-        <motion.rect
+        <m.rect
           x="4"
           y="4"
           width="calc(100% - 8px)"
@@ -166,7 +166,7 @@ export const DrawBorderFrame: React.FC<{
           transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
         />
         {/* Inner border rect */}
-        <motion.rect
+        <m.rect
           x="8"
           y="8"
           width="calc(100% - 16px)"

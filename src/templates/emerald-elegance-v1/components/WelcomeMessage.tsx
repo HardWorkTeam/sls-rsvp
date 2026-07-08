@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { EtherealBorderFrame } from './BotanicalAssets';
 
 interface WelcomeMessageProps {
@@ -32,7 +32,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
   return (
     <section className="relative py-24 px-6 bg-transparent text-center">
       <EtherealBorderFrame className="max-w-2xl mx-auto space-y-12 py-16 px-6 md:px-12 bg-white/60 shadow-sm relative z-10">
-        <motion.div
+        <m.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -44,15 +44,15 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
           </span>
           <h2 className="font-serif-en text-3xl md:text-4xl text-[#0A1C16] flex flex-wrap justify-center gap-x-2.5">
             {words.map((word, i) => (
-              <motion.span key={i} variants={wordVariants} className="inline-block">
+              <m.span key={i} variants={wordVariants} className="inline-block">
                 {word}
-              </motion.span>
+              </m.span>
             ))}
           </h2>
           <div className="w-16 h-[1px] bg-emerald-gold/40 mx-auto mt-4" />
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -71,7 +71,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
               {invitationTextEn}
             </p>
           </div>
-        </motion.div>
+        </m.div>
       </EtherealBorderFrame>
     </section>
   );

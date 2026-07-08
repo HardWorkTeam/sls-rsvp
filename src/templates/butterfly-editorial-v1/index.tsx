@@ -12,7 +12,8 @@
  */
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
+import { MotionProvider } from '@/components/MotionProvider';
 import { TemplateProps } from '../registry';
 
 // ─── Section Components ──────────────────────────────────────────────────────
@@ -33,14 +34,14 @@ const CinematicReveal: React.FC<{
   children: React.ReactNode;
   delay?: number;
 }> = ({ children, delay = 0 }) => (
-  <motion.div
+  <m.div
     initial={{ opacity: 0, y: 35 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: '-10% 0px' }}
     transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
   >
     {children}
-  </motion.div>
+  </m.div>
 );
 
 // ─── Fine Gold Butterfly Divider ─────────────────────────────────────────────
@@ -59,6 +60,7 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
   const primaryEvent = data.events[0];
 
   return (
+    <MotionProvider>
     <div
       className="min-h-screen antialiased bg-transparent text-[#2A2A2A] relative"
       style={{ fontFamily: 'var(--font-sans)' }}
@@ -174,5 +176,6 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
         <Footer couple={data.couple} />
       </CinematicReveal>
     </div>
+    </MotionProvider>
   );
 }

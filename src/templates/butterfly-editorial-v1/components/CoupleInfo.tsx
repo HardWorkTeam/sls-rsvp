@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { InvitationData } from '@/types/invitation';
 import { khmerSolarDate, khmerTimeLabel } from '@/lib/khmer';
+import { Photo } from '@/components/Photo';
 import { Butterfly } from './Butterfly';
 
 interface CoupleInfoProps {
@@ -39,7 +40,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
 
   // One date/venue entry per wedding day — Khmer weddings often span two days.
   // data.events carries one event per wedding day (see mapInvitation).
-  const eventDays = data.events.map((evt) => {
+  const eventDays = data.events.slice(0, 1).map((evt) => {
     const d = new Date(evt.dateSolar);
     return {
       id: evt.id,
@@ -76,7 +77,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
       </div>
 
       <div className="max-w-2xl mx-auto relative z-10 px-4">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -173,12 +174,13 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                 {/* Elegant double border frame with image hover scale */}
                 <div className="relative p-2 bg-white border border-[#C5A059]/25 shadow-[0_15px_35px_rgba(90,18,29,0.04)] rounded-2xl w-full aspect-[3/4] overflow-hidden group">
                   <div className="absolute inset-3 border border-[#C5A059]/15 rounded-xl pointer-events-none z-10 transition-transform duration-500 group-hover:scale-[0.98]" />
-                  <div className="w-full h-full overflow-hidden rounded-xl">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                  <div className="relative w-full h-full overflow-hidden rounded-xl">
+                    <Photo
                       src={groom.photo}
                       alt={groom.nameEn}
-                      className="w-full h-full object-cover filter sepia-[15%] transition-transform duration-700 group-hover:scale-108"
+                      fill
+                      sizes="(max-width: 768px) 50vw, 200px"
+                      className="filter sepia-[15%] transition-transform duration-700 group-hover:scale-108"
                     />
                   </div>
                 </div>
@@ -190,7 +192,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                   <h4 className="font-sans text-sm font-semibold text-[#2A2A2A]">
                     {groom.nameKh}
                   </h4>
-                  <motion.h3
+                  <m.h3
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -198,7 +200,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                     className="font-editorial-serif italic text-lg md:text-xl text-[#5A121D] leading-none"
                   >
                     {groom.nameEn}
-                  </motion.h3>
+                  </m.h3>
                 </div>
               </div>
 
@@ -221,12 +223,13 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                 {/* Elegant double border frame with image hover scale */}
                 <div className="relative p-2 bg-white border border-[#C5A059]/25 shadow-[0_15px_35px_rgba(90,18,29,0.04)] rounded-2xl w-full aspect-[3/4] overflow-hidden group">
                   <div className="absolute inset-3 border border-[#C5A059]/15 rounded-xl pointer-events-none z-10 transition-transform duration-500 group-hover:scale-[0.98]" />
-                  <div className="w-full h-full overflow-hidden rounded-xl">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                  <div className="relative w-full h-full overflow-hidden rounded-xl">
+                    <Photo
                       src={bride.photo}
                       alt={bride.nameEn}
-                      className="w-full h-full object-cover filter sepia-[15%] transition-transform duration-700 group-hover:scale-108"
+                      fill
+                      sizes="(max-width: 768px) 50vw, 200px"
+                      className="filter sepia-[15%] transition-transform duration-700 group-hover:scale-108"
                     />
                   </div>
                 </div>
@@ -238,7 +241,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                   <h4 className="font-sans text-sm font-semibold text-[#2A2A2A]">
                     {bride.nameKh}
                   </h4>
-                  <motion.h3
+                  <m.h3
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -246,7 +249,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                     className="font-editorial-serif italic text-lg md:text-xl text-[#5A121D] leading-none"
                   >
                     {bride.nameEn}
-                  </motion.h3>
+                  </m.h3>
                 </div>
               </div>
             </div>
@@ -312,7 +315,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               {thankYou}
             </p>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

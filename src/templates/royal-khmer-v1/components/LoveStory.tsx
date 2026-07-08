@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { LoveStoryMilestone } from '@/types/invitation';
+import { Photo } from '@/components/Photo';
 import { SectionHeading, DrawBorderFrame } from './KhmerOrnaments';
 
 interface LoveStoryProps {
@@ -23,7 +24,7 @@ export const LoveStory: React.FC<LoveStoryProps> = ({ milestones }) => {
         {/* Vertical timeline */}
         <div className="relative pl-6">
           {/* Timeline line */}
-          <motion.div
+          <m.div
             initial={{ scaleY: 0 }}
             whileInView={{ scaleY: 1 }}
             viewport={{ once: true, margin: '-8% 0px' }}
@@ -34,7 +35,7 @@ export const LoveStory: React.FC<LoveStoryProps> = ({ milestones }) => {
 
           <div className="space-y-10">
             {sorted.map((milestone, index) => (
-              <motion.div
+              <m.div
                 key={milestone.id}
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -64,10 +65,12 @@ export const LoveStory: React.FC<LoveStoryProps> = ({ milestones }) => {
                   <DrawBorderFrame className="w-full p-0 overflow-hidden">
                   {milestone.photoUrl && (
                     <div className="h-44 overflow-hidden relative">
-                      <img
+                      <Photo
                         src={milestone.photoUrl}
                         alt={milestone.title}
-                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                        fill
+                        sizes="(max-width: 768px) 90vw, 400px"
+                        className="transition-transform duration-700 hover:scale-105"
                         style={{ filter: 'sepia(15%) brightness(0.85)' }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#1a0e08]/90 via-transparent to-transparent" />
@@ -98,7 +101,7 @@ export const LoveStory: React.FC<LoveStoryProps> = ({ milestones }) => {
                   </div>
                   </DrawBorderFrame>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
+import { Photo } from '@/components/Photo';
 
 interface GalleryProps { photos: string[]; }
 
@@ -10,9 +11,12 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
   const prevPhoto = () => setLightbox((i) => (i !== null ? (i - 1 + photos.length) % photos.length : null));
   const nextPhoto = () => setLightbox((i) => (i !== null ? (i + 1) % photos.length : null));
 
-  // Keyboard navigation while the lightbox is open.
+  // Keyboard navigation while the lightbox is open. Only (un)binds when the
+  // open/closed state flips — the handlers use functional state updates, so
+  // they don't need to be re-registered on every photo change.
+  const isOpen = lightbox !== null;
   useEffect(() => {
-    if (lightbox === null) return;
+    if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setLightbox(null);
       else if (e.key === 'ArrowLeft') prevPhoto();
@@ -21,7 +25,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lightbox === null]);
+  }, [isOpen]);
 
   return (
     <section className="py-20 px-6" style={{ background: 'linear-gradient(180deg, rgba(255, 243, 208, 0.85) 0%, rgba(255, 232, 154, 0.75) 40%, rgba(255, 243, 208, 0.85) 100%)', backdropFilter: 'blur(8px)' }}>
@@ -36,20 +40,21 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
             no cropping — while the two columns stay visually balanced. */}
         <div className="columns-2 gap-2.5 [&>*]:mb-2.5">
           {photos.map((url, i) => (
-            <motion.button
+            <m.button
               key={i}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.07 }}
+              // Cap the stagger so large albums don't leave the last photos
+              // invisible for seconds (40 photos × 0.07s ≈ 2.8s otherwise).
+              transition={{ duration: 0.6, delay: Math.min(i, 8) * 0.07 }}
               onClick={() => setLightbox(i)}
               className="relative block w-full break-inside-avoid overflow-hidden rounded-xl group cursor-pointer"
               style={{ border: '2px solid rgba(212,160,32,0.35)' }}
               aria-label={`View photo ${i + 1} of ${photos.length}`}
             >
-              <img src={url} alt={`Photo ${i + 1}`}
-                loading="lazy"
-                decoding="async"
+              <Photo src={url} alt={`Photo ${i + 1}`}
+                sizes="(max-width: 768px) 50vw, 240px"
                 className="w-full h-auto transition-transform duration-700 group-hover:scale-110"
                 style={{ filter: 'sepia(10%) brightness(0.9) saturate(1.1)' }}
               />
@@ -57,20 +62,20 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 style={{ background: 'rgba(92,58,0,0.35)' }}>
                 <span style={{ color: '#FFE566', fontSize: '1.5rem' }}>⊕</span>
               </div>
-            </motion.button>
+            </m.button>
           ))}
         </div>
 
         {/* Lightbox */}
         <AnimatePresence>
           {lightbox !== null && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="fixed inset-0 z-[100] flex items-center justify-center p-4"
               style={{ background: 'rgba(92,58,0,0.92)', backdropFilter: 'blur(16px)' }}
               onClick={() => setLightbox(null)}
             >
-              <motion.div
+              <m.div
                 initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}
                 transition={{ ease: [0.16, 1, 0.3, 1] }}
                 drag={photos.length > 1 ? 'x' : false}
@@ -84,12 +89,12 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 style={{ border: '2px solid rgba(212,160,32,0.4)' }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <img src={photos[lightbox]} alt="" className="w-full object-contain pointer-events-none select-none" style={{ maxHeight: '75vh' }} />
+                <Photo src={photos[lightbox]} alt="" sizes="(max-width: 768px) 100vw, 640px" className="object-contain pointer-events-none select-none" style={{ maxHeight: '75vh' }} />
                 <div className="absolute top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-serif-en"
                   style={{ background: 'rgba(92,58,0,0.8)', color: '#FFE566', border: '1px solid rgba(212,160,32,0.4)' }}>
                   {lightbox + 1} / {photos.length}
                 </div>
-              </motion.div>
+              </m.div>
               {photos.length > 1 && (
                 <>
                   <button onClick={(e) => { e.stopPropagation(); prevPhoto(); }}
@@ -106,7 +111,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 aria-label="Close photo viewer"
                 className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center"
                 style={{ background: 'rgba(92,58,0,0.8)', color: '#FFE566', border: '1px solid rgba(212,160,32,0.4)' }}>×</button>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

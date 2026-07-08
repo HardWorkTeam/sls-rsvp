@@ -13,7 +13,8 @@
  */
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
+import { MotionProvider } from '@/components/MotionProvider';
 import { TemplateProps } from '../registry';
 
 import { Cover } from './components/Cover';
@@ -30,14 +31,14 @@ import { RsvpForm } from './components/RsvpSection';
 
 // ── Section transition wrapper ────────────────────────────────────────────────
 const Reveal: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => (
-  <motion.div
+  <m.div
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: '-8% 0px' }}
     transition={{ duration: 1.1, delay, ease: [0.16, 1, 0.3, 1] }}
   >
     {children}
-  </motion.div>
+  </m.div>
 );
 
 // ── Thin divider ──────────────────────────────────────────────────────────────
@@ -54,6 +55,7 @@ export default function AngkorHeritageV1Template({ data, guestName }: TemplatePr
   const primaryEvent = data.events[0];
 
   return (
+    <MotionProvider>
     <div className="min-h-screen antialiased bg-transparent relative" style={{ color: '#3D2200' }}>
       {/* Fixed Angkor Wat background underlay */}
       <div
@@ -158,5 +160,6 @@ export default function AngkorHeritageV1Template({ data, guestName }: TemplatePr
       {/* ── FOOTER ── */}
       <Footer couple={data.couple} />
     </div>
+    </MotionProvider>
   );
 }

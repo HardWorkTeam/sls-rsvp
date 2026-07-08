@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Butterfly } from './Butterfly';
 
 interface WelcomeMessageProps {
@@ -53,7 +53,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
       {/* High-end magazine paper block */}
       <div className="max-w-2xl w-full mx-auto text-center space-y-10 relative z-10 px-4">
         {/* Word-by-word reveal headline */}
-        <motion.div
+        <m.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -66,16 +66,16 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
           
           <h2 className="font-editorial-serif text-3xl md:text-4xl text-[#5A121D] font-light leading-tight tracking-wide flex flex-wrap justify-center gap-x-2.5">
             {words.map((word, i) => (
-              <motion.span key={i} variants={wordVariants} className="inline-block">
+              <m.span key={i} variants={wordVariants} className="inline-block">
                 {word}
-              </motion.span>
+              </m.span>
             ))}
           </h2>
           <div className="w-12 h-[0.5px] bg-[#C5A059]/40 mx-auto mt-3" />
-        </motion.div>
+        </m.div>
 
         {/* Paper texture quote block */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -106,7 +106,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
               {invitationTextEn}
             </p>
           </div>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Decorative gold vector line */}

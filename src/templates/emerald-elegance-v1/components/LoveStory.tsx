@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { LoveStoryMilestone } from '@/types/invitation';
+import { Photo } from '@/components/Photo';
 import { EtherealBorderFrame } from './BotanicalAssets';
 
 interface LoveStoryProps { milestones: LoveStoryMilestone[]; }
@@ -18,7 +19,7 @@ export const LoveStory: React.FC<LoveStoryProps> = ({ milestones }) => {
           <div className="h-[0.5px] w-16 mx-auto bg-emerald-gold/30" />
         </div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -30,9 +31,9 @@ export const LoveStory: React.FC<LoveStoryProps> = ({ milestones }) => {
               <div className="absolute left-[11px] top-0 bottom-0 w-[0.5px]"
                 style={{ background: 'linear-gradient(to bottom, transparent, rgba(201,168,76,0.6) 10%, rgba(201,168,76,0.6) 90%, transparent)' }} />
               <div className="space-y-10">
-                {sorted.map((m, i) => (
-                  <motion.div
-                    key={m.id}
+                {sorted.map((milestone, i) => (
+                  <m.div
+                    key={milestone.id}
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: '-10% 0px' }}
@@ -44,21 +45,21 @@ export const LoveStory: React.FC<LoveStoryProps> = ({ milestones }) => {
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-gold" />
                     </div>
                     <div className="flex-1 space-y-2 pt-1 pb-4">
-                      {m.photoUrl && (
-                        <div className="h-40 rounded-lg overflow-hidden mb-3 shadow-md">
-                          <img src={m.photoUrl} alt={m.title} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                      {milestone.photoUrl && (
+                        <div className="relative h-40 rounded-lg overflow-hidden mb-3 shadow-md">
+                          <Photo src={milestone.photoUrl} alt={milestone.title} fill sizes="(max-width: 768px) 90vw, 400px" className="transition-transform duration-700 hover:scale-105" />
                         </div>
                       )}
-                      <span className="font-serif-en text-[9px] tracking-widest uppercase font-bold text-emerald-gold">{m.dateLabel}</span>
-                      <h4 className="font-sans font-bold text-[15px] text-[#0A1C16]">{m.title}</h4>
-                      <p className="font-sans text-[13px] leading-relaxed text-[#0A1C16]/80 font-light">{m.description}</p>
+                      <span className="font-serif-en text-[9px] tracking-widest uppercase font-bold text-emerald-gold">{milestone.dateLabel}</span>
+                      <h4 className="font-sans font-bold text-[15px] text-[#0A1C16]">{milestone.title}</h4>
+                      <p className="font-sans text-[13px] leading-relaxed text-[#0A1C16]/80 font-light">{milestone.description}</p>
                     </div>
-                  </motion.div>
+                  </m.div>
                 ))}
               </div>
             </div>
           </EtherealBorderFrame>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 interface WelcomeMessageProps {
   invitationTextKh?: string;
@@ -34,7 +34,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
       <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#E8EFF6]/50 to-transparent pointer-events-none" />
 
       <div className="max-w-2xl mx-auto space-y-12 relative z-10">
-        <motion.div
+        <m.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -46,15 +46,15 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
           </span>
           <h2 className="font-serif-en text-3xl md:text-4xl text-[#2C3E56] flex flex-wrap justify-center gap-x-2.5">
             {words.map((word, i) => (
-              <motion.span key={i} variants={wordVariants} className="inline-block">
+              <m.span key={i} variants={wordVariants} className="inline-block">
                 {word}
-              </motion.span>
+              </m.span>
             ))}
           </h2>
           <div className="w-16 h-[1px] bg-[#6A8CB2]/40 mx-auto mt-4" />
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -73,7 +73,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
               {invitationTextEn}
             </p>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );
