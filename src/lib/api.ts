@@ -32,16 +32,24 @@ export const invitationTag = (code: string) => `invitation:${code}`;
  * instead of doing the work twice.
  */
 export const getInvitation = cache(
-  async (code: string): Promise<PublicInvitation | null> => {
+  async (code: string, previewToken?: string): Promise<PublicInvitation | null> => {
     try {
+      const url =
+        `${SERVER_API_URL}/public/invitations/${encodeURIComponent(code)}` +
+        (previewToken ? `?preview_token=${encodeURIComponent(previewToken)}` : "");
+
       const response = await fetch(
-        `${SERVER_API_URL}/public/invitations/${encodeURIComponent(code)}`,
+        url,
         {
           headers: { Accept: "application/json" },
-          next: {
-            revalidate: INVITATION_REVALIDATE_SECONDS,
-            tags: [invitationTag(code)],
-          },
+          ...(previewToken
+            ? { cache: "no-store" as const }
+            : {
+                next: {
+                  revalidate: INVITATION_REVALIDATE_SECONDS,
+                  tags: [invitationTag(code)],
+                },
+              }),
         },
       );
 

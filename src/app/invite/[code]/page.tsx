@@ -29,9 +29,11 @@ function readGuestName(value: string | string[] | undefined): string | undefined
   return name ? name : undefined;
 }
 
-export async function generateMetadata({ params }: InvitePageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: InvitePageProps): Promise<Metadata> {
   const { code } = await params;
-  const invitation = await getInvitation(code);
+  const query = await searchParams;
+  const previewToken = typeof query.preview_token === "string" ? query.preview_token : undefined;
+  const invitation = await getInvitation(code, previewToken);
 
   if (!invitation) {
     return { title: "Invitation not found" };
@@ -58,7 +60,8 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
   // list). When present we show a "my check-in QR" pass they can present at the
   // door on the wedding day — or read the code out for manual check-in.
   const checkInToken = readGuestName(query.t);
-  const invitation = await getInvitation(code);
+  const previewToken = typeof query.preview_token === "string" ? query.preview_token : undefined;
+  const invitation = await getInvitation(code, previewToken);
 
   if (!invitation) {
     notFound();
