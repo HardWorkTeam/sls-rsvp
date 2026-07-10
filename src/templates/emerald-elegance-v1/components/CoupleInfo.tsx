@@ -94,22 +94,22 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               {/* Groom's parents */}
               <div className="space-y-1 text-center">
                 <p className="font-emerald-serif font-bold text-emerald-gold">
-                  {groom.father}
+                  {groom.father && `លោក ${groom.father}`}
                 </p>
                 <p className="font-emerald-serif font-bold text-emerald-gold">
-                  {groom.mother}
+                  {groom.mother && `លោកស្រី ${groom.mother}`}
                 </p>
                 {(fatherGroomEn || motherGroomEn) && (
                   <>
                     <div className="h-[0.5px] w-12 bg-emerald-gold/30 mx-auto my-2" />
                     {fatherGroomEn && (
                       <p className="font-emerald-sans text-[9px] tracking-wider opacity-70 uppercase">
-                        {fatherGroomEn}
+                        Mr. {fatherGroomEn}
                       </p>
                     )}
                     {motherGroomEn && (
                       <p className="font-emerald-sans text-[9px] tracking-wider opacity-70 uppercase">
-                        {motherGroomEn}
+                        Mrs. {motherGroomEn}
                       </p>
                     )}
                   </>
@@ -119,22 +119,22 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               {/* Bride's parents */}
               <div className="space-y-1 text-center">
                 <p className="font-emerald-serif font-bold text-emerald-gold">
-                  {bride.father}
+                  {bride.father && `លោក ${bride.father}`}
                 </p>
                 <p className="font-emerald-serif font-bold text-emerald-gold">
-                  {bride.mother}
+                  {bride.mother && `លោកស្រី ${bride.mother}`}
                 </p>
                 {(fatherBrideEn || motherBrideEn) && (
                   <>
                     <div className="h-[0.5px] w-12 bg-emerald-gold/30 mx-auto my-2" />
                     {fatherBrideEn && (
                       <p className="font-emerald-sans text-[9px] tracking-wider opacity-70 uppercase">
-                        {fatherBrideEn}
+                        Mr. {fatherBrideEn}
                       </p>
                     )}
                     {motherBrideEn && (
                       <p className="font-emerald-sans text-[9px] tracking-wider opacity-70 uppercase">
-                        {motherBrideEn}
+                        Mrs. {motherBrideEn}
                       </p>
                     )}
                   </>

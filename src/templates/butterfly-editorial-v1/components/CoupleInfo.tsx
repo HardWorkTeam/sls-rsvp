@@ -107,21 +107,21 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               {/* Groom's parents */}
               <div className="space-y-1.5">
                 <p className="font-sans text-xs font-bold text-[#2A2A2A]">
-                  {groom.father}
+                  {groom.father && `លោក ${groom.father}`}
                 </p>
                 <p className="font-sans text-xs font-bold text-[#2A2A2A]">
-                  {groom.mother}
+                  {groom.mother && `លោកស្រី ${groom.mother}`}
                 </p>
                 {(fatherGroomEn || motherGroomEn) && (
                   <div className="space-y-0.5 pt-1">
                     {fatherGroomEn && (
                       <p className="font-editorial-serif text-[8px] tracking-[0.25em] text-[#C5A059] uppercase font-bold">
-                        {fatherGroomEn}
+                        Mr. {fatherGroomEn}
                       </p>
                     )}
                     {motherGroomEn && (
                       <p className="font-editorial-serif text-[8px] tracking-[0.25em] text-[#C5A059] uppercase font-bold">
-                        {motherGroomEn}
+                        Mrs. {motherGroomEn}
                       </p>
                     )}
                   </div>
@@ -131,21 +131,21 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               {/* Bride's parents */}
               <div className="space-y-1.5 border-l border-[#C5A059]/10">
                 <p className="font-sans text-xs font-bold text-[#2A2A2A]">
-                  {bride.father}
+                  {bride.father && `លោក ${bride.father}`}
                 </p>
                 <p className="font-sans text-xs font-bold text-[#2A2A2A]">
-                  {bride.mother}
+                  {bride.mother && `លោកស្រី ${bride.mother}`}
                 </p>
                 {(fatherBrideEn || motherBrideEn) && (
                   <div className="space-y-0.5 pt-1">
                     {fatherBrideEn && (
                       <p className="font-editorial-serif text-[8px] tracking-[0.25em] text-[#C5A059] uppercase font-bold">
-                        {fatherBrideEn}
+                        Mr. {fatherBrideEn}
                       </p>
                     )}
                     {motherBrideEn && (
                       <p className="font-editorial-serif text-[8px] tracking-[0.25em] text-[#C5A059] uppercase font-bold">
-                        {motherBrideEn}
+                        Mrs. {motherBrideEn}
                       </p>
                     )}
                   </div>
