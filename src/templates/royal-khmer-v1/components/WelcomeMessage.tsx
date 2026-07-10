@@ -72,13 +72,19 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
           <span className="absolute -bottom-10 right-6 font-serif-en text-7xl leading-none" style={{ color: 'var(--rk-gold)', opacity: 0.1 }}>”</span>
 
           <div className="space-y-6 relative z-10">
-            <p className="font-khmer-body text-sm md:text-[15px] leading-loose tracking-wide" style={{ color: 'var(--rk-ivory)' }}>
-              {invitationTextKh}
-            </p>
-            <div className="w-12 h-[1px] mx-auto" style={{ background: 'var(--rk-gold)', opacity: 0.3 }} />
-            <p className="font-serif-en text-[10px] md:text-xs leading-[2.2] tracking-[0.2em] uppercase" style={{ color: 'var(--rk-gold)' }}>
-              {invitationTextEn}
-            </p>
+            {invitationTextKh && (
+              <p className="font-khmer-body text-sm md:text-[15px] leading-loose tracking-wide" style={{ color: 'var(--rk-ivory)' }}>
+                {invitationTextKh}
+              </p>
+            )}
+            {invitationTextKh && invitationTextEn && (
+              <div className="w-12 h-[1px] mx-auto" style={{ background: 'var(--rk-gold)', opacity: 0.3 }} />
+            )}
+            {invitationTextEn && (
+              <p className="font-serif-en text-[10px] md:text-xs leading-[2.2] tracking-[0.2em] uppercase" style={{ color: 'var(--rk-gold)' }}>
+                {invitationTextEn}
+              </p>
+            )}
           </div>
         </m.div>
       </div>

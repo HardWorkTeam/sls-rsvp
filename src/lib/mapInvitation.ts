@@ -292,11 +292,11 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
   };
 
   // Invitation text: editor saves to settings; fall back to defaults
-  const invTextKh = typeof invitation.settings?.invitation_text_kh === "string"
-    ? invitation.settings.invitation_text_kh
+  const invTextKh = invitation.settings && "invitation_text_kh" in invitation.settings
+    ? (typeof invitation.settings.invitation_text_kh === "string" ? invitation.settings.invitation_text_kh : "")
     : "មានកិត្តិយសសូមគោរពអញ្ជើញ ចូលរួមជាភ្ញៀវកិត្តិយស";
-  const invTextEn = typeof invitation.settings?.invitation_text_en === "string"
-    ? invitation.settings.invitation_text_en
+  const invTextEn = invitation.settings && "invitation_text_en" in invitation.settings
+    ? (typeof invitation.settings.invitation_text_en === "string" ? invitation.settings.invitation_text_en : "")
     : "CORDIALLY REQUEST THE HONOR OF YOUR PRESENCE AT THE CELEBRATION OF THEIR WEDDING";
 
   const ext = (invitation.settings?.couple_extended ?? {}) as Record<string, Record<string, string>>;

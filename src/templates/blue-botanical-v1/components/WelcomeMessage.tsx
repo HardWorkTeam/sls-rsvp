@@ -65,13 +65,19 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
           <span className="absolute -bottom-10 right-6 font-serif-en text-7xl text-[#6A8CB2]/10 leading-none">”</span>
 
           <div className="space-y-6 relative z-10">
-            <p className="font-khmer-body text-sm md:text-[15px] leading-loose text-[#2C3E56] tracking-wide">
-              {invitationTextKh}
-            </p>
-            <div className="w-12 h-[1px] bg-[#6A8CB2]/20 mx-auto" />
-            <p className="font-serif-en text-[10px] md:text-xs leading-[2.2] tracking-[0.2em] text-[#6A8CB2] uppercase">
-              {invitationTextEn}
-            </p>
+            {invitationTextKh && (
+              <p className="font-khmer-body text-sm md:text-[15px] leading-loose text-[#2C3E56] tracking-wide">
+                {invitationTextKh}
+              </p>
+            )}
+            {invitationTextKh && invitationTextEn && (
+              <div className="w-12 h-[1px] bg-[#6A8CB2]/20 mx-auto" />
+            )}
+            {invitationTextEn && (
+              <p className="font-serif-en text-[10px] md:text-xs leading-[2.2] tracking-[0.2em] text-[#6A8CB2] uppercase">
+                {invitationTextEn}
+              </p>
+            )}
           </div>
         </m.div>
       </div>

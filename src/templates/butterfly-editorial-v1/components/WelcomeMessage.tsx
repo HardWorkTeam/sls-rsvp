@@ -95,16 +95,22 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
 
           <div className="space-y-6 relative z-10">
             {/* Traditional Khmer text */}
-            <p className="font-sans text-sm md:text-base leading-[2.2] text-[#2A2A2A] font-light tracking-wide px-4">
-              {invitationTextKh}
-            </p>
+            {invitationTextKh && (
+              <p className="font-sans text-sm md:text-base leading-[2.2] text-[#2A2A2A] font-light tracking-wide px-4">
+                {invitationTextKh}
+              </p>
+            )}
 
-            <div className="w-16 h-[0.5px] bg-[#C5A059]/25 mx-auto" />
+            {invitationTextKh && invitationTextEn && (
+              <div className="w-16 h-[0.5px] bg-[#C5A059]/25 mx-auto" />
+            )}
 
             {/* Premium English text */}
-            <p className="font-editorial-serif text-[10px] md:text-xs leading-[2.4] tracking-[0.2em] text-[#2A2A2A]/60 uppercase px-4 font-light">
-              {invitationTextEn}
-            </p>
+            {invitationTextEn && (
+              <p className="font-editorial-serif text-[10px] md:text-xs leading-[2.4] tracking-[0.2em] text-[#2A2A2A]/60 uppercase px-4 font-light">
+                {invitationTextEn}
+              </p>
+            )}
           </div>
         </m.div>
       </div>

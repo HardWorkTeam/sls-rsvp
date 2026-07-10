@@ -32,8 +32,8 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
   const fatherBrideEn = bride.fatherEn || '';
   const motherBrideEn = bride.motherEn || '';
 
-  const inviteKh = data.invitationTextKh || 'មានកិត្តិយសសូមគោរពអញ្ជើញ ឯកឧត្តម លោកជំទាវ លោកអ្នកស្រី អ្នកនាងកញ្ញា ចូលរួមជាភ្ញៀវកិត្តិយស ដើម្បីប្រសិទ្ធពរជ័យ សិរីសួស្តីជ័យមង្គលក្នុងពិធីសិរីមង្គលអាពាហ៍ពិពាហ៍កូនប្រុស កូនស្រីរបស់យើងខ្ញុំ';
-  const inviteEn = data.invitationTextEn || 'CORDIALLY REQUEST THE HONOR OF YOUR PRESENCE ON THE AUSPICIOUS OCCASION OF THE WEDDING OF OUR CHILDREN';
+  const inviteKh = data.invitationTextKh ?? 'មានកិត្តិយសសូមគោរពអញ្ជើញ ឯកឧត្តម លោកជំទាវ លោកអ្នកស្រី អ្នកនាងកញ្ញា ចូលរួមជាភ្ញៀវកិត្តិយស ដើម្បីប្រសិទ្ធពរជ័យ សិរីសួស្តីជ័យមង្គលក្នុងពិធីសិរីមង្គលអាពាហ៍ពិពាហ៍កូនប្រុស កូនស្រីរបស់យើងខ្ញុំ';
+  const inviteEn = data.invitationTextEn ?? 'CORDIALLY REQUEST THE HONOR OF YOUR PRESENCE ON THE AUSPICIOUS OCCASION OF THE WEDDING OF OUR CHILDREN';
 
   const lunarDate = data.lunarDateText || (primaryEvent ? primaryEvent.dateKh : '');
   const thankYou = data.thankYouText || 'THANK YOU! / សូមអរគុណ';
@@ -157,12 +157,16 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
 
             {/* Formal request texts */}
             <div className="space-y-4 max-w-lg mx-auto text-center">
-              <p className="font-sans text-xs leading-[2] text-[#2A2A2A]/85 px-2">
-                {inviteKh}
-              </p>
-              <p className="font-editorial-serif text-[9px] md:text-[10px] leading-[2] tracking-[0.15em] text-[#5A121D] uppercase font-light px-2">
-                {inviteEn}
-              </p>
+              {inviteKh && (
+                <p className="font-sans text-xs leading-[2] text-[#2A2A2A]/85 px-2">
+                  {inviteKh}
+                </p>
+              )}
+              {inviteEn && (
+                <p className="font-editorial-serif text-[9px] md:text-[10px] leading-[2] tracking-[0.15em] text-[#5A121D] uppercase font-light px-2">
+                  {inviteEn}
+                </p>
+              )}
             </div>
 
             <ElegantDivider />

@@ -63,13 +63,19 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
           <span className="absolute -bottom-10 right-0 font-serif-en text-7xl text-emerald-gold/10 leading-none">”</span>
 
           <div className="space-y-6 relative z-10">
-            <p className="font-khmer-body text-sm md:text-[15px] leading-loose text-[#0A1C16] tracking-wide">
-              {invitationTextKh}
-            </p>
-            <div className="w-12 h-[1px] bg-emerald-gold/30 mx-auto" />
-            <p className="font-serif-en text-[10px] md:text-xs leading-[2.2] tracking-[0.2em] text-[#0A1C16]/70 uppercase">
-              {invitationTextEn}
-            </p>
+            {invitationTextKh && (
+              <p className="font-khmer-body text-sm md:text-[15px] leading-loose text-[#0A1C16] tracking-wide">
+                {invitationTextKh}
+              </p>
+            )}
+            {invitationTextKh && invitationTextEn && (
+              <div className="w-12 h-[1px] bg-emerald-gold/30 mx-auto" />
+            )}
+            {invitationTextEn && (
+              <p className="font-serif-en text-[10px] md:text-xs leading-[2.2] tracking-[0.2em] text-[#0A1C16]/70 uppercase">
+                {invitationTextEn}
+              </p>
+            )}
           </div>
         </m.div>
       </EtherealBorderFrame>
