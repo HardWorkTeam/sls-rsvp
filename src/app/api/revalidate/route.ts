@@ -30,8 +30,9 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ message: "Missing invitation code" }, { status: 400 });
   }
 
-  // Next 16 requires a cache profile as the 2nd arg; "max" expires the tag
-  // immediately (updateTag is Server-Action-only, so it's not usable here).
-  revalidateTag(invitationTag(code), "max");
+  // Use { expire: 0 } to force immediate cache invalidation. This ensures that
+  // when the portal/editor saves, the iframe preview will immediately load the
+  // fresh data instead of using stale-while-revalidate (which would serve old data once).
+  revalidateTag(invitationTag(code), { expire: 0 });
   return NextResponse.json({ revalidated: true, code });
 }
