@@ -32,7 +32,7 @@ export default function Home() {
         <input
           value={code}
           onChange={(event) => setCode(event.target.value)}
-          placeholder="e.g. DEMO2026"
+          placeholder="Enter your invitation code"
           aria-label="Invitation code"
           className="h-12 flex-1 rounded-full border border-emerald-200 bg-white px-5 font-mono text-sm uppercase tracking-widest text-zinc-800 outline-none placeholder:normal-case placeholder:font-sans placeholder:tracking-normal placeholder:text-zinc-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200"
         />
