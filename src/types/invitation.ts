@@ -131,7 +131,7 @@ export interface PublicTimelineEvent {
 
 export interface PublicMediaItem {
   id: number;
-  media_type: "photo" | "video";
+  media_type: "photo" | "video" | "document";
   url: string;
   thumbnail_url: string | null;
   original_name: string | null;
