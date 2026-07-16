@@ -56,7 +56,7 @@ export function CoverSection({ invitation }: { invitation: PublicInvitation }) {
                 key={i}
                 className={`inline-flex flex-col items-center gap-1 rounded-2xl border px-8 py-5 shadow-sm backdrop-blur transition-all ${
                   isMain
-                    ? "border-amber-400 bg-amber-50/90 ring-2 ring-amber-300/50 shadow-md"
+                    ? "border-emerald-500 bg-emerald-50/90 ring-2 ring-emerald-400/50 shadow-md"
                     : "border-emerald-200 bg-white/80"
                 }`}
               >
@@ -67,7 +67,7 @@ export function CoverSection({ invitation }: { invitation: PublicInvitation }) {
                     </p>
                   ) : null}
                   {isMain ? (
-                    <span className="rounded-full bg-amber-500 px-2 py-0.5 text-[9px] font-bold text-white uppercase tracking-wider">
+                    <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[9px] font-bold text-white uppercase tracking-wider">
                       ★ Main Date
                     </span>
                   ) : null}
