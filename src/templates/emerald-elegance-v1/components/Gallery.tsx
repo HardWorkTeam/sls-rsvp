@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { Photo } from '@/components/Photo';
+import { ThinGoldRule } from './BotanicalAssets';
 
 export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -25,6 +26,19 @@ export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
 
   return (
     <section className="relative w-full py-20 bg-white/40 backdrop-blur-md border-y border-emerald-gold/20 flex flex-col items-center">
+      {/* Header */}
+      <div className="text-center space-y-3 mb-10 px-4">
+        <p className="font-emerald-sans text-[10px] tracking-[0.35em] uppercase text-emerald-gold font-semibold">
+          Photo Gallery
+        </p>
+        <h2 className="font-emerald-serif text-3xl md:text-4xl text-emerald-gradient leading-relaxed">
+          អាល់ប៊ុមរូបថត
+        </h2>
+        <div className="w-24 mx-auto mt-2">
+          <ThinGoldRule />
+        </div>
+      </div>
+
       {/* Masonry columns: every photo keeps its natural aspect ratio —
           no cropping — and the columns stagger themselves naturally. */}
       <div className="w-full max-w-2xl px-4 columns-2 gap-4 [&>*]:mb-4">
