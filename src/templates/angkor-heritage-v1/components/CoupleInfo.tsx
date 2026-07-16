@@ -24,7 +24,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
   const motherBrideEn = bride.motherEn || '';
 
   const inviteKh = data.invitationTextKh ?? 'មានកិត្តិយសសូមគោរពអញ្ជើញ ឯកឧត្តម លោកជំទាវ លោកអ្នកស្រី អ្នកនាងកញ្ញា ចូលរួមជាភ្ញៀវកិត្តិយស ដើម្បីប្រសិទ្ធពរជ័យ សិរីសួស្តីជ័យមង្គលក្នុងពិធីសិរីមង្គលអាពាហ៍ពិពាហ៍កូនប្រុស កូនស្រីរបស់យើងខ្ញុំ';
-  const inviteEn = data.invitationTextEn ?? 'CORDIALLY REQUEST THE HONOR OF YOUR PRESENCE ON THE AUSPICIOUS OCCASION OF THE WEDDING OF OUR CHILDREN';
+  const inviteEn = data.invitationTextEn ?? '';
 
   const lunarDate = data.lunarDateText || (primaryEvent ? primaryEvent.dateKh : '');
   const thankYou = data.thankYouText || 'THANK YOU! / សូមអរគុណ';
