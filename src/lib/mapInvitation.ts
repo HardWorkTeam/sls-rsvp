@@ -274,7 +274,15 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
   const gallery = buildGallery(invitation);
   const loveStory = buildLoveStory(invitation);
 
-  const deadlineDate = wedding.wedding_date
+  const weddingDays = parseWeddingDays(invitation);
+  const mainDayIndex = typeof invitation.settings?.main_wedding_day_index === "number"
+    ? (invitation.settings.main_wedding_day_index as number)
+    : 0;
+  const selectedMainDay = weddingDays[mainDayIndex] ?? weddingDays[0];
+
+  const deadlineDate = selectedMainDay?.date
+    ? `${selectedMainDay.date}T${selectedMainDay.time || "00:00:00"}Z`
+    : wedding.wedding_date
     ? `${wedding.wedding_date}T00:00:00Z`
     : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 

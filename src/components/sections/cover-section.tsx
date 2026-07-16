@@ -7,6 +7,10 @@ export function CoverSection({ invitation }: { invitation: PublicInvitation }) {
   // Multi-day weddings (settings.wedding_days) show one card per day; older
   // invitations fall back to the wedding's single date/time.
   const weddingDays = (invitation.settings?.wedding_days ?? []).filter((d) => d.date);
+  const mainDayIdx = typeof invitation.settings?.main_wedding_day_index === "number"
+    ? invitation.settings.main_wedding_day_index
+    : 0;
+
   const days = weddingDays.length > 0
     ? weddingDays.map((d, i) => ({
         date: d.date as string,
@@ -45,27 +49,41 @@ export function CoverSection({ invitation }: { invitation: PublicInvitation }) {
 
       {days.length > 0 ? (
         <div className="relative mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
-          {days.map((day, i) => (
-            <div
-              key={i}
-              className="inline-flex flex-col items-center gap-1 rounded-2xl border border-emerald-200 bg-white/80 px-8 py-5 shadow-sm backdrop-blur"
-            >
-              {days.length > 1 ? (
-                <p className="text-xs uppercase tracking-[0.2em] text-emerald-700">
-                  ថ្ងៃទី{i + 1} · Day {i + 1}
+          {days.map((day, i) => {
+            const isMain = days.length > 1 && i === mainDayIdx;
+            return (
+              <div
+                key={i}
+                className={`inline-flex flex-col items-center gap-1 rounded-2xl border px-8 py-5 shadow-sm backdrop-blur transition-all ${
+                  isMain
+                    ? "border-amber-400 bg-amber-50/90 ring-2 ring-amber-300/50 shadow-md"
+                    : "border-emerald-200 bg-white/80"
+                }`}
+              >
+                <div className="flex items-center gap-1.5">
+                  {days.length > 1 ? (
+                    <p className="text-xs uppercase tracking-[0.2em] text-emerald-700">
+                      ថ្ងៃទី{i + 1} · Day {i + 1}
+                    </p>
+                  ) : null}
+                  {isMain ? (
+                    <span className="rounded-full bg-amber-500 px-2 py-0.5 text-[9px] font-bold text-white uppercase tracking-wider">
+                      ★ Main Date
+                    </span>
+                  ) : null}
+                </div>
+                <p className="font-[family-name:var(--font-serif)] text-xl font-semibold text-emerald-900">
+                  {formatLongDate(day.date)}
                 </p>
-              ) : null}
-              <p className="font-[family-name:var(--font-serif)] text-xl font-semibold text-emerald-900">
-                {formatLongDate(day.date)}
-              </p>
-              {day.time ? (
-                <p className="text-sm text-zinc-500">at {formatTime(day.time)}</p>
-              ) : null}
-              {day.venue ? (
-                <p className="mt-1 text-sm text-zinc-600">{day.venue}</p>
-              ) : null}
-            </div>
-          ))}
+                {day.time ? (
+                  <p className="text-sm text-zinc-500">at {formatTime(day.time)}</p>
+                ) : null}
+                {day.venue ? (
+                  <p className="mt-1 text-sm text-zinc-600">{day.venue}</p>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
       ) : null}
 
