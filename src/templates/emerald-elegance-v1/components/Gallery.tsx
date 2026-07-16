@@ -72,7 +72,7 @@ export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
         {lightboxIndex !== null && (
           <m.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0A1C16]/95 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-[#0A1C16]/95 backdrop-blur-md overflow-hidden"
             onClick={() => setLightboxIndex(null)}
           >
             <m.div
@@ -85,12 +85,18 @@ export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
                 if (info.offset.x < -60) nextPhoto();
                 else if (info.offset.x > 60) prevPhoto();
               }}
-              className="relative max-w-sm w-full max-h-[85vh] rounded-2xl overflow-hidden border border-emerald-gold/30 shadow-[0_0_50px_rgba(201,168,76,0.15)] touch-pan-y"
+              className="relative max-w-sm w-auto max-h-[80vh] flex flex-col items-center justify-center rounded-2xl overflow-hidden border border-emerald-gold/30 shadow-[0_0_50px_rgba(201,168,76,0.15)] touch-pan-y"
               onClick={(e) => e.stopPropagation()}
             >
-              <Photo src={photos[lightboxIndex]} alt="Expanded" sizes="(max-width: 768px) 100vw, 640px" className="object-contain pointer-events-none select-none" style={{ maxHeight: '75vh' }} />
+              <Photo
+                src={photos[lightboxIndex]}
+                alt="Expanded"
+                sizes="(max-width: 768px) 100vw, 640px"
+                className="object-contain pointer-events-none select-none"
+                style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '70vh', display: 'block', margin: '0 auto' }}
+              />
               
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full font-serif-en text-xs bg-[#0A1C16]/80 text-emerald-gold border border-emerald-gold/30">
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full font-serif-en text-xs bg-[#0A1C16]/80 text-emerald-gold border border-emerald-gold/30 z-10">
                 {lightboxIndex + 1} / {photos.length}
               </div>
             </m.div>

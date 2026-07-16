@@ -100,7 +100,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+              className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 overflow-hidden"
               style={{ background: 'rgba(20,2,3,0.97)', backdropFilter: 'blur(24px)' }}
               onClick={closeLightbox}
             >
@@ -116,7 +116,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                   if (info.offset.x < -60) nextPhoto();
                   else if (info.offset.x > 60) prevPhoto();
                 }}
-                className="relative max-w-sm w-full max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl touch-pan-y"
+                className="relative max-w-sm w-auto max-h-[80vh] flex flex-col items-center justify-center rounded-3xl overflow-hidden shadow-2xl touch-pan-y"
                 style={{ border: '1px solid rgba(232, 201, 122, 0.35)' }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -125,11 +125,11 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                   alt={`Expanded Photo ${lightboxIndex + 1}`}
                   sizes="(max-width: 768px) 100vw, 640px"
                   className="object-contain pointer-events-none select-none"
-                  style={{ maxHeight: '75vh' }}
+                  style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '70vh', display: 'block', margin: '0 auto' }}
                 />
                 {/* Image counter indicator */}
                 <div
-                  className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full font-serif-en text-xs"
+                  className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full font-serif-en text-xs z-10"
                   style={{
                     background: 'rgba(92, 3, 12, 0.85)',
                     color: '#E8C97A',

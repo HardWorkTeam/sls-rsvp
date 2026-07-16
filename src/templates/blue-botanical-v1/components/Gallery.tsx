@@ -64,7 +64,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
           {lightbox !== null && (
             <m.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+              className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 overflow-hidden"
               style={{ background: 'rgba(44,62,86,0.92)', backdropFilter: 'blur(16px)' }}
               onClick={() => setLightbox(null)}
             >
@@ -78,12 +78,18 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                   if (info.offset.x < -60) nextPhoto();
                   else if (info.offset.x > 60) prevPhoto();
                 }}
-                className="relative max-w-sm w-full rounded-2xl overflow-hidden touch-pan-y"
+                className="relative max-w-sm w-auto max-h-[80vh] flex flex-col items-center justify-center rounded-2xl overflow-hidden touch-pan-y"
                 style={{ border: '2px solid rgba(106,140,178,0.4)' }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <Photo src={photos[lightbox]} alt="" sizes="(max-width: 768px) 100vw, 640px" className="object-contain pointer-events-none select-none" style={{ maxHeight: '75vh' }} />
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-serif-en"
+                <Photo
+                  src={photos[lightbox]}
+                  alt=""
+                  sizes="(max-width: 768px) 100vw, 640px"
+                  className="object-contain pointer-events-none select-none"
+                  style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '70vh', display: 'block', margin: '0 auto' }}
+                />
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-serif-en z-10"
                   style={{ background: 'rgba(44,62,86,0.8)', color: '#B8D0E8', border: '1px solid rgba(106,140,178,0.4)' }}>
                   {lightbox + 1} / {photos.length}
                 </div>

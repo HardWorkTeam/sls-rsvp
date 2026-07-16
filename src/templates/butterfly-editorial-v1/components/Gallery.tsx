@@ -146,7 +146,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+              className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 overflow-hidden"
               style={{ background: 'rgba(252,251,249,0.97)', backdropFilter: 'blur(20px)' }}
               onClick={() => setLightboxOpen(false)}
             >
@@ -162,18 +162,18 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                   if (info.offset.x < -60) nextSlide();
                   else if (info.offset.x > 60) prevSlide();
                 }}
-                className="relative max-w-sm w-full max-h-[85vh] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(90,18,29,0.15)] bg-white border border-[#C5A059]/20 touch-pan-y"
+                className="relative max-w-sm w-auto max-h-[80vh] flex flex-col items-center justify-center rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(90,18,29,0.15)] bg-white border border-[#C5A059]/20 touch-pan-y"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={cldUrl(photos[currentIndex], 1080)}
                   alt={`Expanded Photo ${currentIndex + 1}`}
-                  className="w-full h-full object-contain p-2 pointer-events-none select-none"
-                  style={{ maxHeight: '75vh' }}
+                  className="object-contain p-2 pointer-events-none select-none"
+                  style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '70vh', display: 'block', margin: '0 auto' }}
                 />
                 <div
-                  className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full font-editorial-serif text-[10px] uppercase tracking-widest bg-white/90 text-[#5A121D] shadow-sm border border-[#C5A059]/30"
+                  className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full font-editorial-serif text-[10px] uppercase tracking-widest bg-white/90 text-[#5A121D] shadow-sm border border-[#C5A059]/30 z-10"
                 >
                   {currentIndex + 1} / {photos.length}
                 </div>
