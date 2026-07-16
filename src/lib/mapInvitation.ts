@@ -148,7 +148,19 @@ function buildScheduleEvents(invitation: PublicInvitation): WeddingEvent[] {
 // none are set does it fall back to the timeline so those sections aren't empty.
 function buildEvents(invitation: PublicInvitation): WeddingEvent[] {
   const weddingEvents = buildWeddingEvents(invitation);
-  return weddingEvents.length > 0 ? weddingEvents : buildScheduleEvents(invitation);
+  if (weddingEvents.length > 0) {
+    const mainDayIndex = typeof invitation.settings?.main_wedding_day_index === "number"
+      ? (invitation.settings.main_wedding_day_index as number)
+      : 0;
+    if (mainDayIndex > 0 && mainDayIndex < weddingEvents.length) {
+      const reordered = [...weddingEvents];
+      const [mainEvent] = reordered.splice(mainDayIndex, 1);
+      reordered.unshift(mainEvent);
+      return reordered;
+    }
+    return weddingEvents;
+  }
+  return buildScheduleEvents(invitation);
 }
 
 // Derive the "add to calendar" entry straight from the wedding's own fields
