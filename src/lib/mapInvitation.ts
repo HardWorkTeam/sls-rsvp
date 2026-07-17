@@ -273,7 +273,21 @@ function buildGallery(invitation: PublicInvitation): string[] {
   const settingsUrls = Array.isArray(invitation.settings?.gallery_urls)
     ? (invitation.settings.gallery_urls as string[]).filter(Boolean)
     : [];
-  return [...albumPhotos, ...settingsUrls];
+
+  const coupleExtended = invitation.settings?.couple_extended as
+    | Record<string, Record<string, unknown>>
+    | undefined;
+  const excludedUrls = new Set(
+    [
+      invitation.cover_image_path,
+      invitation.wedding.bride_photo_path,
+      invitation.wedding.groom_photo_path,
+      coupleExtended?.bride?.photo,
+      coupleExtended?.groom?.photo,
+    ].filter((url): url is string => typeof url === "string" && url.length > 0),
+  );
+
+  return [...albumPhotos, ...settingsUrls].filter((url) => !excludedUrls.has(url));
 }
 
 export function mapToInvitationData(invitation: PublicInvitation): InvitationData {
