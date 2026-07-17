@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { m, AnimatePresence } from 'framer-motion';
-import { RsvpSettings } from '@/types/invitation';
-import { submitRsvp } from '@/lib/rsvp';
-import { Butterfly } from './Butterfly';
+import { submitRsvp } from "@/lib/rsvp";
+import { RsvpSettings } from "@/types/invitation";
+import { AnimatePresence, m } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { Butterfly } from "./Butterfly";
 
 interface RsvpSectionProps {
   weddingId: string;
@@ -13,7 +13,7 @@ interface RsvpSectionProps {
   guestName?: string;
 }
 
-type AttendStatus = 'attending' | 'declined' | '';
+type AttendStatus = "attending" | "declined" | "";
 
 interface Wish {
   id: string;
@@ -22,9 +22,24 @@ interface Wish {
 }
 
 const INITIAL_WISHES: Wish[] = [
-  { id: 'w-1', name: 'ម៉េង ហួរ', message: 'សូមជូនពរឱ្យអ្នកទាំងពីរស្រលាញ់គ្នារហូតដល់ចាស់កោងខ្នង ជួបតែសុភមង្គល!' },
-  { id: 'w-2', name: 'Sok Sopheak', message: 'Wishing you a beautiful wedding day and a lifetime of love and happiness.' },
-  { id: 'w-3', name: 'លីណា & វិចិត្រ', message: 'សូមឱ្យជីវិតអាពាហ៍ពិពាហ៍របស់អ្នកទាំងពីរពេញដោយសំណើច និងក្តីស្រឡាញ់ជានិរន្តរ៍!' },
+  {
+    id: "w-1",
+    name: "ម៉េង ហួរ",
+    message:
+      "សូមជូនពរឱ្យអ្នកទាំងពីរស្រលាញ់គ្នារហូតដល់ចាស់កោងខ្នង ជួបតែសុភមង្គល!",
+  },
+  {
+    id: "w-2",
+    name: "Sok Sopheak",
+    message:
+      "Wishing you a beautiful wedding day and a lifetime of love and happiness.",
+  },
+  {
+    id: "w-3",
+    name: "លីណា & វិចិត្រ",
+    message:
+      "សូមឱ្យជីវិតអាពាហ៍ពិពាហ៍របស់អ្នកទាំងពីរពេញដោយសំណើច និងក្តីស្រឡាញ់ជានិរន្តរ៍!",
+  },
 ];
 
 export const RsvpSection: React.FC<RsvpSectionProps> = ({
@@ -36,18 +51,19 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
   // RSVP deadline is driven by the real wedding data (rsvpSettings.deadline).
   // We read the calendar parts straight from the ISO string so timezone never
   // shifts the day. The static literal stays ONLY as a preview/no-data fallback.
-  const deadlineStr = (rsvpSettings?.deadline ?? '').split('T')[0];
-  const [dlY, dlM, dlD] = deadlineStr ? deadlineStr.split('-').map(Number) : [];
-  const formattedDeadline = deadlineText
-    ?? (dlY && dlM && dlD
-      ? `${new Date(Date.UTC(dlY, dlM - 1, dlD, 12)).toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' })} ${dlD}, ${dlY}`
-      : 'November 10, 2026');
-  const [name, setName] = useState(guestName ?? '');
-  const [status, setStatus] = useState<AttendStatus>('');
+  const deadlineStr = (rsvpSettings?.deadline ?? "").split("T")[0];
+  const [dlY, dlM, dlD] = deadlineStr ? deadlineStr.split("-").map(Number) : [];
+  const formattedDeadline =
+    deadlineText ??
+    (dlY && dlM && dlD
+      ? `${new Date(Date.UTC(dlY, dlM - 1, dlD, 12)).toLocaleDateString("en-US", { month: "long", timeZone: "UTC" })} ${dlD}, ${dlY}`
+      : "November 10, 2026");
+  const [name, setName] = useState(guestName ?? "");
+  const [status, setStatus] = useState<AttendStatus>("");
   const [guests, setGuests] = useState<number | string>(1);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCustomGuests, setIsCustomGuests] = useState(false);
-  const [wishes, setWishes] = useState('');
+  const [wishes, setWishes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -61,12 +77,15 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
   useEffect(() => {
     if (!isDropdownOpen) return;
     const onPointerDown = (e: PointerEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
-    document.addEventListener('pointerdown', onPointerDown);
-    return () => document.removeEventListener('pointerdown', onPointerDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [isDropdownOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -75,9 +94,18 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
     setSubmitting(true);
     setError(null);
     try {
-      await submitRsvp(weddingId, { name, status, guests: Number(guests) || 1, wishes });
+      await submitRsvp(weddingId, {
+        name,
+        status,
+        guests: Number(guests) || 1,
+        wishes,
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'មិនអាចផ្ញើបានទេ សូមព្យាយាមម្តងទៀត / Failed to submit. Please try again.');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "មិនអាចផ្ញើបានទេ សូមព្យាយាមម្តងទៀត / Failed to submit. Please try again.",
+      );
       setSubmitting(false);
       return;
     }
@@ -113,7 +141,8 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
           transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
           className="rounded-2xl p-6 md:p-10 bg-white border border-[#C5A059]/25 shadow-[0_30px_70px_rgba(90,18,29,0.04)] relative overflow-hidden"
           style={{
-            boxShadow: '0 35px 80px rgba(0,0,0,0.03), inset 0 0 50px rgba(255,255,255,0.95)',
+            boxShadow:
+              "0 35px 80px rgba(0,0,0,0.03), inset 0 0 50px rgba(255,255,255,0.95)",
           }}
         >
           {/* Inner border margin line */}
@@ -129,7 +158,10 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                 Confirm Your Presence
               </h2>
               <div className="text-xs text-[#2A2A2A]/70 mt-2 font-medium tracking-wider uppercase">
-                Please reply by <span className="text-[#5A121D] font-bold">{formattedDeadline}</span>
+                Please reply by{" "}
+                <span className="text-[#5A121D] font-bold">
+                  {formattedDeadline}
+                </span>
               </div>
               <div className="h-[0.5px] w-20 mx-auto mt-4 bg-[#C5A059]/40" />
             </div>
@@ -149,15 +181,16 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                     Thank You for RSVPing!
                   </h3>
                   <p className="font-sans text-xs text-[#2A2A2A]/75 leading-relaxed px-4">
-                    ការឆ្លើយតបរបស់អ្នកត្រូវបានរក្សាទុកដោយជោគជ័យ។ យើងទន្ទឹងរង់ចាំជួបអ្នកក្នុងថ្ងៃមង្គលនេះ!
+                    ការឆ្លើយតបរបស់អ្នកត្រូវបានរក្សាទុកដោយជោគជ័យ។
+                    យើងទន្ទឹងរង់ចាំជួបអ្នកក្នុងថ្ងៃមង្គលនេះ!
                   </p>
                   <div className="w-16 h-[0.5px] bg-[#C5A059]/25 mx-auto" />
                   <button
                     onClick={() => {
                       setSuccess(false);
-                      setName(guestName ?? '');
-                      setStatus('');
-                      setWishes('');
+                      setName(guestName ?? "");
+                      setStatus("");
+                      setWishes("");
                       setGuests(1);
                     }}
                     className="font-editorial-serif text-[10px] tracking-[0.3em] uppercase underline text-[#C5A059] hover:text-[#5A121D] transition-colors cursor-pointer"
@@ -166,7 +199,10 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                   </button>
                 </m.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5 relative z-10 text-left">
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-5 relative z-10 text-left"
+                >
                   {/* Full Name input */}
                   <div className="space-y-2">
                     <label className="font-editorial-serif text-[9px] tracking-widest uppercase block font-bold text-[#C5A059]">
@@ -188,37 +224,45 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                       Attendance / វត្តមាន *
                     </label>
                     <div className="grid grid-cols-2 gap-3">
-                      {(['attending', 'declined'] as AttendStatus[]).map((s) => (
-                        <button
-                          key={s}
-                          type="button"
-                          onClick={() => setStatus(s)}
-                          className="py-2.5 rounded-lg font-sans text-xs font-semibold transition-all duration-300 cursor-pointer border shadow-xs"
-                          style={{
-                            borderColor: status === s ? '#5A121D' : 'rgba(197,160,89,0.2)',
-                            background: status === s
-                              ? s === 'attending'
-                                ? 'rgba(90,18,29,0.06)'
-                                : 'rgba(186,12,47,0.04)'
-                              : '#ffffff',
-                            color: status === s ? '#5A121D' : 'rgba(42,42,42,0.6)',
-                            transform: status === s ? 'scale(1.02)' : 'scale(1)',
-                          }}
-                        >
-                          {s === 'attending' ? '✓ Attending' : '✗ Declined'}
-                        </button>
-                      ))}
+                      {(["attending", "declined"] as AttendStatus[]).map(
+                        (s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => setStatus(s)}
+                            className="py-2.5 rounded-lg font-sans text-xs font-semibold transition-all duration-300 cursor-pointer border shadow-xs"
+                            style={{
+                              borderColor:
+                                status === s
+                                  ? "#5A121D"
+                                  : "rgba(197,160,89,0.2)",
+                              background:
+                                status === s
+                                  ? s === "attending"
+                                    ? "rgba(90,18,29,0.06)"
+                                    : "rgba(186,12,47,0.04)"
+                                  : "#ffffff",
+                              color:
+                                status === s ? "#5A121D" : "rgba(42,42,42,0.6)",
+                              transform:
+                                status === s ? "scale(1.02)" : "scale(1)",
+                            }}
+                          >
+                            {s === "attending" ? "✓ Attending" : "✗ Declined"}
+                          </button>
+                        ),
+                      )}
                     </div>
                   </div>
 
                   {/* Guests Selector */}
                   <AnimatePresence>
-                    {status === 'attending' && (
+                    {status === "attending" && (
                       <m.div
                         initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
+                        animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.35, ease: 'easeInOut' }}
+                        transition={{ duration: 0.35, ease: "easeInOut" }}
                         className="space-y-4 overflow-hidden"
                       >
                         <div className="space-y-2">
@@ -231,7 +275,13 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                                 type="number"
                                 min="4"
                                 value={guests}
-                                onChange={(e) => setGuests(e.target.value === '' ? '' : Number(e.target.value))}
+                                onChange={(e) =>
+                                  setGuests(
+                                    e.target.value === ""
+                                      ? ""
+                                      : Number(e.target.value),
+                                  )
+                                }
                                 className="w-full bg-white border border-[#C5A059]/20 focus:border-[#5A121D] rounded-lg text-[#2A2A2A] text-xs px-3.5 py-3 pr-16 outline-none transition-all duration-300 shadow-xs appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0"
                                 placeholder="Enter number of guests"
                                 autoFocus
@@ -249,32 +299,41 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                             </div>
                           ) : (
                             <div className="relative" ref={dropdownRef}>
-                              <div 
-                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                              <div
+                                onClick={() =>
+                                  setIsDropdownOpen(!isDropdownOpen)
+                                }
                                 className="flex items-center justify-between cursor-pointer w-full bg-white border border-[#C5A059]/20 hover:border-[#5A121D]/50 rounded-lg text-[#2A2A2A] text-xs px-3.5 py-3 outline-none transition-all duration-300 shadow-xs"
                               >
-                                <span>{guests} {guests === 1 ? 'Guest' : 'Guests'}</span>
-                                <m.svg 
-                                  animate={{ rotate: isDropdownOpen ? 180 : 0 }} 
-                                  className="w-4 h-4 text-[#C5A059]" 
-                                  fill="none" 
-                                  viewBox="0 0 24 24" 
+                                <span>
+                                  {guests} {guests === 1 ? "Guest" : "Guests"}
+                                </span>
+                                <m.svg
+                                  animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                                  className="w-4 h-4 text-[#C5A059]"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
                                   stroke="currentColor"
                                 >
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 9l-7 7-7-7"
+                                  />
                                 </m.svg>
                               </div>
 
                               <AnimatePresence>
                                 {isDropdownOpen && (
-                                  <m.div 
+                                  <m.div
                                     initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
+                                    animate={{ opacity: 1, height: "auto" }}
                                     exit={{ opacity: 0, height: 0 }}
                                     className="mt-2 bg-white/95 backdrop-blur-md border border-[#C5A059]/30 rounded-lg shadow-lg z-20 overflow-hidden"
                                   >
                                     {[1, 2, 3].map((n) => (
-                                      <div 
+                                      <div
                                         key={n}
                                         onClick={() => {
                                           setGuests(n);
@@ -282,13 +341,13 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                                         }}
                                         className="px-4 py-3 cursor-pointer text-[#2A2A2A] hover:bg-[#C5A059]/10 transition-colors border-b border-[#C5A059]/10 text-xs"
                                       >
-                                        {n} {n === 1 ? 'Guest' : 'Guests'}
+                                        {n} {n === 1 ? "Guest" : "Guests"}
                                       </div>
                                     ))}
-                                    <div 
+                                    <div
                                       onClick={() => {
                                         setIsCustomGuests(true);
-                                        setGuests('');
+                                        setGuests("");
                                         setIsDropdownOpen(false);
                                       }}
                                       className="px-4 py-3 cursor-pointer text-[#2A2A2A] hover:bg-[#C5A059]/10 transition-colors text-xs"
@@ -325,37 +384,11 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                     disabled={submitting || !name || !status}
                     className="w-full cursor-pointer py-3.5 rounded-lg text-xs font-editorial-serif uppercase font-semibold tracking-widest text-[#FCFBF9] transition-all relative overflow-hidden bg-[#5A121D] hover:bg-[#7E1E2C] disabled:opacity-50 shadow-md hover:shadow-lg"
                   >
-                    {submitting ? 'Sending...' : 'Confirm RSVP'}
+                    {submitting ? "Sending..." : "Confirm RSVP"}
                   </button>
                 </form>
               )}
             </div>
-
-            {/* Wishes wall block */}
-            {wishesList.length > 0 && (
-              <div className="space-y-4">
-                <h4 className="font-editorial-serif text-[10px] tracking-[0.3em] text-[#C5A059] uppercase text-center font-bold">
-                  Wedding Wishes Wall
-                </h4>
-                <div className="space-y-3 max-h-56 overflow-y-auto pr-2 scrollbar-thin">
-                  {wishesList.map((w, index) => (
-                    <m.div
-                      key={w.id}
-                      initial={{ opacity: 0, y: 15 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      className="p-4 rounded-xl border border-[#C5A059]/15 bg-[#FCFBF9] text-left shadow-xs space-y-1 hover:border-[#5A121D]/35 transition-colors duration-300"
-                    >
-                      <p className="font-sans text-xs font-bold text-[#5A121D]">{w.name}</p>
-                      <p className="font-sans text-[10px] text-[#2A2A2A]/85 italic leading-relaxed">
-                        &ldquo;{w.message}&rdquo;
-                      </p>
-                    </m.div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </m.div>
       </div>

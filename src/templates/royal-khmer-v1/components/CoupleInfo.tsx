@@ -1,11 +1,16 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { m } from 'framer-motion';
-import { InvitationData } from '@/types/invitation';
-import { khmerSolarDate, khmerTimeLabel } from '@/lib/khmer';
-import { Photo } from '@/components/Photo';
-import { SectionHeading, DiamondDivider, DrawBorderFrame, LotusOrnament } from './KhmerOrnaments';
+import { Photo } from "@/components/Photo";
+import { khmerSolarDate, khmerTimeLabel } from "@/lib/khmer";
+import { InvitationData } from "@/types/invitation";
+import { m } from "framer-motion";
+import React from "react";
+import {
+  DiamondDivider,
+  DrawBorderFrame,
+  LotusOrnament,
+  SectionHeading,
+} from "./KhmerOrnaments";
 
 interface CoupleInfoProps {
   data: InvitationData;
@@ -18,16 +23,19 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
   const primaryEvent = data.events[0];
 
   // Dynamic customization strings with fallbacks
-  const fatherGroomEn = groom.fatherEn || '';
-  const motherGroomEn = groom.motherEn || '';
-  const fatherBrideEn = bride.fatherEn || '';
-  const motherBrideEn = bride.motherEn || '';
+  const fatherGroomEn = groom.fatherEn || "";
+  const motherGroomEn = groom.motherEn || "";
+  const fatherBrideEn = bride.fatherEn || "";
+  const motherBrideEn = bride.motherEn || "";
 
-  const inviteKh = data.invitationTextKh ?? 'មានកិត្តិយសសូមគោរពអញ្ជើញ ឯកឧត្តម លោកជំទាវ លោកអ្នកស្រី អ្នកនាងកញ្ញា ចូលរួមជាភ្ញៀវកិត្តិយស ដើម្បីប្រសិទ្ធពរជ័យ សិរីសួស្តីជ័យមង្គលក្នុងពិធីសិរីមង្គលអាពាហ៍ពិពាហ៍កូនប្រុស កូនស្រីរបស់យើងខ្ញុំ';
-  const inviteEn = data.invitationTextEn ?? '';
-  
-  const lunarDate = data.lunarDateText || (primaryEvent ? primaryEvent.dateKh : '');
-  const thankYou = data.thankYouText || 'THANK YOU! / សូមអរគុណ';
+  const inviteKh =
+    data.invitationTextKh ??
+    "មានកិត្តិយសសូមគោរពអញ្ជើញ ឯកឧត្តម លោកជំទាវ លោកអ្នកស្រី អ្នកនាងកញ្ញា ចូលរួមជាភ្ញៀវកិត្តិយស ដើម្បីប្រសិទ្ធពរជ័យ សិរីសួស្តីជ័យមង្គលក្នុងពិធីសិរីមង្គលអាពាហ៍ពិពាហ៍កូនប្រុស កូនស្រីរបស់យើងខ្ញុំ";
+  const inviteEn = data.invitationTextEn ?? "";
+
+  const lunarDate =
+    data.lunarDateText || (primaryEvent ? primaryEvent.dateKh : "");
+  const thankYou = data.thankYouText || "THANK YOU! / សូមអរគុណ";
 
   // One date/venue entry per wedding day — Khmer weddings often span two days.
   // data.events carries one event per wedding day (see mapInvitation).
@@ -35,8 +43,8 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
     const d = new Date(evt.dateSolar);
     return {
       id: evt.id,
-      monthName: d.toLocaleDateString('en-US', { month: 'long' }).toUpperCase(),
-      dayName: d.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase(),
+      monthName: d.toLocaleDateString("en-US", { month: "long" }).toUpperCase(),
+      dayName: d.toLocaleDateString("en-US", { weekday: "long" }).toUpperCase(),
       dateDay: d.getDate(),
       dateYear: d.getFullYear(),
       solarKh: khmerSolarDate(d),
@@ -50,15 +58,17 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
     <section
       className="rk-section"
       style={{
-        background: 'linear-gradient(180deg, rgba(31,16,10,0.5) 0%, rgba(44,24,16,0.15) 50%, rgba(31,16,10,0.5) 100%)',
-        backdropFilter: 'blur(8px)',
+        background:
+          "linear-gradient(180deg, rgba(31,16,10,0.5) 0%, rgba(44,24,16,0.15) 50%, rgba(31,16,10,0.5) 100%)",
+        backdropFilter: "blur(8px)",
       }}
     >
       {/* Watermark texture */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, #C9A84C 0px, #C9A84C 1px, transparent 1px, transparent 16px)',
+          backgroundImage:
+            "repeating-linear-gradient(45deg, #C9A84C 0px, #C9A84C 1px, transparent 1px, transparent 16px)",
         }}
       />
 
@@ -81,8 +91,9 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
           <DrawBorderFrame
             className="p-6 md:p-10 text-center flex flex-col items-center gap-6"
             style={{
-              background: 'linear-gradient(185deg, rgba(44, 24, 16, 0.85) 0%, rgba(26, 14, 8, 0.95) 100%)',
-              borderColor: 'rgba(201, 168, 76, 0.3)',
+              background:
+                "linear-gradient(185deg, rgba(44, 24, 16, 0.85) 0%, rgba(26, 14, 8, 0.95) 100%)",
+              borderColor: "rgba(201, 168, 76, 0.3)",
             }}
           >
             {/* Top Emblem */}
@@ -93,7 +104,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
             {/* Khmer Card Title */}
             <h3
               className="font-khmer-title text-base md:text-lg tracking-wide"
-              style={{ color: 'var(--rk-gold-light)', lineHeight: 1.7 }}
+              style={{ color: "var(--rk-gold-light)", lineHeight: 1.7 }}
             >
               សិរីសួស្តីអាពាហ៍ពិពាហ៍
             </h3>
@@ -151,7 +162,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               </div>
             </div>
 
-            <div className="w-1/3">
+            <div className="w-1/3" mx-auto>
               <DiamondDivider color="#C9A84C" />
             </div>
 
@@ -162,11 +173,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
 
             {/* Formal Request text */}
             <div className="space-y-3 max-w-lg mx-auto text-[11.5px] md:text-xs text-[#FAF6EF]/85 leading-relaxed">
-              {inviteKh && (
-                <p className="font-khmer-body">
-                  {inviteKh}
-                </p>
-              )}
+              {inviteKh && <p className="font-khmer-body">{inviteKh}</p>}
               {inviteEn && (
                 <p className="font-serif-en tracking-wider text-[9px] md:text-[10px] text-[#FAF6EF]/60 italic uppercase mt-1">
                   {inviteEn}
@@ -184,15 +191,28 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                 {groom.photo && (
                   <div className="flex flex-col items-center gap-1.5">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#C9A84C]/50 shadow-[0_0_0_3px_rgba(201,168,76,0.12)]">
-                      <Photo src={groom.photo} alt={groom.nameEn} fill sizes="80px" />
+                      <Photo
+                        src={groom.photo}
+                        alt={groom.nameEn}
+                        fill
+                        sizes="80px"
+                      />
                     </div>
                   </div>
                 )}
-                <div className="w-[1px] h-16 self-center" style={{ background: 'rgba(201,168,76,0.2)' }} />
+                <div
+                  className="w-[1px] h-16 self-center"
+                  style={{ background: "rgba(201,168,76,0.2)" }}
+                />
                 {bride.photo && (
                   <div className="flex flex-col items-center gap-1.5">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#C9A84C]/50 shadow-[0_0_0_3px_rgba(201,168,76,0.12)]">
-                      <Photo src={bride.photo} alt={bride.nameEn} fill sizes="80px" />
+                      <Photo
+                        src={bride.photo}
+                        alt={bride.nameEn}
+                        fill
+                        sizes="80px"
+                      />
                     </div>
                   </div>
                 )}
@@ -215,7 +235,10 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
 
               <div
                 className="w-8 h-8 rounded-full border flex items-center justify-center text-[10px] font-khmer-body text-[#C9A84C]"
-                style={{ borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201, 168, 76, 0.04)' }}
+                style={{
+                  borderColor: "rgba(201, 168, 76, 0.3)",
+                  background: "rgba(201, 168, 76, 0.04)",
+                }}
               >
                 ជាគូនឹង
               </div>
@@ -264,16 +287,19 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                     <span>{day.monthName}</span>
                     <div className="flex flex-col items-center border-x border-[#C9A84C]/20 px-4">
                       <span className="text-[9px]">{day.dayName}</span>
-                      <span className="text-xl md:text-2xl font-bold my-0.5 text-[#FAF6EF]">{day.dateDay}</span>
+                      <span className="text-xl md:text-2xl font-bold my-0.5 text-[#FAF6EF]">
+                        {day.dateDay}
+                      </span>
                       <span className="text-[9px]">{day.dateYear}</span>
                     </div>
-                    <span>AT {day.timeLabel.toUpperCase() || '5 PM'}</span>
+                    <span>AT {day.timeLabel.toUpperCase() || "5 PM"}</span>
                   </div>
 
                   {/* Time detail */}
                   {day.timeLabel && (
                     <p className="font-khmer-body text-xs opacity-75">
-                      {khmerTimeLabel(day.timeLabel)} ទៅ / Starting at {day.timeLabel}
+                      {khmerTimeLabel(day.timeLabel)} ទៅ / Starting at{" "}
+                      {day.timeLabel}
                     </p>
                   )}
 
@@ -287,7 +313,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               ))}
             </div>
 
-            <div className="w-1/4 my-2">
+            <div className="w-1/4 mx-auto my-2">
               <DiamondDivider color="#C9A84C" />
             </div>
 

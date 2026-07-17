@@ -1,11 +1,15 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { m } from 'framer-motion';
-import { InvitationData } from '@/types/invitation';
-import { khmerSolarDate, khmerTimeLabel } from '@/lib/khmer';
-import { Photo } from '@/components/Photo';
-import { EtherealBorderFrame, DiamondSeparator, ThinGoldRule } from './BotanicalAssets';
+import { Photo } from "@/components/Photo";
+import { khmerSolarDate, khmerTimeLabel } from "@/lib/khmer";
+import { InvitationData } from "@/types/invitation";
+import { m } from "framer-motion";
+import React from "react";
+import {
+  DiamondSeparator,
+  EtherealBorderFrame,
+  ThinGoldRule,
+} from "./BotanicalAssets";
 
 interface CoupleInfoProps {
   data: InvitationData;
@@ -18,16 +22,19 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
   const primaryEvent = data.events[0];
 
   // Dynamic customization strings with fallbacks
-  const fatherGroomEn = groom.fatherEn || '';
-  const motherGroomEn = groom.motherEn || '';
-  const fatherBrideEn = bride.fatherEn || '';
-  const motherBrideEn = bride.motherEn || '';
+  const fatherGroomEn = groom.fatherEn || "";
+  const motherGroomEn = groom.motherEn || "";
+  const fatherBrideEn = bride.fatherEn || "";
+  const motherBrideEn = bride.motherEn || "";
 
-  const inviteKh = data.invitationTextKh ?? 'មានកិត្តិយសសូមគោរពអញ្ជើញ ឯកឧត្តម លោកជំទាវ លោកអ្នកស្រី អ្នកនាងកញ្ញា ចូលរួមជាភ្ញៀវកិត្តិយស ដើម្បីប្រសិទ្ធពរជ័យ សិរីសួស្តីជ័យមង្គលក្នុងពិធីសិរីមង្គលអាពាហ៍ពិពាហ៍កូនប្រុស កូនស្រីរបស់យើងខ្ញុំ';
-  const inviteEn = data.invitationTextEn ?? '';
-  
-  const lunarDate = data.lunarDateText || (primaryEvent ? primaryEvent.dateKh : '');
-  const thankYou = data.thankYouText || 'THANK YOU! / សូមអរគុណ';
+  const inviteKh =
+    data.invitationTextKh ??
+    "មានកិត្តិយសសូមគោរពអញ្ជើញ ឯកឧត្តម លោកជំទាវ លោកអ្នកស្រី អ្នកនាងកញ្ញា ចូលរួមជាភ្ញៀវកិត្តិយស ដើម្បីប្រសិទ្ធពរជ័យ សិរីសួស្តីជ័យមង្គលក្នុងពិធីសិរីមង្គលអាពាហ៍ពិពាហ៍កូនប្រុស កូនស្រីរបស់យើងខ្ញុំ";
+  const inviteEn = data.invitationTextEn ?? "";
+
+  const lunarDate =
+    data.lunarDateText || (primaryEvent ? primaryEvent.dateKh : "");
+  const thankYou = data.thankYouText || "THANK YOU! / សូមអរគុណ";
 
   // One date/venue entry per wedding day — Khmer weddings often span two days.
   // data.events carries one event per wedding day (see mapInvitation).
@@ -35,8 +42,8 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
     const d = new Date(evt.dateSolar);
     return {
       id: evt.id,
-      monthName: d.toLocaleDateString('en-US', { month: 'long' }).toUpperCase(),
-      dayName: d.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase(),
+      monthName: d.toLocaleDateString("en-US", { month: "long" }).toUpperCase(),
+      dayName: d.toLocaleDateString("en-US", { weekday: "long" }).toUpperCase(),
       dateDay: d.getDate(),
       dateYear: d.getFullYear(),
       solarKh: khmerSolarDate(d),
@@ -48,7 +55,6 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
 
   return (
     <section className="relative w-full py-20 overflow-hidden flex flex-col items-center bg-transparent">
-      
       {/* Section Header */}
       <div className="flex flex-col items-center gap-3 text-center mb-10">
         <p className="font-emerald-sans text-[10px] tracking-[0.35em] uppercase text-emerald-gold">
@@ -75,11 +81,20 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
           className="w-full"
         >
           <EtherealBorderFrame className="text-center flex flex-col items-center gap-6 shadow-[0_8px_30px_rgba(201,168,76,0.1)]">
-            
             {/* Top Emblem */}
             <div className="flex justify-center mb-2">
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" className="text-emerald-gold">
-                <path d="M20 5 L25 15 L35 20 L25 25 L20 35 L15 25 L5 20 L15 15 Z" fill="currentColor" opacity="0.8" />
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                fill="none"
+                className="text-emerald-gold"
+              >
+                <path
+                  d="M20 5 L25 15 L35 20 L25 25 L20 35 L15 25 L5 20 L15 15 Z"
+                  fill="currentColor"
+                  opacity="0.8"
+                />
                 <circle cx="20" cy="20" r="4" fill="#1a2818" />
               </svg>
             </div>
@@ -142,7 +157,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               </div>
             </div>
 
-            <div className="w-1/3 my-2">
+            <div className="w-1/3 mx-auto my-2">
               <DiamondSeparator />
             </div>
 
@@ -153,11 +168,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
 
             {/* Formal Request text */}
             <div className="space-y-4 max-w-lg mx-auto text-[11.5px] md:text-xs text-emerald-ivory/85 leading-relaxed">
-              {inviteKh && (
-                <p className="font-emerald-serif">
-                  {inviteKh}
-                </p>
-              )}
+              {inviteKh && <p className="font-emerald-serif">{inviteKh}</p>}
               {inviteEn && (
                 <p className="font-emerald-sans tracking-wider text-[9px] md:text-[10px] text-emerald-ivory/60 uppercase">
                   {inviteEn}
@@ -174,13 +185,23 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               <div className="flex items-end justify-center gap-4 w-full py-2">
                 {groom.photo && (
                   <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-emerald-300/50 shadow-[0_0_0_3px_rgba(52,211,153,0.10)]">
-                    <Photo src={groom.photo} alt={groom.nameEn} fill sizes="80px" />
+                    <Photo
+                      src={groom.photo}
+                      alt={groom.nameEn}
+                      fill
+                      sizes="80px"
+                    />
                   </div>
                 )}
                 <div className="w-[1px] h-16 self-center bg-emerald-200/30" />
                 {bride.photo && (
                   <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-emerald-300/50 shadow-[0_0_0_3px_rgba(52,211,153,0.10)]">
-                    <Photo src={bride.photo} alt={bride.nameEn} fill sizes="80px" />
+                    <Photo
+                      src={bride.photo}
+                      alt={bride.nameEn}
+                      fill
+                      sizes="80px"
+                    />
                   </div>
                 )}
               </div>
@@ -248,16 +269,19 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
                     <span>{day.monthName}</span>
                     <div className="flex flex-col items-center border-x border-emerald-gold/20 px-5">
                       <span className="text-[9px]">{day.dayName}</span>
-                      <span className="text-2xl md:text-3xl font-emerald-serif font-bold my-1 text-emerald-ivory">{day.dateDay}</span>
+                      <span className="text-2xl md:text-3xl font-emerald-serif font-bold my-1 text-emerald-ivory">
+                        {day.dateDay}
+                      </span>
                       <span className="text-[9px]">{day.dateYear}</span>
                     </div>
-                    <span>AT {day.timeLabel || '5 PM'}</span>
+                    <span>AT {day.timeLabel || "5 PM"}</span>
                   </div>
 
                   {/* Time detail */}
                   {day.timeLabel && (
                     <p className="font-emerald-serif text-xs opacity-80">
-                      {khmerTimeLabel(day.timeLabel)} ទៅ / Starting at {day.timeLabel}
+                      {khmerTimeLabel(day.timeLabel)} ទៅ / Starting at{" "}
+                      {day.timeLabel}
                     </p>
                   )}
 
@@ -271,7 +295,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               ))}
             </div>
 
-            <div className="w-1/4 my-4">
+            <div className="w-1/4 mx-auto my-4">
               <DiamondSeparator />
             </div>
 
