@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { m, AnimatePresence } from 'framer-motion';
+import { m } from 'framer-motion';
 import { GiftRegistryItem as RegistryType } from '@/types/invitation';
 import { EtherealBorderFrame, ThinGoldRule, DiamondSeparator } from './BotanicalAssets';
 
@@ -62,7 +62,8 @@ export const GiftRegistry: React.FC<{ registries: RegistryType[] }> = ({ registr
                     
                     {registry.qrCodeUrl && (
                       <div className="w-32 h-32 relative mb-4 p-2 bg-white rounded-lg shadow-sm border border-emerald-gold/20 flex items-center justify-center overflow-hidden">
-                        <img 
+                        {/* eslint-disable-next-line @next/next/no-img-element -- QR sources may be data URLs. */}
+                        <img
                           src={registry.qrCodeUrl} 
                           alt={`${registry.bankName} QR Code`}
                           className="w-full h-full object-contain p-1"

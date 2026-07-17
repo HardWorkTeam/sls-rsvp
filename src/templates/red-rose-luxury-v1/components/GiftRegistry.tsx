@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { m, AnimatePresence } from 'framer-motion';
+import { m } from 'framer-motion';
 import { GiftRegistryItem } from '@/types/invitation';
 import { SectionHeading, DiamondDivider, DrawBorderFrame } from '../../royal-khmer-v1/components/KhmerOrnaments';
 
@@ -74,6 +74,7 @@ export const GiftRegistry: React.FC<GiftProps> = ({ registries }) => {
                         padding: '4px',
                       }}
                     >
+                      {/* eslint-disable-next-line @next/next/no-img-element -- QR sources may be data URLs. */}
                       <img
                         src={item.qrCodeUrl}
                         alt={`QR Code ${item.bankName}`}

@@ -46,6 +46,7 @@ export const GiftRegistry: React.FC<GiftProps> = ({ registries }) => {
             {item.qrCodeUrl && (
               <div className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden p-1"
                 style={{ border: '1px solid rgba(106, 140, 178, 0.3)', background: 'rgba(255,255,255,0.05)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element -- QR sources may be data URLs. */}
                 <img src={item.qrCodeUrl} alt={item.bankName} className="w-full h-full object-cover rounded-lg" />
               </div>
             )}

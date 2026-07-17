@@ -5,7 +5,7 @@ import { m } from 'framer-motion';
 import { InvitationData } from '@/types/invitation';
 import { khmerSolarDate, khmerTimeLabel } from '@/lib/khmer';
 import { Photo } from '@/components/Photo';
-import { SectionHeading, DiamondDivider, DrawBorderFrame, LotusOrnament } from '../../royal-khmer-v1/components/KhmerOrnaments';
+import { DiamondDivider, DrawBorderFrame, LotusOrnament } from '../../royal-khmer-v1/components/KhmerOrnaments';
 
 interface CoupleInfoProps {
   data: InvitationData;

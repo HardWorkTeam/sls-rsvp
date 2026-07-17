@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useSyncExternalStore } from 'react';
 
 interface CountdownProps {
   targetDate: string;
@@ -15,11 +15,14 @@ interface TimeLeft {
 }
 
 export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0, ended: false });
 
   useEffect(() => {
-    setMounted(true);
     const calc = () => {
       const diff = +new Date(targetDate) - +new Date();
       if (diff <= 0) {
@@ -34,7 +37,6 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
         ended:   false,
       });
     };
-    calc();
     const timer = setInterval(calc, 1000);
     return () => clearInterval(timer);
   }, [targetDate]);

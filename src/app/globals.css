@@ -3,6 +3,8 @@
 :root {
   --background: #faf7f2;
   --foreground: #1c1917;
+  --font-geist-sans: Arial, Helvetica, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
 
   /* Royal Khmer */
   --rk-gold: #C9A84C;

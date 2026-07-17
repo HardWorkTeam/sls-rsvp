@@ -75,6 +75,7 @@ export const GiftRegistry: React.FC<GiftProps> = ({ registries }) => {
                       padding: '4px',
                     }}
                   >
+                    {/* eslint-disable-next-line @next/next/no-img-element -- QR sources may be data URLs. */}
                     <img
                       src={item.qrCodeUrl}
                       alt={`QR Code ${item.bankName}`}

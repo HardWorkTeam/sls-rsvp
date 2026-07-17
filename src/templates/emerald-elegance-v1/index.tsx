@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { m, useScroll, useSpring } from 'framer-motion';
 import { MotionProvider } from '@/components/MotionProvider';
 import { TemplateProps } from '../registry';
@@ -17,7 +17,19 @@ import { Gallery } from './components/Gallery';
 import { GiftRegistry } from './components/GiftRegistry';
 import { RsvpSection } from './components/RsvpSection';
 import { Footer } from './components/Footer';
-import { DiamondSeparator, EtherealBorderFrame } from './components/BotanicalAssets';
+import { DiamondSeparator } from './components/BotanicalAssets';
+
+const DESKTOP_QUERY = '(min-width: 769px)';
+
+function subscribeToDesktop(onChange: () => void) {
+  const media = window.matchMedia(DESKTOP_QUERY);
+  media.addEventListener('change', onChange);
+  return () => media.removeEventListener('change', onChange);
+}
+
+function getDesktopSnapshot() {
+  return window.matchMedia(DESKTOP_QUERY).matches;
+}
 
 // ─── Scroll Reveal Wrapper ──────────────────────────────────────────────────
 const CinematicReveal: React.FC<{
@@ -66,10 +78,13 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
 
   // Custom Cursor state
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isDesktop, setIsDesktop] = useState(true);
+  const isDesktop = useSyncExternalStore(
+    subscribeToDesktop,
+    getDesktopSnapshot,
+    () => false,
+  );
 
   useEffect(() => {
-    setIsDesktop(window.innerWidth > 768);
     const updateMousePosition = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { Couple, WeddingEvent } from '@/types/invitation';
 import { CoverPhoto } from '@/components/CoverPhoto';
-import { LotusOrnament, DiamondDivider } from '../../royal-khmer-v1/components/KhmerOrnaments';
+import { LotusOrnament } from '../../royal-khmer-v1/components/KhmerOrnaments';
 
 interface CoverProps {
   couple: Couple;

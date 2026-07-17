@@ -1,8 +1,5 @@
 import type { PublicInvitation } from "@/types/invitation";
 
-const img = (id: string, w = 1200) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
-
 // Photos for the preview. Save them into sls-rsvp/public/ with these filenames.
 const COVER_PHOTO = "/preview-cover.jpg"; // couple together, Khmer attire
 const BRIDE_PHOTO = "/preview-bride.jpg"; // bride, gold traditional dress

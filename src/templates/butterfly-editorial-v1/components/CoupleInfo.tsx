@@ -61,7 +61,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
     visible: {
       clipPath: 'inset(0 0% 0 0)',
       opacity: 1,
-      transition: { duration: 1.6, ease: 'easeOut' as any },
+      transition: { duration: 1.6, ease: 'easeOut' as const },
     },
   };
 

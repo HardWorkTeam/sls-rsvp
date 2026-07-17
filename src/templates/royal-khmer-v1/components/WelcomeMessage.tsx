@@ -24,7 +24,7 @@ export const WelcomeMessage: React.FC<WelcomeMessageProps> = ({
     hidden: { filter: 'blur(8px)', opacity: 0, y: 10 },
     visible: {
       filter: 'blur(0px)', opacity: 1, y: 0,
-      transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] as any },
+      transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] as const },
     },
   };
 

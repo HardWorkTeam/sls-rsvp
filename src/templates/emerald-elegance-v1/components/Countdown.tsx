@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { DiamondSeparator, ThinGoldRule } from './BotanicalAssets';
 
@@ -13,40 +13,17 @@ interface TimeLeft {
   seconds: number;
 }
 
-export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    const target = new Date(targetDate).getTime();
-
-    const updateTimer = () => {
-      const now = new Date().getTime();
-      const distance = target - now;
-
-      if (distance < 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        return;
-      }
-
-      setTimeLeft({
-        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000)
-      });
-    };
-
-    updateTimer();
-    const timerId = setInterval(updateTimer, 1000);
-    return () => clearInterval(timerId);
-  }, [targetDate]);
-
-  if (!isMounted) return null;
-
-  const TimeUnit = ({ label, value, delay }: { label: string; value: number; delay: number }) => (
-    <m.div 
+function TimeUnit({
+  label,
+  value,
+  delay,
+}: {
+  label: string;
+  value: number;
+  delay: number;
+}) {
+  return (
+    <m.div
       className="flex flex-col items-center justify-center w-[70px]"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -70,6 +47,41 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
       </span>
     </m.div>
   );
+}
+
+export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const target = new Date(targetDate).getTime();
+
+    const updateTimer = () => {
+      const now = new Date().getTime();
+      const distance = target - now;
+
+      if (distance < 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      setTimeLeft({
+        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((distance % (1000 * 60)) / 1000)
+      });
+    };
+
+    const timerId = setInterval(updateTimer, 1000);
+    return () => clearInterval(timerId);
+  }, [targetDate]);
+
+  if (!mounted) return null;
 
   return (
     <m.section 

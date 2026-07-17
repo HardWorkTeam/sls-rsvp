@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { m, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Couple } from '@/types/invitation';
 import { CoverPhoto } from '@/components/CoverPhoto';
-import { TopBotanicalBranch, BottomBotanicalBranch, ThinGoldRule, DiamondSeparator } from './BotanicalAssets';
+import { TopBotanicalBranch, BottomBotanicalBranch, DiamondSeparator } from './BotanicalAssets';
 
 interface CoverProps {
   couple: Couple;

@@ -20,11 +20,12 @@ type PhotoProps = BaseProps & {
  * the invitation goes through here so it is served as responsive AVIF/WebP from
  * Cloudinary's edge instead of the full-resolution original.
  */
-export function Photo({ fill, sizes, style, ...rest }: PhotoProps) {
+export function Photo({ fill, sizes, style, alt, ...rest }: PhotoProps) {
   if (fill) {
     return (
       <Image
         loader={cloudinaryLoader}
+        alt={alt}
         fill
         sizes={sizes ?? "(max-width: 768px) 100vw, 800px"}
         style={{ objectFit: "cover", ...style }}
@@ -38,6 +39,7 @@ export function Photo({ fill, sizes, style, ...rest }: PhotoProps) {
   return (
     <Image
       loader={cloudinaryLoader}
+      alt={alt}
       width={0}
       height={0}
       sizes={sizes ?? "(max-width: 768px) 50vw, 400px"}

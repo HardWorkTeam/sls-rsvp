@@ -28,7 +28,7 @@ import { GiftRegistry }  from './components/GiftRegistry';
 import { RsvpForm }      from './components/RsvpSection';
 import { Footer }        from './components/Footer';
 import { Countdown }     from './components/Countdown';
-import { DiamondDivider, LotusOrnament } from '../royal-khmer-v1/components/KhmerOrnaments';
+import { LotusOrnament } from '../royal-khmer-v1/components/KhmerOrnaments';
 
 // ─── Scroll Reveal Wrapper ──────────────────────────────────────────────────
 const CinematicReveal: React.FC<{

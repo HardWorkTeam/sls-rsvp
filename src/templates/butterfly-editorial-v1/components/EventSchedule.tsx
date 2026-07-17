@@ -199,7 +199,7 @@ export const EventSchedule: React.FC<EventScheduleProps> = ({ events, lunarDateT
       opacity: 1,
       x: 0,
       y: 0,
-      transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] as any },
+      transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] as const },
     },
   };
 

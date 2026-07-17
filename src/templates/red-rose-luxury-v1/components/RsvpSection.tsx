@@ -41,7 +41,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ weddingId, rsvpSettings, gue
   // Wishes live state wall
   const [wishesList, setWishesList] = useState<Wish[]>(INITIAL_WISHES);
 
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close the guest-count dropdown when tapping anywhere outside it.

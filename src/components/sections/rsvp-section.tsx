@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { CheckCircle2, HeartHandshake } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { SectionHeading } from "@/components/sections/story-section";
 import { PUBLIC_API_URL } from "@/lib/api";
@@ -34,7 +34,7 @@ export function RsvpSection({ code, guestName }: { code: string; guestName?: str
     resolver: zodResolver(rsvpSchema),
     defaultValues: { guest_name: guestName ?? "", phone: "", number_of_guests: 1, message: "", status: "accepted" },
   });
-  const status = form.watch("status");
+  const status = useWatch({ control: form.control, name: "status" });
 
   const onSubmit = form.handleSubmit(async (values) => {
     setError(null);
