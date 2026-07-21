@@ -180,7 +180,7 @@ export const CoupleInfo: React.FC<CoupleInfoProps> = ({ data }) => {
               </div>
             </div>
 
-            <div className="w-1/3">
+            <div className="w-1/3" style={{ margin: "0 auto" }}>
               <DiamondDivider color="#E8C97A" />
             </div>
 
