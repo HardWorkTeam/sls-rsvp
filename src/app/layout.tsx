@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 /* eslint-disable @next/next/no-page-custom-font */
 
@@ -28,7 +29,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#faf7f2]">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#faf7f2]">
+        {children}
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
