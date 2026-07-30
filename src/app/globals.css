@@ -279,7 +279,7 @@ html {
   background-color: #F8FAFC;
   background-image:
     linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 100%),
-    url("/blue-ethereal-bg.png");
+    url("/blue-ethereal-bg.webp");
   background-size: cover;
   background-position: center top;
   background-attachment: fixed;
@@ -295,7 +295,7 @@ html {
 
 .bg-pattern-editorial {
   background-color: var(--ed-ivory);
-  background-image: url('/butterfly-artwork-bg.png');
+  background-image: url('/butterfly-artwork-bg.webp');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -304,7 +304,7 @@ html {
 
 .bg-pattern-emerald {
   background-color: #f8f6f0;
-  background-image: url("/ethereal-bg.png");
+  background-image: url("/ethereal-bg.webp");
   background-size: cover;
   background-position: center top;
   background-attachment: fixed;

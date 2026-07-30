@@ -1,9 +1,9 @@
 import type { PublicInvitation } from "@/types/invitation";
 
 // Photos for the preview. Save them into sls-rsvp/public/ with these filenames.
-const COVER_PHOTO = "/preview-cover.jpg"; // couple together, Khmer attire
-const BRIDE_PHOTO = "/preview-bride.jpg"; // bride, gold traditional dress
-const GROOM_PHOTO = "/preview-groom.jpg"; // groom, black suit
+const COVER_PHOTO = "/preview-cover.webp"; // couple together, Khmer attire
+const BRIDE_PHOTO = "/preview-bride.webp"; // bride, gold traditional dress
+const GROOM_PHOTO = "/preview-groom.webp"; // groom, black suit
 
 /**
  * A fully-populated, self-contained sample invitation used to render a

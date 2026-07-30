@@ -68,7 +68,7 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
       {/* Fixed Butterfly background underlay */}
       <div
         className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat pointer-events-none"
-        style={{ backgroundImage: "url('/butterfly-artwork-bg.png')" }}
+        style={{ backgroundImage: "url('/butterfly-artwork-bg.webp')" }}
       />
 
       {/* 1. COVER (Envelope reveal and first slide card) */}

@@ -60,7 +60,7 @@ export default function AngkorHeritageV1Template({ data, guestName }: TemplatePr
       {/* Fixed Angkor Wat background underlay */}
       <div
         className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat pointer-events-none"
-        style={{ backgroundImage: "url('/angkor-heritage-bg.jpg')" }}
+        style={{ backgroundImage: "url('/angkor-heritage-bg.webp')" }}
       />
 
       {/* ── COVER ── */}
