@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
-import { submitRsvp } from '@/lib/rsvp';
+import { useRsvpForm, type RsvpAttendStatus } from '@/lib/useRsvpForm';
 import { EtherealBorderFrame, ThinGoldRule } from './BotanicalAssets';
 
 interface RsvpProps {
@@ -12,48 +12,21 @@ interface RsvpProps {
   guestName?: string;
 }
 
-type Status = 'attending' | 'declined' | '';
+type Status = RsvpAttendStatus;
 
 export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, guestName }) => {
-  const [name, setName] = useState(guestName ?? '');
-  const [status, setStatus] = useState<Status>('');
-  const [guests, setGuests] = useState<number | string>(1);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isCustomGuests, setIsCustomGuests] = useState(false);
-  const [wishes, setWishes] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [, setError] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Close the guest-count dropdown when tapping anywhere outside it.
-  useEffect(() => {
-    if (!isDropdownOpen) return;
-    const onPointerDown = (e: PointerEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-    document.addEventListener('pointerdown', onPointerDown);
-    return () => document.removeEventListener('pointerdown', onPointerDown);
-  }, [isDropdownOpen]);
+  const {
+    name, setName,
+    status, setStatus,
+    guests, setGuests,
+    isDropdownOpen, setIsDropdownOpen,
+    isCustomGuests, setIsCustomGuests,
+    wishes, setWishes,
+    submitting, success,
+    dropdownRef, submit, reset,
+  } = useRsvpForm(weddingId, guestName);
 
   const deadlineDate = new Date(rsvpSettings.deadline).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !status) return;
-    setSubmitting(true);
-    setError(null);
-    try {
-      await submitRsvp(weddingId, { name, status, guests: Number(guests) || 1, wishes });
-      setSuccess(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'មិនអាចផ្ញើបានទេ សូមព្យាយាមម្តងទៀត / Failed to submit. Please try again.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const inputStyle: React.CSSProperties = {
     background: 'rgba(255, 255, 255, 0.4)',
@@ -91,7 +64,7 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
                   <ThinGoldRule />
                 </div>
                 <button 
-                  onClick={() => { setSuccess(false); setName(guestName ?? ''); setStatus(''); setWishes(''); }}
+                  onClick={reset}
                   className="font-emerald-sans text-[10px] tracking-widest uppercase text-emerald-gold hover:text-emerald-ivory transition-colors underline"
                 >
                   Submit another response

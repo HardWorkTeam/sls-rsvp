@@ -1,37 +1,25 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { RsvpSettings } from '@/types/invitation';
-import { submitRsvp } from '@/lib/rsvp';
+import { useRsvpForm, type RsvpAttendStatus } from '@/lib/useRsvpForm';
 
 interface RsvpProps { weddingId: string; rsvpSettings: RsvpSettings; guestName?: string; }
 
-type Status = 'attending' | 'declined' | '';
+type Status = RsvpAttendStatus;
 
 export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestName }) => {
-  const [name, setName] = useState(guestName ?? '');
-  const [status, setStatus] = useState<Status>('');
-  const [guests, setGuests] = useState<number | string>(1);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isCustomGuests, setIsCustomGuests] = useState(false);
-  const [wishes, setWishes] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [, setError] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Close the guest-count dropdown when tapping anywhere outside it.
-  useEffect(() => {
-    if (!isDropdownOpen) return;
-    const onPointerDown = (e: PointerEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-    document.addEventListener('pointerdown', onPointerDown);
-    return () => document.removeEventListener('pointerdown', onPointerDown);
-  }, [isDropdownOpen]);
+  const {
+    name, setName,
+    status, setStatus,
+    guests, setGuests,
+    isDropdownOpen, setIsDropdownOpen,
+    isCustomGuests, setIsCustomGuests,
+    wishes, setWishes,
+    submitting, success,
+    dropdownRef, submit, reset,
+  } = useRsvpForm(weddingId, guestName);
 
   const inputStyle: React.CSSProperties = {
     background: 'rgba(255,255,240,0.7)',
@@ -45,21 +33,6 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
     outline: 'none',
   };
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !status) return;
-    setSubmitting(true);
-    setError(null);
-    try {
-      await submitRsvp(weddingId, { name, status, guests: Number(guests) || 1, wishes });
-      setSuccess(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'មិនអាចផ្ញើបានទេ សូមព្យាយាមម្តងទៀត / Failed to submit. Please try again.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   if (success) return (
     <section className="py-24 px-6 flex flex-col items-center justify-center text-center min-h-[40vh]"
       style={{ background: 'linear-gradient(180deg, rgba(255, 243, 208, 0.85) 0%, rgba(255, 232, 154, 0.85) 100%)', backdropFilter: 'blur(8px)' }}>
@@ -67,7 +40,7 @@ export const RsvpForm: React.FC<RsvpProps> = ({ weddingId, rsvpSettings, guestNa
         <span style={{ fontSize: '3rem' }}>🌸</span>
         <h3 className="font-khmer-title text-xl" style={{ color: '#5C3A00', lineHeight: 1.7 }}>អរគុណសម្រាប់ការឆ្លើយតប!</h3>
         <p className="font-serif-en italic text-sm" style={{ color: '#8B6014', opacity: 0.8 }}>Thank you. We look forward to celebrating with you.</p>
-        <button onClick={() => { setSuccess(false); setName(guestName ?? ''); setStatus(''); setWishes(''); }}
+        <button onClick={reset}
           className="font-serif-en text-xs tracking-widest underline" style={{ color: '#B8860B' }}>
           Submit another response
         </button>

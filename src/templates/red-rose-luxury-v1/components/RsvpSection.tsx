@@ -1,9 +1,9 @@
 "use client";
 
-import { submitRsvp } from "@/lib/rsvp";
+import { useRsvpForm, type RsvpAttendStatus } from "@/lib/useRsvpForm";
 import { RsvpSettings } from "@/types/invitation";
 import { AnimatePresence, m } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   DiamondDivider,
   DrawBorderFrame,
@@ -17,7 +17,7 @@ interface RsvpFormProps {
   guestName?: string;
 }
 
-type AttendStatus = "attending" | "declined" | "";
+type AttendStatus = RsvpAttendStatus;
 
 interface Wish {
   id: string;
@@ -61,71 +61,38 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({
   rsvpSettings,
   guestName,
 }) => {
-  const [name, setName] = useState(guestName ?? "");
-  const [status, setStatus] = useState<AttendStatus>("");
-  const [guests, setGuests] = useState<number | string>(1);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isCustomGuests, setIsCustomGuests] = useState(false);
-  const [wishes, setWishes] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-
   // Wishes live state wall
   const [wishesList, setWishesList] = useState<Wish[]>(INITIAL_WISHES);
 
-  const [, setError] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Close the guest-count dropdown when tapping anywhere outside it.
-  useEffect(() => {
-    if (!isDropdownOpen) return;
-    const onPointerDown = (e: PointerEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-    document.addEventListener("pointerdown", onPointerDown);
-    return () => document.removeEventListener("pointerdown", onPointerDown);
-  }, [isDropdownOpen]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !status) return;
-    setSubmitting(true);
-    setError(null);
-    try {
-      await submitRsvp(weddingId, {
-        name,
-        status,
-        guests: Number(guests) || 1,
-        wishes,
-      });
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "មិនអាចផ្ញើបានទេ សូមព្យាយាមម្តងទៀត / Failed to submit. Please try again.",
-      );
-      setSubmitting(false);
-      return;
-    }
-
+  const {
+    name,
+    setName,
+    status,
+    setStatus,
+    guests,
+    setGuests,
+    isDropdownOpen,
+    setIsDropdownOpen,
+    isCustomGuests,
+    setIsCustomGuests,
+    wishes,
+    setWishes,
+    submitting,
+    success,
+    setSuccess,
+    dropdownRef,
+    submit: handleSubmit,
+  } = useRsvpForm(weddingId, guestName, (submitted) => {
     // Add wishes to live board if written
-    if (wishes.trim()) {
+    if (submitted.wishes.trim()) {
       const newWish: Wish = {
         id: `w-user-${Date.now()}`,
-        name: name,
-        message: wishes,
+        name: submitted.name,
+        message: submitted.wishes,
       };
       setWishesList((prev) => [newWish, ...prev]);
     }
-
-    setSubmitting(false);
-    setSuccess(true);
-  };
+  });
 
   return (
     <section
