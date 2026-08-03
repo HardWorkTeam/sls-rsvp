@@ -367,30 +367,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({
             </DrawBorderFrame>
           </m.form>
         )}
-
-        {/* ─── LIVE BLESSINGS / WISHES WALL MARQUEE ─── */}
-        <div className="space-y-4 pt-6">
-          <div className="text-center space-y-1">
-            <h4 className="font-khmer-title text-sm text-[#E8C97A]">
-              ពាក្យជូនពរផ្ទាល់
-            </h4>
-            <p className="font-serif-en text-[9px] tracking-widest text-[#FAF6EF]/50 uppercase">
-              Live blessings wall
-            </p>
-          </div>
-
-          <div
-            className="relative h-[250px] overflow-hidden rounded-2xl p-4 border border-[#E8C97A]/25"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(92, 3, 12, 0.4) 0%, rgba(38, 2, 6, 0.6) 100%)",
-            }}
-          >
-            {/* Soft vertical fade borders */}
-            <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#260206] to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#3D0207] to-transparent z-10 pointer-events-none" />
-          </div>
-        </div>
       </div>
     </section>
   );
