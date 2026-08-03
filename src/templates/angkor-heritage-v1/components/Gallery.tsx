@@ -1,6 +1,7 @@
 "use client";
 
 import { Photo } from "@/components/Photo";
+import { Portal } from "@/components/Portal";
 import { AnimatePresence, m } from "framer-motion";
 import React, { useEffect, useState } from "react";
 
@@ -248,124 +249,128 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
           </div>
         </m.div>
 
-        {/* Lightbox Modal */}
-        <AnimatePresence>
-          {lightbox !== null && (
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden"
-              style={{
-                background: "rgba(20, 12, 0, 0.92)",
-                backdropFilter: "blur(16px)",
-              }}
-              onClick={() => setLightbox(null)}
-            >
+        {/* Lightbox Modal — portalled to <body>: this section sets a
+            backdrop-filter, which makes it the containing block for fixed
+            children and would otherwise pin the overlay to the section box. */}
+        <Portal>
+          <AnimatePresence>
+            {lightbox !== null && (
               <m.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.3 }}
-                drag={photos.length > 1 ? "x" : false}
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.5}
-                onDragEnd={(_, info) => {
-                  if (info.offset.x < -60)
-                    setLightbox((i) =>
-                      i !== null ? (i + 1) % photos.length : null,
-                    );
-                  else if (info.offset.x > 60)
-                    setLightbox((i) =>
-                      i !== null
-                        ? (i - 1 + photos.length) % photos.length
-                        : null,
-                    );
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden"
+                style={{
+                  background: "rgba(20, 12, 0, 0.92)",
+                  backdropFilter: "blur(16px)",
                 }}
-                className="relative w-full h-full max-h-[85vh] flex items-center justify-center p-2 touch-pan-y"
-                onClick={(e) => e.stopPropagation()}
+                onClick={() => setLightbox(null)}
               >
-                <Photo
-                  src={photos[lightbox]}
-                  alt={`Fullview photo ${lightbox + 1}`}
-                  sizes="100vw"
-                  className="object-contain pointer-events-none select-none rounded-lg max-w-full max-h-[78vh] w-auto h-auto mx-auto shadow-2xl"
-                  style={{ border: "1px solid rgba(212,160,32,0.3)" }}
-                />
-
-                {/* Counter */}
-                <div
-                  className="absolute bottom-2 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-serif-en z-10 shadow-lg"
-                  style={{
-                    background: "rgba(92,58,0,0.85)",
-                    color: "#FFE566",
-                    border: "1px solid rgba(212,160,32,0.4)",
-                  }}
-                >
-                  {lightbox + 1} / {photos.length}
-                </div>
-              </m.div>
-
-              {/* Lightbox Controls */}
-              {photos.length > 1 && (
-                <>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
+                <m.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.3 }}
+                  drag={photos.length > 1 ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.5}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x < -60)
+                      setLightbox((i) =>
+                        i !== null ? (i + 1) % photos.length : null,
+                      );
+                    else if (info.offset.x > 60)
                       setLightbox((i) =>
                         i !== null
                           ? (i - 1 + photos.length) % photos.length
                           : null,
                       );
-                    }}
-                    aria-label="Previous photo"
-                    className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xl sm:text-2xl z-20 cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg"
-                    style={{
-                      background: "rgba(92,58,0,0.85)",
-                      color: "#FFE566",
-                      border: "1px solid rgba(212,160,32,0.5)",
-                    }}
-                  >
-                    ‹
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setLightbox((i) =>
-                        i !== null ? (i + 1) % photos.length : null,
-                      );
-                    }}
-                    aria-label="Next photo"
-                    className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xl sm:text-2xl z-20 cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg"
-                    style={{
-                      background: "rgba(92,58,0,0.85)",
-                      color: "#FFE566",
-                      border: "1px solid rgba(212,160,32,0.5)",
-                    }}
-                  >
-                    ›
-                  </button>
-                </>
-              )}
+                  }}
+                  className="relative w-full h-full max-h-[85vh] flex items-center justify-center p-2 touch-pan-y"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Photo
+                    src={photos[lightbox]}
+                    alt={`Fullview photo ${lightbox + 1}`}
+                    sizes="100vw"
+                    className="object-contain pointer-events-none select-none rounded-lg max-w-full max-h-[78vh] w-auto h-auto mx-auto shadow-2xl"
+                    style={{ border: "1px solid rgba(212,160,32,0.3)" }}
+                  />
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setLightbox(null);
-                }}
-                aria-label="Close photo viewer"
-                className="absolute top-4 right-4 sm:top-6 sm:right-6 w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-lg z-20 cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg"
-                style={{
-                  background: "rgba(92,58,0,0.85)",
-                  color: "#FFE566",
-                  border: "1px solid rgba(212,160,32,0.5)",
-                }}
-              >
-                ×
-              </button>
-            </m.div>
-          )}
-        </AnimatePresence>
+                  {/* Counter */}
+                  <div
+                    className="absolute bottom-2 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-serif-en z-10 shadow-lg"
+                    style={{
+                      background: "rgba(92,58,0,0.85)",
+                      color: "#FFE566",
+                      border: "1px solid rgba(212,160,32,0.4)",
+                    }}
+                  >
+                    {lightbox + 1} / {photos.length}
+                  </div>
+                </m.div>
+
+                {/* Lightbox Controls */}
+                {photos.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLightbox((i) =>
+                          i !== null
+                            ? (i - 1 + photos.length) % photos.length
+                            : null,
+                        );
+                      }}
+                      aria-label="Previous photo"
+                      className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xl sm:text-2xl z-20 cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg"
+                      style={{
+                        background: "rgba(92,58,0,0.85)",
+                        color: "#FFE566",
+                        border: "1px solid rgba(212,160,32,0.5)",
+                      }}
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLightbox((i) =>
+                          i !== null ? (i + 1) % photos.length : null,
+                        );
+                      }}
+                      aria-label="Next photo"
+                      className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xl sm:text-2xl z-20 cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg"
+                      style={{
+                        background: "rgba(92,58,0,0.85)",
+                        color: "#FFE566",
+                        border: "1px solid rgba(212,160,32,0.5)",
+                      }}
+                    >
+                      ›
+                    </button>
+                  </>
+                )}
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightbox(null);
+                  }}
+                  aria-label="Close photo viewer"
+                  className="absolute top-4 right-4 sm:top-6 sm:right-6 w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-lg z-20 cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg"
+                  style={{
+                    background: "rgba(92,58,0,0.85)",
+                    color: "#FFE566",
+                    border: "1px solid rgba(212,160,32,0.5)",
+                  }}
+                >
+                  ×
+                </button>
+              </m.div>
+            )}
+          </AnimatePresence>
+        </Portal>
       </div>
     </section>
   );
