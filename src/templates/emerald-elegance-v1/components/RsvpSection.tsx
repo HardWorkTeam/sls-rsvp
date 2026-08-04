@@ -33,7 +33,7 @@ export const RsvpSection: React.FC<RsvpProps> = ({ rsvpSettings, weddingId, gues
     border: '1px solid rgba(201, 168, 76, 0.4)',
     borderRadius: '0.5rem',
     color: 'var(--ee-ivory)',
-    fontFamily: 'var(--font-emerald-serif)',
+    fontFamily: "'Playfair Display', var(--font-serif), serif",
     fontSize: '1rem',
     padding: '0.75rem 1rem',
     width: '100%',

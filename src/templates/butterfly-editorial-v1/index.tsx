@@ -62,8 +62,7 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
   return (
     <MotionProvider>
     <div
-      className="min-h-screen antialiased bg-transparent text-[#2A2A2A] relative"
-      style={{ fontFamily: 'var(--font-sans)' }}
+      className="butterfly-editorial min-h-screen antialiased bg-transparent text-[#2A2A2A] relative"
     >
       {/* Fixed Butterfly background underlay */}
       <div

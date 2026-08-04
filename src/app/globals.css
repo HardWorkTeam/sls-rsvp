@@ -5,6 +5,8 @@
   --foreground: #1c1917;
   --font-geist-sans: Arial, Helvetica, sans-serif;
   --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-editorial-body: "Kantumruy Pro", Arial, sans-serif;
+  --font-emerald-body: "Kantumruy Pro", "Montserrat", Arial, sans-serif;
 
   /* Royal Khmer */
   --rk-gold: #C9A84C;
@@ -80,6 +82,25 @@ html {
 .font-emerald-serif    { font-family: 'Playfair Display', var(--font-serif), serif !important; }
 .font-emerald-sans     { font-family: 'Montserrat', sans-serif !important; }
 .font-emerald-script   { font-family: 'Great Vibes', cursive !important; }
+
+/* Keep the invitation type systems cohesive when a component uses Tailwind's
+   generic font utilities. Khmer falls back to Kantumruy Pro rather than the
+   browser default, while the display faces remain reserved for headings. */
+.butterfly-editorial { font-family: var(--font-editorial-body); }
+.butterfly-editorial .font-sans { font-family: var(--font-editorial-body) !important; }
+.butterfly-editorial input,
+.butterfly-editorial textarea { font-family: var(--font-editorial-body) !important; }
+
+.emerald-elegance {
+  font-family: var(--font-emerald-body);
+  /* `overflow-x: hidden` implicitly makes the y-axis scrollable, producing a
+     second page scrollbar. Clip decorative overflow without creating one. */
+  overflow-x: clip;
+}
+.emerald-elegance .font-sans { font-family: var(--font-emerald-body) !important; }
+.emerald-elegance .font-serif-en { font-family: 'Playfair Display', var(--font-serif), serif !important; }
+.emerald-elegance input,
+.emerald-elegance textarea { font-family: 'Playfair Display', var(--font-serif), serif !important; }
 
 /* ─── Color utilities ────────────────────────────────────────────────── */
 .text-gold       { color: var(--rk-gold); }

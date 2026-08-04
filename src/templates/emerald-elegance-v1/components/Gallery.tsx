@@ -156,7 +156,7 @@ export const Gallery: React.FC<{ photos: string[] }> = ({ photos }) => {
             </div>
 
             {/* Thumbnail Selection Grid */}
-            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-40 overflow-y-auto p-1 scrollbar-thin">
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 p-1">
               {photos.map((photoUrl, index) => (
                 <button
                   key={index}

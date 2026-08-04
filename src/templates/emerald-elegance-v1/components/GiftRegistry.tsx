@@ -49,11 +49,15 @@ export const GiftRegistry: React.FC<{ registries: RegistryType[] }> = ({ registr
             </p>
 
             {registries.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-lg mx-auto">
+              <div
+                className={`grid grid-cols-1 gap-6 mx-auto ${
+                  registries.length > 1 ? 'max-w-lg md:grid-cols-2' : 'max-w-xs'
+                }`}
+              >
                 {registries.map((registry) => (
                   <div 
                     key={registry.id}
-                    className="relative flex flex-col items-center p-6 rounded-xl border border-emerald-gold/30"
+                    className="relative flex w-full flex-col items-center p-6 rounded-xl border border-emerald-gold/30"
                     style={{ background: 'rgba(255, 255, 255, 0.5)' }}
                   >
                     <h3 className="font-emerald-serif text-lg text-emerald-gradient mb-4 font-bold tracking-wide">

@@ -104,7 +104,7 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
 
   return (
     <MotionProvider>
-    <div className={`min-h-screen antialiased bg-pattern-emerald text-emerald-ivory selection:bg-emerald-gold/30 selection:text-emerald-gold-bright overflow-x-hidden ${isDesktop ? 'emerald-cursor' : ''}`}>
+    <div className={`emerald-elegance min-h-screen antialiased bg-pattern-emerald text-emerald-ivory selection:bg-emerald-gold/30 selection:text-emerald-gold-bright overflow-x-hidden ${isDesktop ? 'emerald-cursor' : ''}`}>
       {/* ── Custom Cursor ── */}
       {isDesktop && (
         <>
