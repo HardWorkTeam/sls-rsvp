@@ -57,6 +57,7 @@ const EmeraldDivider: React.FC = () => (
 
 export default function EmeraldEleganceV1Template({ data, guestName }: TemplateProps) {
   const { sectionsVisibility } = data;
+  const isCompleted = data.weddingStatus === 'completed';
 
   // Dates are driven by the real wedding/event date. We parse the calendar
   // parts straight from the date string (like EventSchedule) so timezone never
@@ -150,7 +151,7 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
 
       {sectionsVisibility.Schedule && data.events.length > 0 && (
         <CinematicReveal>
-          <Countdown targetDate={data.events[0].dateSolar} />
+          <Countdown targetDate={data.events[0].dateSolar} isCompleted={isCompleted} />
         </CinematicReveal>
       )}
 
@@ -204,7 +205,7 @@ export default function EmeraldEleganceV1Template({ data, guestName }: TemplateP
 
       <EmeraldDivider />
 
-      {sectionsVisibility.RSVP && (
+      {sectionsVisibility.RSVP && !isCompleted && (
         <CinematicReveal>
           <RsvpSection rsvpSettings={data.rsvpSettings} weddingId={data.slug} guestName={guestName} />
         </CinematicReveal>

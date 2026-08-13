@@ -4,6 +4,7 @@ import React, { useEffect, useState, useSyncExternalStore } from 'react';
 
 interface CountdownProps {
   targetDate: string;
+  isCompleted?: boolean;
 }
 
 interface TimeLeft {
@@ -14,7 +15,7 @@ interface TimeLeft {
   ended: boolean;
 }
 
-export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
+export const Countdown: React.FC<CountdownProps> = ({ targetDate, isCompleted }) => {
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -62,6 +63,19 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
             <span className="font-serif-en text-[9px] tracking-widest" style={{ color: 'var(--rk-gold)', opacity: 0.5 }}>{u.labelEn}</span>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  if (isCompleted) {
+    return (
+      <div className="space-y-3 text-center">
+        <p className="font-khmer-title text-lg animate-pulse-glow" style={{ color: 'var(--rk-gold-light)' }}>
+          ពិធីមង្គលការបានបញ្ចប់ 🎉
+        </p>
+        <p className="font-serif-en text-xs tracking-[0.25em] uppercase" style={{ color: 'var(--rk-gold)', opacity: 0.7 }}>
+          The wedding has been celebrated
+        </p>
       </div>
     );
   }

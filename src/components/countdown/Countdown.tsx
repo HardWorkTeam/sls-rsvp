@@ -4,9 +4,10 @@ import React, { useEffect, useState, useSyncExternalStore } from 'react';
 
 interface CountdownProps {
   targetDate: string; // ISO string
+  isCompleted?: boolean;
 }
 
-export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
+export const Countdown: React.FC<CountdownProps> = ({ targetDate, isCompleted }) => {
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -59,6 +60,19 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
             <span className="text-xs text-gray-500">{label}</span>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  if (isCompleted) {
+    return (
+      <div className="text-center space-y-2">
+        <div className="font-semibold text-lg text-amber-700 animate-pulse">
+          ពិធីមង្គលការបានបញ្ចប់ 🎉
+        </div>
+        <p className="text-xs tracking-widest uppercase text-amber-600/70">
+          The wedding has been celebrated
+        </p>
       </div>
     );
   }

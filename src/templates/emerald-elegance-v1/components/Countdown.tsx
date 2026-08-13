@@ -4,6 +4,7 @@ import { DiamondSeparator, ThinGoldRule } from './BotanicalAssets';
 
 interface CountdownProps {
   targetDate: string;
+  isCompleted?: boolean;
 }
 
 interface TimeLeft {
@@ -11,6 +12,7 @@ interface TimeLeft {
   hours: number;
   minutes: number;
   seconds: number;
+  ended: boolean;
 }
 
 function TimeUnit({
@@ -49,13 +51,13 @@ function TimeUnit({
   );
 }
 
-export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
+export const Countdown: React.FC<CountdownProps> = ({ targetDate, isCompleted }) => {
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
     () => false,
   );
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0, ended: false });
 
   useEffect(() => {
     const target = new Date(targetDate).getTime();
@@ -65,7 +67,7 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
       const distance = target - now;
 
       if (distance < 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, ended: true });
         return;
       }
 
@@ -73,7 +75,8 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
         hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
         minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        seconds: Math.floor((distance % (1000 * 60)) / 1000),
+        ended: false,
       });
     };
 
@@ -83,8 +86,48 @@ export const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
 
   if (!mounted) return null;
 
+  if (isCompleted) {
+    return (
+      <m.section
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-10% 0px" }}
+        className="relative w-full py-12 bg-white/40 backdrop-blur-md border-y border-emerald-gold/20 flex flex-col items-center gap-3 text-center"
+      >
+        <p className="font-emerald-sans text-[9px] tracking-[0.3em] text-emerald-gold uppercase">
+          CELEBRATED WITH LOVE
+        </p>
+        <p className="font-emerald-serif text-2xl text-emerald-gold font-bold animate-pulse">
+          ពិធីមង្គលការបានបញ្ចប់ 🎉
+        </p>
+        <p className="font-emerald-sans text-xs tracking-widest uppercase text-emerald-ivory/60">
+          The wedding has been celebrated
+        </p>
+        <ThinGoldRule width="60px" />
+      </m.section>
+    );
+  }
+
+  if (timeLeft.ended) {
+    return (
+      <m.section
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-10% 0px" }}
+        className="relative w-full py-12 bg-white/40 backdrop-blur-md border-y border-emerald-gold/20 flex flex-col items-center gap-3 text-center"
+      >
+        <p className="font-emerald-serif text-2xl text-emerald-gold font-bold animate-pulse">
+          ថ្ងៃមង្គលការបានមកដល់ហើយ! 🎉
+        </p>
+        <ThinGoldRule width="60px" />
+      </m.section>
+    );
+  }
+
   return (
-    <m.section 
+    <m.section
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}

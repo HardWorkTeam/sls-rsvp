@@ -57,6 +57,7 @@ const CrimsonDivider: React.FC = () => (
 export default function RedRoseLuxuryV1Template({ data, guestName }: TemplateProps) {
   const { sectionsVisibility } = data;
   const primaryEvent = data.events[0];
+  const isCompleted = data.weddingStatus === 'completed';
 
   return (
     <MotionProvider>
@@ -97,7 +98,7 @@ export default function RedRoseLuxuryV1Template({ data, guestName }: TemplatePro
                 Counting Down · រាប់ថយក្រោយ
               </p>
               <div className="[&_.font-serif-en]:!text-[#E8C97A] [&_div]:!border-[#E8C97A]/40 text-[#FAF6EF]">
-                <Countdown targetDate={primaryEvent.dateSolar} />
+                <Countdown targetDate={primaryEvent.dateSolar} isCompleted={isCompleted} />
               </div>
             </div>
           </section>
@@ -161,7 +162,7 @@ export default function RedRoseLuxuryV1Template({ data, guestName }: TemplatePro
       <CrimsonDivider />
 
       {/* 9. RSVP & LIVE WISHES WALL */}
-      {sectionsVisibility.RSVP && (
+      {sectionsVisibility.RSVP && !isCompleted && (
         <CinematicReveal>
           <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} guestName={guestName} />
         </CinematicReveal>

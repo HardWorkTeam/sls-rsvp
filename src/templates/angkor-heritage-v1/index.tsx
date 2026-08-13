@@ -53,6 +53,7 @@ const WarmDivider: React.FC = () => (
 export default function AngkorHeritageV1Template({ data, guestName }: TemplateProps) {
   const { sectionsVisibility } = data;
   const primaryEvent = data.events[0];
+  const isCompleted = data.weddingStatus === 'completed';
 
   return (
     <MotionProvider>
@@ -88,7 +89,7 @@ export default function AngkorHeritageV1Template({ data, guestName }: TemplatePr
               </p>
               {/* Override countdown style with amber colors via inline wrapper */}
               <div className="[&_.font-serif-en]:!text-amber-800 [&_div]:!border-amber-400/40">
-                <Countdown targetDate={primaryEvent.dateSolar} />
+                <Countdown targetDate={primaryEvent.dateSolar} isCompleted={isCompleted} />
               </div>
             </div>
           </section>
@@ -151,7 +152,7 @@ export default function AngkorHeritageV1Template({ data, guestName }: TemplatePr
       <WarmDivider />
 
       {/* ── RSVP ── */}
-      {sectionsVisibility.RSVP && (
+      {sectionsVisibility.RSVP && !isCompleted && (
         <Reveal>
           <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} guestName={guestName} />
         </Reveal>

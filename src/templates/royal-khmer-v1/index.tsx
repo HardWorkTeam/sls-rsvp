@@ -56,6 +56,7 @@ const SectionDivider: React.FC = () => (
 export default function RoyalKhmerV1Template({ data, guestName }: TemplateProps) {
   const { sectionsVisibility } = data;
   const primaryEvent = data.events[0];
+  const isCompleted = data.weddingStatus === 'completed';
 
   return (
     <MotionProvider>
@@ -100,7 +101,7 @@ export default function RoyalKhmerV1Template({ data, guestName }: TemplateProps)
               >
                 Counting Down · រាប់ថយក្រោយ
               </p>
-              <Countdown targetDate={primaryEvent.dateSolar} />
+              <Countdown targetDate={primaryEvent.dateSolar} isCompleted={isCompleted} />
             </div>
           </section>
         </CinematicSection>
@@ -177,7 +178,7 @@ export default function RoyalKhmerV1Template({ data, guestName }: TemplateProps)
       {/* ══════════════════════════════════════════════════════════════════
           SECTION 8 · RSVP
       ══════════════════════════════════════════════════════════════════ */}
-      {sectionsVisibility.RSVP && (
+      {sectionsVisibility.RSVP && !isCompleted && (
         <CinematicSection>
           <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} guestName={guestName} />
         </CinematicSection>

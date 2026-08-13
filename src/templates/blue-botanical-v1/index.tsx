@@ -55,6 +55,7 @@ const BotanicalDivider: React.FC = () => (
 export default function BlueBotanicalV1Template({ data, guestName }: TemplateProps) {
   const { sectionsVisibility } = data;
   const primaryEvent = data.events[0];
+  const isCompleted = data.weddingStatus === 'completed';
 
   return (
     <MotionProvider>
@@ -92,7 +93,7 @@ export default function BlueBotanicalV1Template({ data, guestName }: TemplatePro
                   ['--tw-ring-color' as string]: 'rgba(106,140,178,0.3)',
                 }}
               >
-                <Countdown targetDate={primaryEvent.dateSolar} />
+                <Countdown targetDate={primaryEvent.dateSolar} isCompleted={isCompleted} />
               </div>
             </div>
           </section>
@@ -156,7 +157,7 @@ export default function BlueBotanicalV1Template({ data, guestName }: TemplatePro
       <BotanicalDivider />
 
       {/* ── RSVP ── */}
-      {sectionsVisibility.RSVP && (
+      {sectionsVisibility.RSVP && !isCompleted && (
         <Reveal>
           <RsvpForm weddingId={data.slug} rsvpSettings={data.rsvpSettings} guestName={guestName} />
         </Reveal>

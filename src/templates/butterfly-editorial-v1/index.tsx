@@ -58,6 +58,7 @@ const EditorialDivider: React.FC = () => (
 export default function ButterflyEditorialV1Template({ data, guestName }: TemplateProps) {
   const { sectionsVisibility } = data;
   const primaryEvent = data.events[0];
+  const isCompleted = data.weddingStatus === 'completed';
 
   return (
     <MotionProvider>
@@ -95,7 +96,7 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
                 Counting Down
               </p>
               <div className="[&_.font-serif-en]:!text-[#5A121D] [&_div]:!border-[#C5A059]/30 text-[#2A2A2A] font-medium font-editorial-serif">
-                <Countdown targetDate={primaryEvent.dateSolar} />
+                <Countdown targetDate={primaryEvent.dateSolar} isCompleted={isCompleted} />
               </div>
             </div>
           </section>
@@ -159,7 +160,7 @@ export default function ButterflyEditorialV1Template({ data, guestName }: Templa
       <EditorialDivider />
 
       {/* 10. RSVP FORM AND WISHES WALL */}
-      {sectionsVisibility.RSVP && (
+      {sectionsVisibility.RSVP && !isCompleted && (
         <CinematicReveal>
           <RsvpSection
             weddingId={data.slug}

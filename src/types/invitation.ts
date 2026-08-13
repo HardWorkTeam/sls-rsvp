@@ -76,6 +76,7 @@ export interface InvitationData {
   slug: string;
   templateId: TemplateId;
   coverImage?: string;
+  weddingStatus?: string;  // e.g. 'active', 'completed'
   sectionsVisibility: {
     Cover: boolean;
     CoupleInfo: boolean;
@@ -171,6 +172,7 @@ export interface PublicInvitation {
     reception_venue: string | null;
     google_map_link: string | null;
     story_description: string | null;
+    status: string | null;
     timeline_events: PublicTimelineEvent[];
     albums: PublicAlbum[];
   };

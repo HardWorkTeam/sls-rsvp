@@ -349,6 +349,7 @@ export function mapToInvitationData(invitation: PublicInvitation): InvitationDat
     slug: invitation.invitation_code,
     templateId,
     coverImage: invitation.cover_image_path ?? "",
+    weddingStatus: wedding.status ?? undefined,
     sectionsVisibility,
     couple: {
       groom: {

@@ -58,6 +58,7 @@ export function buildSampleInvitation(slug: string): PublicInvitation {
       wedding_name: "Veasna & Chanreah",
       bride_name: "Chanreah",
       groom_name: "Veasna",
+      status: "active",
       bride_photo_path: BRIDE_PHOTO,
       groom_photo_path: GROOM_PHOTO,
       wedding_date: "2026-11-21",

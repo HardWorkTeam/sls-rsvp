@@ -102,7 +102,9 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
       ) : null}
       {publicAlbums.length > 0 ? <GallerySection albums={publicAlbums} /> : null}
       <LocationSection wedding={wedding} />
-      <RsvpSection code={invitation.invitation_code} guestName={guestName} />
+      {wedding.status !== "completed" ? (
+        <RsvpSection code={invitation.invitation_code} guestName={guestName} />
+      ) : null}
       {invitation.settings?.show_gift_section ? (
         <GiftSection settings={invitation.settings} />
       ) : null}
