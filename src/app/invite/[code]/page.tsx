@@ -75,7 +75,9 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
     return (
       <>
         <TemplateComponent data={data} guestName={guestName} />
-        {checkInToken ? <CheckInPass token={checkInToken} guestName={guestName} /> : null}
+        {checkInToken && data.weddingStatus !== "completed" ? (
+          <CheckInPass token={checkInToken} guestName={guestName} />
+        ) : null}
         {data.calendar ? <AddToCalendar event={data.calendar} slug={data.slug} /> : null}
       </>
     );
@@ -115,7 +117,9 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
         </p>
         <p className="mt-1">With love, powered by Srolanh</p>
       </footer>
-      {checkInToken ? <CheckInPass token={checkInToken} guestName={guestName} /> : null}
+      {checkInToken && wedding.status !== "completed" ? (
+        <CheckInPass token={checkInToken} guestName={guestName} />
+      ) : null}
       {data.calendar ? <AddToCalendar event={data.calendar} slug={data.slug} /> : null}
     </main>
   );
