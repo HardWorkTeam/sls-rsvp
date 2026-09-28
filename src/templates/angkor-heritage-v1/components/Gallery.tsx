@@ -111,7 +111,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 overflow-hidden"
+                className="fixed inset-0 z-[100] flex items-center justify-center px-2 py-14 sm:px-16 sm:py-16 overflow-hidden"
                 style={{
                   background: "rgba(20, 12, 0, 0.92)",
                   backdropFilter: "blur(16px)",
@@ -130,26 +130,22 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                     if (info.offset.x < -60) nextPhoto();
                     else if (info.offset.x > 60) prevPhoto();
                   }}
-                  className="relative max-w-sm w-auto max-h-[80vh] flex flex-col items-center justify-center rounded-2xl overflow-hidden touch-pan-y"
-                  style={{ border: "2px solid rgba(212,160,32,0.5)" }}
+                  className="relative w-full h-full touch-pan-y"
                   onClick={(e) => e.stopPropagation()}
                 >
+                  {/* Fill the viewport box and letterbox with object-contain,
+                      so every photo — portrait or landscape — fits the screen
+                      whole, regardless of its intrinsic pixel size. */}
                   <Photo
+                    fill
                     src={photos[lightbox]}
-                    alt=""
-                    sizes="(max-width: 768px) 100vw, 640px"
-                    className="object-contain pointer-events-none select-none"
-                    style={{
-                      width: "auto",
-                      height: "auto",
-                      maxWidth: "100%",
-                      maxHeight: "70vh",
-                      display: "block",
-                      margin: "0 auto",
-                    }}
+                    alt={`Photo ${lightbox + 1}`}
+                    sizes="100vw"
+                    className="pointer-events-none select-none"
+                    style={{ objectFit: "contain" }}
                   />
                   <div
-                    className="absolute top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-serif-en z-10"
+                    className="absolute bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-serif-en z-10"
                     style={{
                       background: "rgba(92,58,0,0.85)",
                       color: "#FFE566",
